@@ -58,7 +58,7 @@ function setActiveMenu(target) {
     const touch = event.touches[0];
     const deltaX = touch.clientX - touchStartX;
     const deltaY = Math.abs(touch.clientY - touchStartY);
-    if (deltaX < -40 && deltaY < 30) {
+    if (deltaX > 40 && deltaY < 30) {
       closeDrawer();
     }
   }, { passive: true });
@@ -368,7 +368,7 @@ function bindEvents() {
     const touch = event.touches[0];
     const deltaX = touch.clientX - touchStartX;
     const deltaY = Math.abs(touch.clientY - touchStartY);
-    if (deltaX < -40 && deltaY < 30) {
+    if (deltaX > 40 && deltaY < 30) {
       closeDrawer();
     }
   }, { passive: true });
