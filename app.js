@@ -610,12 +610,17 @@ async function init() {
   initTelegram();
   loadState();
   await loadConfig();
-  await loadData();
   forceMenuRight();
   bindEvents();
   updateBadges();
   renderFavorites();
   renderCart();
+
+  try {
+    await loadData();
+  } catch (err) {
+    console.error("Failed to load catalog data", err);
+  }
 }
 
 init();
