@@ -49,7 +49,20 @@ const ui = {
 };
 
 function setScreen(name) {
+  if (state.currentScreen === name) return;
+  state.currentScreen = name;
+  if (state.screenStack[state.screenStack.length - 1] !== name) {
+    state.screenStack.push(name);
+  }
   ui.screens.forEach((s) => s.classList.toggle('active', s.id === `screen-${name}`));
+}
+
+function goBack() {
+  if (state.screenStack.length <= 1) return;
+  state.screenStack.pop();
+  const prev = state.screenStack[state.screenStack.length - 1];
+  state.currentScreen = prev;
+  ui.screens.forEach((s) => s.classList.toggle('active', s.id === `screen-${prev}`));
 }
 
 function openDrawer() {
@@ -227,7 +240,7 @@ function addToCart(id) {
 
 function bindEvents() {
   ui.menuButton.addEventListener('click', openDrawer);
-  ui.menuClose.addEventListener('click', closeDrawer);
+  if (ui.menuClose) ui.menuClose.addEventListener('click', closeDrawer);
   ui.overlay.addEventListener('click', closeDrawer);
 
 
@@ -298,7 +311,7 @@ function bindEvents() {
   ui.cartBar.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
 
   document.querySelectorAll('.back-button').forEach((btn) => {
-    btn.addEventListener('click', () => setScreen(btn.dataset.back));
+    btn.addEventListener('click', () => goBack());
   });
 
   ui.favoritesToCart.addEventListener('click', () => {
@@ -382,6 +395,22 @@ function bindEvents() {
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
     if (dx > 40 && dy < 30) closeDrawer();
   });
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (dx > 40 && dy < 30) {
+      if (ui.menuDrawer.classList.contains('drawer-open')) {
+        closeDrawer();
+      } else {
+        goBack();
+      }
+    }
+  });
 }
 
 async function loadConfig() {
@@ -423,6 +452,8 @@ async function loadData() {
 
 async function init() {
   loadStorage();
+  state.screenStack = ['home'];
+  state.currentScreen = 'home';
   bindEvents();
   updateBadges();
   renderFavorites();
