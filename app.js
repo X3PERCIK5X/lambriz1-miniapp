@@ -396,6 +396,12 @@ async function loadConfig() {
       Адрес: ${state.config.companyAddress || '-'}
     `;
   }
+  const phoneText = state.config.companyPhone || '+7 (916) 616-37-77';
+  const phoneDigits = phoneText.replace(/\D/g, '');
+  const menuPhone = document.getElementById('menuPhone');
+  const menuCallButton = document.getElementById('menuCallButton');
+  if (menuPhone) menuPhone.textContent = phoneText;
+  if (menuCallButton && phoneDigits) menuCallButton.href = `tel:+${phoneDigits}`;
 
   ui.inputName.value = state.profile.name || '';
   ui.inputPhone.value = state.profile.phone || '';

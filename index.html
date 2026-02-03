@@ -42,16 +42,26 @@
 
     <aside id="menuDrawer" class="drawer hidden">
       <div class="drawer-head">
-        <div class="drawer-title">Меню</div>
-        <button id="menuClose" class="icon-button" type="button" aria-label="Закрыть">✕</button>
+        <img class="drawer-logo" src="logo.svg" alt="Ламбриз" />
+        <button id="menuClose" class="drawer-close" type="button" aria-label="Закрыть">✕</button>
       </div>
       <nav class="drawer-menu">
-        <button data-screen="orders">Мои заказы</button>
-        <button data-screen="home">Каталог</button>
+        <button data-screen="home">Каталог <span class="menu-caret">▾</span></button>
+        <button data-screen="promo">Акции</button>
         <button data-screen="about">О компании</button>
+        <button data-screen="production">Производство</button>
         <button data-screen="payment">Оплата и доставка</button>
         <button data-screen="contacts">Контакты</button>
       </nav>
+      <div class="drawer-footer">
+        <div id="menuPhone" class="drawer-phone">+7 (916) 616-37-77</div>
+        <div class="drawer-socials">
+          <a class="social-button" href="https://t.me" target="_blank" rel="noopener" aria-label="Telegram">✈</a>
+          <a class="social-button" href="https://wa.me/79166163777" target="_blank" rel="noopener" aria-label="WhatsApp">☎</a>
+          <a class="social-button" href="mailto:lambrizseller@yandex.ru" aria-label="Email">✉</a>
+        </div>
+        <a id="menuCallButton" class="call-button" href="tel:+79166163777">Позвонить</a>
+      </div>
     </aside>
     <div id="drawerOverlay" class="overlay hidden"></div>
 
@@ -168,6 +178,22 @@
           <h2>Оплата и доставка</h2>
         </div>
         <div id="paymentText" class="text-card"></div>
+      </section>
+
+      <section id="screen-promo" class="screen">
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Акции</h2>
+        </div>
+        <div class="text-card">Информация об акциях будет добавлена позже.</div>
+      </section>
+
+      <section id="screen-production" class="screen">
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Производство</h2>
+        </div>
+        <div class="text-card">Информация о производстве будет добавлена позже.</div>
       </section>
 
       <section id="screen-contacts" class="screen">
