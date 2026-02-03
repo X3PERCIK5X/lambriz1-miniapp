@@ -202,5 +202,69 @@
     </button>
 
     <script defer src="app.js?v=20260202-2"></script>
-  </body>
+  <!-- fallback-handlers -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (window.__LAMBRIZ_INIT__) return;
+
+        const menuButton = document.getElementById("menuButton");
+        const menuDrawer = document.getElementById("menuDrawer");
+        const menuClose = document.getElementById("menuClose");
+        const overlay = document.getElementById("drawerOverlay");
+
+        const openDrawer = () => {
+          if (menuDrawer) {
+            menuDrawer.classList.remove("hidden");
+            menuDrawer.classList.add("drawer-open");
+          }
+          if (overlay) {
+            overlay.classList.remove("hidden");
+            overlay.classList.add("overlay-visible");
+          }
+        };
+
+        const closeDrawer = () => {
+          if (menuDrawer) {
+            menuDrawer.classList.remove("drawer-open");
+          }
+          if (overlay) {
+            overlay.classList.remove("overlay-visible");
+          }
+          setTimeout(() => {
+            menuDrawer && menuDrawer.classList.add("hidden");
+            overlay && overlay.classList.add("hidden");
+          }, 200);
+        };
+
+        const setScreen = (name) => {
+          document.querySelectorAll(".screen").forEach((screen) => {
+            screen.classList.toggle("active", screen.id === `screen-${name}`);
+          });
+        };
+
+        menuButton && menuButton.addEventListener("click", openDrawer);
+        menuClose && menuClose.addEventListener("click", closeDrawer);
+        overlay && overlay.addEventListener("click", closeDrawer);
+
+        const favoritesButton = document.getElementById("favoritesButton");
+        const cartButton = document.getElementById("cartButton");
+        favoritesButton && favoritesButton.addEventListener("click", () => setScreen("favorites"));
+        cartButton && cartButton.addEventListener("click", () => setScreen("cart"));
+
+        document.querySelectorAll(".drawer-menu button").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const target = btn.dataset.nav;
+            if (target) setScreen(target);
+            closeDrawer();
+          });
+        });
+
+        document.querySelectorAll(".back-button").forEach((btn) => {
+          btn.addEventListener("click", () => setScreen(btn.dataset.back));
+        });
+      });
+    </script>
+
+</body>
 </html>

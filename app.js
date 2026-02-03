@@ -623,4 +623,5 @@ async function init() {
   }
 }
 
+window.__LAMBRIZ_INIT__ = true;
 init();
