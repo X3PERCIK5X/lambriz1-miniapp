@@ -385,13 +385,23 @@ async function loadData() {
 
 async function init() {
   loadStorage();
-  await loadConfig();
-  await loadData();
   bindEvents();
   updateBadges();
   renderFavorites();
   renderCart();
   closeDrawer();
+
+  try {
+    await loadConfig();
+  } catch (err) {
+    console.error('loadConfig failed', err);
+  }
+
+  try {
+    await loadData();
+  } catch (err) {
+    console.error('loadData failed', err);
+  }
 }
 
 init();
