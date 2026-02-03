@@ -225,6 +225,13 @@ function bindEvents() {
   ui.menuClose.addEventListener('click', closeDrawer);
   ui.overlay.addEventListener('click', closeDrawer);
 
+
+  document.querySelectorAll('[data-screen]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.screen;
+      if (target) setScreen(target);
+    });
+  });
   document.querySelectorAll('.drawer-menu button').forEach((btn) => {
     btn.addEventListener('click', () => {
       setScreen(btn.dataset.screen);

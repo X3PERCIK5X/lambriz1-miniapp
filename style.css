@@ -7,6 +7,7 @@
   --card: #ffffff;
   --border: #e2e7ec;
   --shadow: 0 16px 36px rgba(7, 25, 42, 0.12);
+  --about-bg: #ecebe9;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,6 +78,40 @@ img { max-width: 100%; display: block; }
 .hero-label { padding: 14px; font-size: 18px; font-weight: 700; }
 .hero-image[data-image="equipment"] { background-image: url("https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=70"); }
 .hero-image[data-image="stainless"] { background-image: url("https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?auto=format&fit=crop&w=900&q=70"); }
+
+.about-card {
+  margin-top: 18px;
+  background: var(--about-bg);
+  border-radius: 16px;
+  padding: 18px;
+  display: grid;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+
+.about-title {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.about-underline {
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+}
+
+.about-text {
+  font-size: 16px;
+  line-height: 1.45;
+  color: #2b2b2b;
+}
+
+.about-button {
+  width: 180px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 16px;
+}
 
 .screen-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .back-button { border: 1px solid var(--border); background: #fff; border-radius: 8px; padding: 6px 10px; }
