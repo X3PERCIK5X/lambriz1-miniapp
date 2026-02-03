@@ -19,6 +19,8 @@ const ui = {
   overlay: document.getElementById('drawerOverlay'),
   favoritesButton: document.getElementById('favoritesButton'),
   cartButton: document.getElementById('cartButton'),
+  ordersButton: document.getElementById('ordersButton'),
+  homeButton: document.getElementById('homeButton'),
   favoritesCount: document.getElementById('favoritesCount'),
   cartCount: document.getElementById('cartCount'),
   categoriesGrid: document.getElementById('categoriesGrid'),
@@ -291,6 +293,8 @@ function bindEvents() {
 
   ui.favoritesButton.addEventListener('click', () => { renderFavorites(); setScreen('favorites'); closeDrawer(); });
   ui.cartButton.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
+  ui.ordersButton.addEventListener('click', () => { renderOrders(); setScreen('orders'); closeDrawer(); });
+  ui.homeButton.addEventListener('click', () => { setScreen('home'); closeDrawer(); });
   ui.cartBar.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
 
   document.querySelectorAll('.back-button').forEach((btn) => {

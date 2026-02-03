@@ -11,33 +11,7 @@
       <div class="logo">
         <img src="logo.svg" alt="Ламбриз" />
       </div>
-      <div class="header-actions">
-        <button id="favoritesButton" class="icon-button" type="button" aria-label="Избранное">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
-          </svg>
-          <span id="favoritesCount" class="badge">0</span>
-        </button>
-        <button id="cartButton" class="icon-button" type="button" aria-label="Корзина">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="m15 11-1 9" />
-            <path d="m19 11-4-7" />
-            <path d="M2 11h20" />
-            <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
-            <path d="M4.5 15.5h15" />
-            <path d="m5 11 4-7" />
-            <path d="m9 11 1 9" />
-          </svg>
-          <span id="cartCount" class="badge">0</span>
-        </button>
-        <button id="menuButton" class="icon-button" type="button" aria-label="Меню">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M4 5h16" />
-            <path d="M4 12h16" />
-            <path d="M4 19h16" />
-          </svg>
-        </button>
-      </div>
+      <div class="header-actions header-empty"></div>
     </header>
 
     <aside id="menuDrawer" class="drawer hidden">
@@ -209,6 +183,48 @@
       <span>Корзина</span>
       <span id="cartBarTotal">0 ₽</span>
     </button>
+
+    <nav class="bottom-nav">
+      <button id="menuButton" class="bottom-item" type="button" aria-label="Меню">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 5h16" />
+          <path d="M4 12h16" />
+          <path d="M4 19h16" />
+        </svg>
+        <span>Меню</span>
+      </button>
+      <button id="ordersButton" class="bottom-item" type="button" aria-label="Мои заказы">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 3h6l1 2h4v4H4V5h4l1-2z" />
+          <path d="M4 9h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9z" />
+        </svg>
+        <span>Заказы</span>
+      </button>
+      <button id="cartButton" class="bottom-item bottom-center" type="button" aria-label="Корзина">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m15 11-1 9" />
+          <path d="m19 11-4-7" />
+          <path d="M2 11h20" />
+          <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
+        </svg>
+        <span>Корзина</span>
+        <span id="cartCount" class="badge">0</span>
+      </button>
+      <button id="favoritesButton" class="bottom-item" type="button" aria-label="Избранное">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+        </svg>
+        <span>Избранное</span>
+        <span id="favoritesCount" class="badge">0</span>
+      </button>
+      <button id="homeButton" class="bottom-item" type="button" aria-label="Главная">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 11 12 3l9 8" />
+          <path d="M5 10v10h14V10" />
+        </svg>
+        <span>Главная</span>
+      </button>
+    </nav>
 
     <script src="app.js"></script>
   </body>
