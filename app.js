@@ -357,6 +357,27 @@ function bindEvents() {
       ui.orderStatus.textContent = 'Ошибка отправки. Проверьте настройки.';
     }
   });
+
+  let touchStartX = 0;
+  let touchStartY = 0;
+  ui.menuDrawer.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  ui.menuDrawer.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (dx > 40 && dy < 30) closeDrawer();
+  });
+  ui.overlay.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  ui.overlay.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (dx > 40 && dy < 30) closeDrawer();
+  });
 }
 
 async function loadConfig() {
@@ -365,12 +386,16 @@ async function loadConfig() {
   ui.policyLink.href = state.config.privacyPolicyUrl || '#';
   ui.aboutText.innerHTML = formatMultiline(state.config.aboutText || 'Текст будет добавлен позже.');
   ui.paymentText.innerHTML = formatMultiline(state.config.paymentText || 'Информация будет добавлена позже.');
-  ui.contactsCard.innerHTML = `
-    <strong>${state.config.companyName || 'Ламбриз'}</strong><br/>
-    Телефон: ${state.config.companyPhone || '-'}<br/>
-    Email: ${state.config.companyEmail || '-'}<br/>
-    Адрес: ${state.config.companyAddress || '-'}
-  `;
+  if (state.config.contactsText) {
+    ui.contactsCard.innerHTML = formatMultiline(state.config.contactsText);
+  } else {
+    ui.contactsCard.innerHTML = `
+      <strong>${state.config.companyName || 'Ламбриз'}</strong><br/>
+      Телефон: ${state.config.companyPhone || '-'}<br/>
+      Email: ${state.config.companyEmail || '-'}<br/>
+      Адрес: ${state.config.companyAddress || '-'}
+    `;
+  }
 
   ui.inputName.value = state.profile.name || '';
   ui.inputPhone.value = state.profile.phone || '';
