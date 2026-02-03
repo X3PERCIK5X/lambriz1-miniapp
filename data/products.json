@@ -12,8 +12,7 @@
       { "label": "Питание", "value": "220 В" }
     ],
     "images": [
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=70",
-      "https://images.unsplash.com/photo-1494319827402-b44f87e6c2c0?auto=format&fit=crop&w=900&q=70"
+      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=70"
     ],
     "categoryId": "equipment-high-pressure"
   },
@@ -47,45 +46,13 @@
       { "label": "Вес", "value": "68 кг" }
     ],
     "images": [
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=900&q=60"
+      "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=900&q=70"
     ],
     "categoryId": "equipment-cleaning"
   },
   {
-    "id": "hose-kit-pro",
-    "title": "Комплект аксессуаров Pro",
-    "price": 15900,
-    "sku": "LM-ACC-01",
-    "shortDescription": "Шланг, пистолет и насадки для АВД.",
-    "description": "Подходит для профессиональных моделей АВД, устойчив к износу.",
-    "specs": [
-      { "label": "Длина шланга", "value": "15 м" },
-      { "label": "Материал", "value": "армированный" }
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=900&q=60"
-    ],
-    "categoryId": "equipment-accessories"
-  },
-  {
-    "id": "auto-chem-foam",
-    "title": "Активная пена Foam X",
-    "price": 1900,
-    "sku": "LM-CHEM-01",
-    "shortDescription": "Концентрированная пена для бесконтактной мойки.",
-    "description": "Обеспечивает плотную пену и безопасно для ЛКП.",
-    "specs": [
-      { "label": "Объём", "value": "5 л" },
-      { "label": "Расход", "value": "1:50" }
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=60"
-    ],
-    "categoryId": "equipment-chemistry"
-  },
-  {
-    "id": "sink-double-1200",
-    "title": "Двойная мойка 1200",
+    "id": "stainless-sink-1200",
+    "title": "Мойка 1200",
     "price": 38400,
     "sku": "LM-SS-1200",
     "shortDescription": "Нержавеющая мойка с двумя чашами.",
@@ -98,21 +65,5 @@
       "https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?auto=format&fit=crop&w=900&q=70"
     ],
     "categoryId": "stainless-sinks"
-  },
-  {
-    "id": "rack-4s",
-    "title": "Стеллаж 4 секции",
-    "price": 52000,
-    "sku": "LM-SS-400",
-    "shortDescription": "Стеллаж из нержавейки для складов и кухни.",
-    "description": "Регулируемая высота полок, высокая нагрузка.",
-    "specs": [
-      { "label": "Размер", "value": "1000×500×1800" },
-      { "label": "Нагрузка", "value": "150 кг/полка" }
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=900&q=70"
-    ],
-    "categoryId": "stainless-racks"
   }
 ]

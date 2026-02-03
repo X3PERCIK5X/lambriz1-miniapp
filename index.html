@@ -8,10 +8,16 @@
   </head>
   <body>
     <header class="header">
-      <div class="logo">ЛАМБРИЗ</div>
+      <div class="logo">
+        <img src="logo.svg" alt="Ламбриз" />
+      </div>
       <div class="header-actions">
-        <button id="favoritesButton" class="icon-button" aria-label="Избранное">❤</button>
-        <button id="cartButton" class="icon-button" aria-label="Корзина">🛒</button>
+        <button id="favoritesButton" class="icon-button" aria-label="Избранное">
+          ❤<span id="favoritesCount" class="badge">0</span>
+        </button>
+        <button id="cartButton" class="icon-button" aria-label="Корзина">
+          🛒<span id="cartCount" class="badge">0</span>
+        </button>
         <button id="menuButton" class="icon-button" aria-label="Меню">☰</button>
       </div>
     </header>
@@ -23,7 +29,9 @@
       </div>
       <nav class="drawer-menu">
         <button data-screen="orders">Мои заказы</button>
+        <button data-screen="home">Каталог</button>
         <button data-screen="about">О компании</button>
+        <button data-screen="payment">Оплата и доставка</button>
         <button data-screen="contacts">Контакты</button>
       </nav>
     </aside>
@@ -31,35 +39,121 @@
 
     <main class="main">
       <section id="screen-home" class="screen active">
-        <h1>Каталог</h1>
-        <p>Стартовая страница. Дальше дополним по ТЗ.</p>
+        <div class="hero-grid">
+          <button class="hero-tile" data-group="equipment">
+            <div class="hero-image" data-image="equipment"></div>
+            <div class="hero-label">Каталог оборудования</div>
+          </button>
+          <button class="hero-tile" data-group="stainless">
+            <div class="hero-image" data-image="stainless"></div>
+            <div class="hero-label">Изделия из нержавейки</div>
+          </button>
+        </div>
+      </section>
+
+      <section id="screen-categories" class="screen">
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2 id="categoriesTitle">Каталог</h2>
+        </div>
+        <div id="categoriesGrid" class="category-grid"></div>
+      </section>
+
+      <section id="screen-products" class="screen">
+        <div class="screen-head">
+          <button class="back-button" data-back="categories">Назад</button>
+          <h2 id="productsTitle">Категория</h2>
+        </div>
+        <div id="productsList" class="product-list"></div>
+      </section>
+
+      <section id="screen-product" class="screen">
+        <div class="screen-head">
+          <button class="back-button" data-back="products">Назад</button>
+          <h2 id="productTitle">Товар</h2>
+        </div>
+        <div id="productView" class="product-view"></div>
       </section>
 
       <section id="screen-favorites" class="screen">
-        <h1>Избранное</h1>
-        <p>Пока пусто.</p>
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Избранное</h2>
+        </div>
+        <div class="favorites-actions">
+          <button id="favoritesToCart" class="secondary-button">Добавить всё в корзину</button>
+          <button id="favoritesClear" class="ghost-button">Очистить избранное</button>
+        </div>
+        <div id="favoritesList" class="product-list"></div>
       </section>
 
       <section id="screen-cart" class="screen">
-        <h1>Корзина</h1>
-        <p>Пока пусто.</p>
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Корзина</h2>
+        </div>
+        <div id="cartList" class="cart-list"></div>
+        <div class="cart-summary">Итого: <span id="cartTotal">0</span> ₽</div>
+
+        <form id="orderForm" class="order-form">
+          <h3>Оформление заявки</h3>
+          <label>ФИО *<input id="inputName" type="text" required /></label>
+          <label>Телефон *<input id="inputPhone" type="tel" required /></label>
+          <label>Email *<input id="inputEmail" type="email" required /></label>
+          <label class="checkbox">
+            <input id="policyCheck" type="checkbox" />
+            <span>Согласен(а) с <a id="policyLink" href="#" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
+          </label>
+          <div id="orderStatus" class="status"></div>
+          <button id="orderSubmit" class="primary-button" type="submit">Оформить заявку</button>
+        </form>
+      </section>
+
+      <section id="screen-confirmation" class="screen">
+        <div class="confirmation">
+          <h2>Заявка отправлена</h2>
+          <p>Мы свяжемся с вами в ближайшее время.</p>
+          <button class="primary-button" data-screen="home">Вернуться в каталог</button>
+        </div>
       </section>
 
       <section id="screen-orders" class="screen">
-        <h1>Мои заказы</h1>
-        <p>Пока пусто.</p>
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Мои заказы</h2>
+        </div>
+        <div id="ordersList" class="orders-list"></div>
       </section>
 
       <section id="screen-about" class="screen">
-        <h1>О компании</h1>
-        <p>Текст будет добавлен позже.</p>
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>О компании</h2>
+        </div>
+        <div id="aboutText" class="text-card"></div>
+      </section>
+
+      <section id="screen-payment" class="screen">
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Оплата и доставка</h2>
+        </div>
+        <div id="paymentText" class="text-card"></div>
       </section>
 
       <section id="screen-contacts" class="screen">
-        <h1>Контакты</h1>
-        <p>Телефон и контакты будут добавлены позже.</p>
+        <div class="screen-head">
+          <button class="back-button" data-back="home">Назад</button>
+          <h2>Контакты</h2>
+        </div>
+        <div id="contactsCard" class="text-card"></div>
       </section>
     </main>
+
+    <button id="cartBar" class="cart-bar hidden" type="button">
+      <span>Корзина</span>
+      <span id="cartBarTotal">0 ₽</span>
+    </button>
 
     <script src="app.js"></script>
   </body>
