@@ -55,6 +55,7 @@ function setScreen(name) {
     state.screenStack.push(name);
   }
   ui.screens.forEach((s) => s.classList.toggle('active', s.id === `screen-${name}`));
+  updateBottomNav(name);
 }
 
 function goBack() {
@@ -63,6 +64,7 @@ function goBack() {
   const prev = state.screenStack[state.screenStack.length - 1];
   state.currentScreen = prev;
   ui.screens.forEach((s) => s.classList.toggle('active', s.id === `screen-${prev}`));
+  updateBottomNav(prev);
 }
 
 function openDrawer() {
@@ -70,15 +72,34 @@ function openDrawer() {
   ui.menuDrawer.classList.add('drawer-open');
   ui.overlay.classList.remove('hidden');
   ui.overlay.classList.add('overlay-visible');
+  document.body.classList.add('menu-open');
+  if (ui.menuButton) ui.menuButton.classList.add('active');
 }
 
 function closeDrawer() {
   ui.menuDrawer.classList.remove('drawer-open');
   ui.overlay.classList.remove('overlay-visible');
+  document.body.classList.remove('menu-open');
+  if (ui.menuButton) ui.menuButton.classList.remove('active');
   setTimeout(() => {
     ui.menuDrawer.classList.add('hidden');
     ui.overlay.classList.add('hidden');
   }, 200);
+}
+
+function updateBottomNav(screen) {
+  const map = {
+    home: ui.homeButton,
+    favorites: ui.favoritesButton,
+    cart: ui.cartButton,
+    orders: ui.ordersButton,
+  };
+  const defaultButton = ui.homeButton;
+  const activeButton = map[screen] || defaultButton;
+  [ui.homeButton, ui.favoritesButton, ui.cartButton, ui.ordersButton, ui.menuButton].forEach((btn) => {
+    if (!btn) return;
+    btn.classList.toggle('active', btn === activeButton);
+  });
 }
 
 function formatPrice(v) { return Number(v || 0).toLocaleString('ru-RU'); }
@@ -455,6 +476,7 @@ async function init() {
   state.screenStack = ['home'];
   state.currentScreen = 'home';
   bindEvents();
+  updateBottomNav('home');
   updateBadges();
   renderFavorites();
   renderCart();
