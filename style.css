@@ -23,7 +23,7 @@ img { max-width: 100%; display: block; }
 .header {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 200;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,8 +34,7 @@ img { max-width: 100%; display: block; }
 
 .logo img { height: 30px; }
 
-.header-actions { display: flex; gap: 8px; }
-.header-actions { position: relative; z-index: 100; }
+.header-actions { display: flex; gap: 8px; position: relative; z-index: 210; }
 
 .icon-button {
   position: relative;
@@ -171,7 +170,7 @@ img { max-width: 100%; display: block; }
 .drawer-menu { display: grid; gap: 8px; }
 .drawer-menu button { background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 10px; border-radius: 10px; text-align: left; }
 
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 60; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 120; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
 .overlay-visible { opacity: 1; pointer-events: auto; }
 .hidden { display: none !important; }
 
