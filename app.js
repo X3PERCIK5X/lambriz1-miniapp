@@ -391,6 +391,7 @@ async function init() {
   updateBadges();
   renderFavorites();
   renderCart();
+  closeDrawer();
 }
 
 init();
