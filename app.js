@@ -289,9 +289,9 @@ function bindEvents() {
     if (btn.dataset.cart) { addToCart(btn.dataset.cart); }
   });
 
-  ui.favoritesButton.addEventListener('click', () => { renderFavorites(); setScreen('favorites'); });
-  ui.cartButton.addEventListener('click', () => { renderCart(); setScreen('cart'); });
-  ui.cartBar.addEventListener('click', () => { renderCart(); setScreen('cart'); });
+  ui.favoritesButton.addEventListener('click', () => { renderFavorites(); setScreen('favorites'); closeDrawer(); });
+  ui.cartButton.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
+  ui.cartBar.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
 
   document.querySelectorAll('.back-button').forEach((btn) => {
     btn.addEventListener('click', () => setScreen(btn.dataset.back));
