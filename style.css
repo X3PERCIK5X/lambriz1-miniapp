@@ -47,6 +47,13 @@ img { max-width: 100%; display: block; }
   place-items: center;
   cursor: pointer;
   pointer-events: auto;
+  color: var(--primary);
+}
+
+.icon-svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
 }
 
 .badge {
