@@ -67,6 +67,9 @@ function closeDrawer() {
 }
 
 function formatPrice(v) { return Number(v || 0).toLocaleString('ru-RU'); }
+function formatMultiline(text) {
+  return String(text || '').replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
+}
 
 function loadStorage() {
   state.favorites = new Set(JSON.parse(localStorage.getItem('lambriz_favorites') || '[]'));
@@ -360,8 +363,8 @@ async function loadConfig() {
   const res = await fetch('config.json', { cache: 'no-store' });
   state.config = await res.json();
   ui.policyLink.href = state.config.privacyPolicyUrl || '#';
-  ui.aboutText.textContent = state.config.aboutText || 'Текст будет добавлен позже.';
-  ui.paymentText.textContent = state.config.paymentText || 'Информация будет добавлена позже.';
+  ui.aboutText.innerHTML = formatMultiline(state.config.aboutText || 'Текст будет добавлен позже.');
+  ui.paymentText.innerHTML = formatMultiline(state.config.paymentText || 'Информация будет добавлена позже.');
   ui.contactsCard.innerHTML = `
     <strong>${state.config.companyName || 'Ламбриз'}</strong><br/>
     Телефон: ${state.config.companyPhone || '-'}<br/>
