@@ -311,6 +311,23 @@ img { max-width: 100%; display: block; }
   box-shadow: 0 10px 22px rgba(7, 25, 42, 0.08);
 }
 
+.cart-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.cart-checkout-button {
+  width: 100%;
+  margin-top: 12px;
+}
+
 .order-form.flat {
   border: none;
   padding: 0;

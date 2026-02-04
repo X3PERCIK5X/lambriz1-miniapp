@@ -110,11 +110,22 @@
           <h2>Корзина</h2>
         </div>
         <div id="cartList" class="cart-list"></div>
+        <div class="cart-summary-row">
+          <span>Итого</span>
+          <strong id="cartTotal">0 ₽</strong>
+        </div>
+        <button id="checkoutButton" class="primary-button cart-checkout-button" type="button">Оформить заказ</button>
+      </section>
 
+      <section id="screen-checkout" class="screen">
+        <div class="screen-head cart-head">
+          <button class="back-button icon-only" data-back="cart" aria-label="Назад">←</button>
+          <h2>Оформление заказа</h2>
+        </div>
         <div class="cart-checkout">
           <div class="section-title">Данные получателя</div>
           <form id="orderForm" class="order-form flat">
-            <label>ФИО *<input id="inputName" type="text" required placeholder="Имя, телефон, почта" /></label>
+            <label>ФИО *<input id="inputName" type="text" required placeholder="Имя" /></label>
             <label>Телефон *<input id="inputPhone" type="tel" required placeholder="+7" /></label>
             <label>Email *<input id="inputEmail" type="email" required placeholder="name@mail.ru" /></label>
             <label>Комментарий к заказу<input id="inputComment" type="text" placeholder="Комментарий" /></label>
@@ -124,7 +135,7 @@
             </label>
             <div class="cart-totals">
               <div><span>Товаров</span><strong id="cartItemsCount">0</strong></div>
-              <div><span>Итого</span><strong id="cartTotal">0 ₽</strong></div>
+              <div><span>Итого</span><strong id="checkoutTotal">0 ₽</strong></div>
             </div>
             <div id="orderStatus" class="status"></div>
             <button id="orderSubmit" class="primary-button" type="submit">Отправить заявку</button>

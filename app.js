@@ -36,6 +36,8 @@ const ui = {
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
   cartItemsCount: document.getElementById('cartItemsCount'),
+  checkoutTotal: document.getElementById('checkoutTotal'),
+  checkoutButton: document.getElementById('checkoutButton'),
   orderForm: document.getElementById('orderForm'),
   inputName: document.getElementById('inputName'),
   inputPhone: document.getElementById('inputPhone'),
@@ -273,6 +275,9 @@ function renderCart() {
   if (ui.cartItemsCount) {
     ui.cartItemsCount.textContent = items.reduce((s, i) => s + i.qty, 0);
   }
+  if (ui.checkoutTotal) {
+    ui.checkoutTotal.textContent = `${formatPrice(cartTotal())} ₽`;
+  }
 }
 
 function renderOrders() {
@@ -418,6 +423,7 @@ function bindEvents() {
   ui.cartButton.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
   ui.ordersButton.addEventListener('click', () => { renderOrders(); setScreen('orders'); closeDrawer(); });
   ui.homeButton.addEventListener('click', () => { setScreen('home'); closeDrawer(); });
+  ui.checkoutButton.addEventListener('click', () => { renderCart(); setScreen('checkout'); });
 
   document.querySelectorAll('.back-button').forEach((btn) => {
     btn.addEventListener('click', () => goBack());
