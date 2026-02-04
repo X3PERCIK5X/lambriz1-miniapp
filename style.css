@@ -175,6 +175,7 @@ img { max-width: 100%; display: block; }
 .product-meta { font-size: 13px; color: var(--ink-soft); margin: 4px 0; }
 .product-price { font-weight: 700; margin-top: 6px; }
 .product-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.product-actions.icon-actions { gap: 8px; align-items: center; }
 
 .card-icon {
   position: absolute;

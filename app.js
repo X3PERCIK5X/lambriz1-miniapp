@@ -247,9 +247,34 @@ function renderFavorites() {
         <div class="product-title">${p.title}</div>
         <div class="product-meta">${p.shortDescription}</div>
         <div class="product-price">${formatPrice(p.price)} ₽</div>
-        <div class="product-actions">
-          <button class="ghost-button" data-favorite="${p.id}">Удалить</button>
-          <button class="primary-button" data-cart="${p.id}">В корзину</button>
+        <div class="product-actions icon-actions">
+          <button class="icon-btn" data-favorite="${p.id}" aria-label="Удалить из избранного">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 6h18" />
+              <path d="M8 6V4h8v2" />
+              <path d="M6 6l1 14h10l1-14" />
+              <path d="M10 11v6" />
+              <path d="M14 11v6" />
+            </svg>
+          </button>
+          ${state.cart[p.id]
+            ? `
+              <div class="product-qty" data-qty="${p.id}">
+                <button class="qty-btn" data-qty-dec="${p.id}" type="button">−</button>
+                <span class="qty-count">${state.cart[p.id]}</span>
+                <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
+              </div>
+            `
+            : `
+              <button class="icon-btn" data-cart="${p.id}" aria-label="В корзину">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m15 11-1 9" />
+                  <path d="m19 11-4-7" />
+                  <path d="M2 11h20" />
+                  <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
+                </svg>
+              </button>
+            `}
         </div>
       </div>
     </article>
