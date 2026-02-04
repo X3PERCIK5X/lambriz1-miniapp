@@ -9,6 +9,8 @@ const state = {
   selectedFavorites: new Set(),
   cart: {},
   selectedCart: new Set(),
+  cartSelectionTouched: false,
+  favoritesSelectionTouched: false,
   profile: {},
   orders: [],
 };
@@ -149,7 +151,8 @@ function cartItems() {
 }
 
 function cartTotal() {
-  const selected = state.selectedCart.size ? cartItems().filter((i) => state.selectedCart.has(i.id)) : cartItems();
+  if (!state.selectedCart.size) return 0;
+  const selected = cartItems().filter((i) => state.selectedCart.has(i.id));
   return selected.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
@@ -250,6 +253,10 @@ function renderProductView() {
 
 function renderFavorites() {
   const list = state.products.filter((p) => state.favorites.has(p.id));
+  if (!state.selectedFavorites.size && list.length && !state.favoritesSelectionTouched) {
+    state.selectedFavorites = new Set(list.map((p) => p.id));
+    saveStorage();
+  }
   if (ui.favoritesSelectAll) {
     ui.favoritesSelectAll.checked = list.length && list.every((p) => state.selectedFavorites.has(p.id));
   }
@@ -300,6 +307,10 @@ function renderFavorites() {
 
 function renderCart() {
   const items = cartItems();
+  if (!state.selectedCart.size && items.length && !state.cartSelectionTouched) {
+    state.selectedCart = new Set(items.map((i) => i.id));
+    saveStorage();
+  }
   ui.cartList.innerHTML = items.map((p) => `
     <div class="cart-item">
       <label class="select-dot">
@@ -502,13 +513,16 @@ function bindEvents() {
       }
       return;
     }
+  });
+
+  ui.favoritesList.addEventListener('change', (e) => {
     const select = e.target.closest('input[data-fav-select]');
-    if (select) {
-      const id = select.dataset.favSelect;
-      if (select.checked) state.selectedFavorites.add(id); else state.selectedFavorites.delete(id);
-      saveStorage();
-      return;
-    }
+    if (!select) return;
+    state.favoritesSelectionTouched = true;
+    const id = select.dataset.favSelect;
+    if (select.checked) state.selectedFavorites.add(id); else state.selectedFavorites.delete(id);
+    saveStorage();
+    renderFavorites();
   });
 
   ui.favoritesButton.addEventListener('click', () => { renderFavorites(); setScreen('favorites'); closeDrawer(); });
@@ -559,6 +573,7 @@ function bindEvents() {
   ui.cartList.addEventListener('change', (e) => {
     const select = e.target.closest('input[data-cart-select]');
     if (!select) return;
+    state.cartSelectionTouched = true;
     const id = select.dataset.cartSelect;
     if (select.checked) state.selectedCart.add(id); else state.selectedCart.delete(id);
     saveStorage();
@@ -566,6 +581,7 @@ function bindEvents() {
   });
 
   if (ui.favoritesSelectAll) ui.favoritesSelectAll.addEventListener('change', () => {
+    state.favoritesSelectionTouched = true;
     const list = state.products.filter((p) => state.favorites.has(p.id));
     state.selectedFavorites = new Set(ui.favoritesSelectAll.checked ? list.map((p) => p.id) : []);
     saveStorage();
@@ -573,6 +589,7 @@ function bindEvents() {
   });
 
   if (ui.cartSelectAll) ui.cartSelectAll.addEventListener('change', () => {
+    state.cartSelectionTouched = true;
     const items = cartItems();
     state.selectedCart = new Set(ui.cartSelectAll.checked ? items.map((i) => i.id) : []);
     saveStorage();

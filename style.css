@@ -354,7 +354,7 @@ img { max-width: 100%; display: block; }
 }
 
 .cart-list { display: grid; gap: 8px; }
-.cart-item { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 10px; display: grid; gap: 6px; }
+.cart-item { position: relative; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 10px 10px 10px 36px; display: grid; gap: 6px; }
 .cart-title-link {
   border: none;
   background: transparent;
