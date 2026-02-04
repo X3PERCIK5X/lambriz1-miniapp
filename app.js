@@ -260,8 +260,8 @@ function renderCart() {
   const items = cartItems();
   ui.cartList.innerHTML = items.map((p) => `
     <div class="cart-item">
+      <div class="cart-title">Артикул: ${p.sku}</div>
       <div><button class="cart-title-link" data-open="${p.id}">${p.title}</button></div>
-      <div>Артикул: ${p.sku}</div>
       <div>${formatPrice(p.price)} ₽</div>
       <div class="cart-controls">
         <button class="qty-btn" data-qty="${p.id}" data-action="dec">−</button>
