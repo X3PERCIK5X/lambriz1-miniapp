@@ -487,40 +487,32 @@ img { max-width: 100%; display: block; }
   box-shadow: var(--shadow-soft);
 }
 
-.drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100vw;
-  height: 100%;
-  background: var(--primary);
-  color: #fff;
-  padding: 20px;
-  z-index: 240;
-  transform: translateX(100%);
-  transition: transform 0.25s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.drawer-open { transform: translateX(0); }
-.drawer-head { display: flex; justify-content: space-between; align-items: center; }
-.drawer-logo { width: 150px; filter: brightness(0) invert(1); }
-.drawer-menu { display: grid; gap: 12px; margin-top: 4px; }
-.drawer-menu button {
+.menu-head { margin-bottom: 6px; }
+.menu-list { display: grid; gap: 12px; margin-top: 8px; }
+.menu-item {
   background: transparent;
   border: none;
-  color: #fff;
-  font-size: 20px;
-  letter-spacing: 0.5px;
+  color: var(--ink);
+  font-size: 18px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
   text-align: left;
   padding: 6px 0;
   cursor: pointer;
 }
-.menu-caret { font-size: 16px; margin-left: 6px; }
-.drawer-footer { margin-top: auto; display: grid; gap: 12px; }
-.drawer-phone { font-size: 24px; font-weight: 700; }
+.menu-caret { font-size: 14px; margin-left: 6px; }
+.menu-sublist { display: grid; gap: 8px; padding-left: 12px; }
+.menu-sublist button {
+  border: none;
+  background: #fff;
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+.menu-footer { margin-top: 24px; display: grid; gap: 12px; }
+.menu-phone { font-size: 22px; font-weight: 700; color: var(--ink); }
 .drawer-socials { display: flex; gap: 10px; }
 .social-button {
   width: 42px;
@@ -532,15 +524,12 @@ img { max-width: 100%; display: block; }
   place-items: center;
   text-decoration: none;
   font-weight: 700;
+  border: 1px solid var(--border);
 }
 .social-icon {
   width: 20px;
   height: 20px;
   display: block;
-}
-
-.drawer-call-placeholder {
-  height: 52px;
 }
 .call-button {
   display: inline-flex;
@@ -555,8 +544,6 @@ img { max-width: 100%; display: block; }
   width: 220px;
 }
 
-.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 150; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
-.overlay-visible { opacity: 1; pointer-events: auto; }
 .hidden { display: none !important; }
 
 .bottom-nav {
@@ -641,10 +628,6 @@ img { max-width: 100%; display: block; }
   stroke: #fff;
 }
 
-.menu-open .bottom-nav {
-  opacity: 1;
-  pointer-events: auto;
-}
 .product-head {
   display: grid;
   grid-template-columns: 36px 1fr 36px;

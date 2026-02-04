@@ -14,42 +14,6 @@
       <div class="header-actions header-empty"></div>
     </header>
 
-    <aside id="menuDrawer" class="drawer hidden">
-      <div class="drawer-head">
-        <img class="drawer-logo" src="logo.svg" alt="Ламбриз" />
-      </div>
-      <nav class="drawer-menu">
-        <button data-screen="home">Каталог <span class="menu-caret">▾</span></button>
-        <button data-screen="promo">Акции</button>
-        <button data-screen="about">О компании</button>
-        <button data-screen="production">Производство</button>
-        <button data-screen="payment">Оплата и доставка</button>
-        <button data-screen="contacts">Контакты</button>
-      </nav>
-      <div class="drawer-footer">
-        <div id="menuPhone" class="drawer-phone">+7 (916) 616-37-77</div>
-        <div class="drawer-socials">
-          <a class="social-button" href="https://t.me" target="_blank" rel="noopener" aria-label="Telegram">
-            <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="currentColor" d="M22 4.01c0-.83-.76-1.37-1.54-1.07L3.02 9.62c-.98.37-.97 1.77.02 2.12l4.64 1.64 1.78 5.57c.22.7 1.07.96 1.63.51l2.65-2.1 4.82 3.52c.67.49 1.63.1 1.78-.74l2.64-14.83c.01-.06.02-.12.02-.18Zm-15.37 8.39 11.64-6.64-8.72 8.86-.44 3.3-1.43-4.48-4.59-1.04 3.54-1.99Z"/>
-            </svg>
-          </a>
-          <a class="social-button" href="https://wa.me/79166163777" target="_blank" rel="noopener" aria-label="WhatsApp">
-            <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="currentColor" d="M12 2a10 10 0 0 0-8.73 14.9L2 22l5.26-1.38A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.06-1.1l-.29-.17-3.12.82.83-3.03-.18-.3A8 8 0 1 1 12 20Zm4.57-5.13c-.25-.12-1.48-.73-1.71-.82-.23-.08-.4-.12-.57.12-.17.25-.65.82-.8.99-.15.17-.3.2-.55.08a6.57 6.57 0 0 1-1.93-1.19 7.22 7.22 0 0 1-1.33-1.65c-.14-.25 0-.38.11-.5.12-.12.25-.3.37-.45.12-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.12-.57-1.36-.78-1.87-.2-.48-.4-.41-.57-.42h-.49c-.17 0-.45.06-.68.32-.23.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.12.17 1.81 2.77 4.39 3.88.61.26 1.09.42 1.46.54.61.2 1.17.17 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.07.14-1.18-.06-.12-.23-.2-.48-.32Z"/>
-            </svg>
-          </a>
-          <a class="social-button" href="mailto:lambrizseller@yandex.ru" aria-label="Email">
-            <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="currentColor" d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2 8 5 8-5H4Zm0 10h16V10l-8 5-8-5v8Z"/>
-            </svg>
-          </a>
-        </div>
-        <div class="drawer-call-placeholder"></div>
-      </div>
-    </aside>
-    <div id="drawerOverlay" class="overlay hidden"></div>
-
     <main class="main">
       <section id="screen-home" class="screen active">
         <section class="about-card">
@@ -81,6 +45,43 @@
           <h2 id="categoriesTitle">Каталог</h2>
         </div>
         <div id="categoriesGrid" class="category-grid"></div>
+      </section>
+
+      <section id="screen-menu" class="screen">
+        <div class="screen-head menu-head">
+          <div class="logo">
+            <img src="logo.svg" alt="Ламбриз" />
+          </div>
+        </div>
+        <nav class="menu-list">
+          <button id="menuCatalogToggle" class="menu-item">Каталог <span class="menu-caret">▾</span></button>
+          <div id="menuCatalogList" class="menu-sublist hidden"></div>
+          <button data-screen="promo" class="menu-item">Акции</button>
+          <button data-screen="about" class="menu-item">О компании</button>
+          <button data-screen="production" class="menu-item">Производство</button>
+          <button data-screen="payment" class="menu-item">Оплата и доставка</button>
+          <button data-screen="contacts" class="menu-item">Контакты</button>
+        </nav>
+        <div class="menu-footer">
+          <div id="menuPhone" class="menu-phone">+7 (916) 616-37-77</div>
+          <div class="drawer-socials">
+            <a class="social-button" href="https://t.me" target="_blank" rel="noopener" aria-label="Telegram">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M22 4.01c0-.83-.76-1.37-1.54-1.07L3.02 9.62c-.98.37-.97 1.77.02 2.12l4.64 1.64 1.78 5.57c.22.7 1.07.96 1.63.51l2.65-2.1 4.82 3.52c.67.49 1.63.1 1.78-.74l2.64-14.83c.01-.06.02-.12.02-.18Zm-15.37 8.39 11.64-6.64-8.72 8.86-.44 3.3-1.43-4.48-4.59-1.04 3.54-1.99Z"/>
+              </svg>
+            </a>
+            <a class="social-button" href="https://wa.me/79166163777" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M12 2a10 10 0 0 0-8.73 14.9L2 22l5.26-1.38A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.06-1.1l-.29-.17-3.12.82.83-3.03-.18-.3A8 8 0 1 1 12 20Zm4.57-5.13c-.25-.12-1.48-.73-1.71-.82-.23-.08-.4-.12-.57.12-.17.25-.65.82-.8.99-.15.17-.3.2-.55.08a6.57 6.57 0 0 1-1.93-1.19 7.22 7.22 0 0 1-1.33-1.65c-.14-.25 0-.38.11-.5.12-.12.25-.3.37-.45.12-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.12-.57-1.36-.78-1.87-.2-.48-.4-.41-.57-.42h-.49c-.17 0-.45.06-.68.32-.23.25-.9.88-.9 2.14s.92 2.48 1.05 2.65c.12.17 1.81 2.77 4.39 3.88.61.26 1.09.42 1.46.54.61.2 1.17.17 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.07.14-1.18-.06-.12-.23-.2-.48-.32Z"/>
+              </svg>
+            </a>
+            <a class="social-button" href="mailto:lambrizseller@yandex.ru" aria-label="Email">
+              <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2 8 5 8-5H4Zm0 10h16V10l-8 5-8-5v8Z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
       </section>
 
       <section id="screen-products" class="screen">
