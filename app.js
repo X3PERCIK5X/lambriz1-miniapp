@@ -740,7 +740,14 @@ async function loadConfig() {
   const res = await fetch('config.json', { cache: 'no-store' });
   state.config = await res.json();
   ui.policyLink.href = state.config.privacyPolicyUrl || '#';
-  ui.aboutText.innerHTML = formatMultiline(state.config.aboutText || 'Текст будет добавлен позже.');
+  if (ui.aboutText) {
+    const aboutRaw = state.config.aboutText || 'Текст будет добавлен позже.';
+    if (String(aboutRaw).includes('<')) {
+      ui.aboutText.innerHTML = aboutRaw;
+    } else {
+      ui.aboutText.innerHTML = formatMultiline(aboutRaw);
+    }
+  }
   ui.paymentText.innerHTML = formatMultiline(state.config.paymentText || 'Информация будет добавлена позже.');
   if (ui.productionText) {
     const prodRaw = state.config.productionText || 'Информация будет добавлена позже.';
