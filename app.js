@@ -6,7 +6,9 @@ const state = {
   currentCategory: null,
   currentProduct: null,
   favorites: new Set(),
+  selectedFavorites: new Set(),
   cart: {},
+  selectedCart: new Set(),
   profile: {},
   orders: [],
 };
@@ -33,11 +35,14 @@ const ui = {
   favoritesList: document.getElementById('favoritesList'),
   favoritesToCart: document.getElementById('favoritesToCart'),
   favoritesClear: document.getElementById('favoritesClear'),
+  favoritesSelectAll: document.getElementById('favoritesSelectAll'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
   cartItemsCount: document.getElementById('cartItemsCount'),
   checkoutTotal: document.getElementById('checkoutTotal'),
   checkoutButton: document.getElementById('checkoutButton'),
+  cartSelectAll: document.getElementById('cartSelectAll'),
+  cartRemoveSelected: document.getElementById('cartRemoveSelected'),
   orderForm: document.getElementById('orderForm'),
   inputName: document.getElementById('inputName'),
   inputPhone: document.getElementById('inputPhone'),
@@ -120,6 +125,8 @@ function formatMultiline(text) {
 function loadStorage() {
   state.favorites = new Set(JSON.parse(localStorage.getItem('lambriz_favorites') || '[]'));
   state.cart = JSON.parse(localStorage.getItem('lambriz_cart') || '{}');
+  state.selectedCart = new Set(JSON.parse(localStorage.getItem('lambriz_cart_selected') || '[]'));
+  state.selectedFavorites = new Set(JSON.parse(localStorage.getItem('lambriz_fav_selected') || '[]'));
   state.profile = JSON.parse(localStorage.getItem('lambriz_profile') || '{}');
   state.orders = JSON.parse(localStorage.getItem('lambriz_orders') || '[]');
 }
@@ -127,6 +134,8 @@ function loadStorage() {
 function saveStorage() {
   localStorage.setItem('lambriz_favorites', JSON.stringify(Array.from(state.favorites)));
   localStorage.setItem('lambriz_cart', JSON.stringify(state.cart));
+  localStorage.setItem('lambriz_cart_selected', JSON.stringify(Array.from(state.selectedCart)));
+  localStorage.setItem('lambriz_fav_selected', JSON.stringify(Array.from(state.selectedFavorites)));
   localStorage.setItem('lambriz_profile', JSON.stringify(state.profile));
   localStorage.setItem('lambriz_orders', JSON.stringify(state.orders));
 }
@@ -140,7 +149,8 @@ function cartItems() {
 }
 
 function cartTotal() {
-  return cartItems().reduce((sum, item) => sum + item.price * item.qty, 0);
+  const selected = state.selectedCart.size ? cartItems().filter((i) => state.selectedCart.has(i.id)) : cartItems();
+  return selected.reduce((sum, item) => sum + item.price * item.qty, 0);
 }
 
 function updateBadges() {
@@ -240,8 +250,15 @@ function renderProductView() {
 
 function renderFavorites() {
   const list = state.products.filter((p) => state.favorites.has(p.id));
+  if (ui.favoritesSelectAll) {
+    ui.favoritesSelectAll.checked = list.length && list.every((p) => state.selectedFavorites.has(p.id));
+  }
   ui.favoritesList.innerHTML = list.map((p) => `
     <article class="product-card">
+      <label class="select-dot">
+        <input type="checkbox" data-fav-select="${p.id}" ${state.selectedFavorites.has(p.id) ? 'checked' : ''} />
+        <span></span>
+      </label>
       <img src="${p.images[0]}" alt="${p.title}" />
       <div>
         <div class="product-title">${p.title}</div>
@@ -285,6 +302,10 @@ function renderCart() {
   const items = cartItems();
   ui.cartList.innerHTML = items.map((p) => `
     <div class="cart-item">
+      <label class="select-dot">
+        <input type="checkbox" data-cart-select="${p.id}" ${state.selectedCart.has(p.id) ? 'checked' : ''} />
+        <span></span>
+      </label>
       <div><button class="cart-title-link" data-open="${p.id}">${p.title}</button></div>
       <div class="cart-sku">Артикул: ${p.sku}</div>
       <div>${formatPrice(p.price)} ₽</div>
@@ -292,7 +313,7 @@ function renderCart() {
         <button class="qty-btn" data-qty="${p.id}" data-action="dec">−</button>
         <span class="qty-count">${p.qty}</span>
         <button class="qty-btn" data-qty="${p.id}" data-action="inc">+</button>
-        <button class="icon-btn" data-favorite="${p.id}" aria-label="В избранное">
+        <button class="icon-btn ${state.favorites.has(p.id) ? 'active' : ''}" data-favorite="${p.id}" aria-label="В избранное">
           <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
           </svg>
@@ -315,6 +336,9 @@ function renderCart() {
   }
   if (ui.checkoutTotal) {
     ui.checkoutTotal.textContent = `${formatPrice(cartTotal())} ₽`;
+  }
+  if (ui.cartSelectAll) {
+    ui.cartSelectAll.checked = items.length && items.every((i) => state.selectedCart.has(i.id));
   }
 }
 
@@ -464,9 +488,27 @@ function bindEvents() {
 
   ui.favoritesList.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
-    if (!btn) return;
-    if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
-    if (btn.dataset.cart) { addToCart(btn.dataset.cart); }
+    if (btn) {
+      if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
+      if (btn.dataset.cart) { addToCart(btn.dataset.cart); renderFavorites(); }
+      if (btn.dataset.qtyInc) { addToCart(btn.dataset.qtyInc); renderFavorites(); }
+      if (btn.dataset.qtyDec) {
+        const id = btn.dataset.qtyDec;
+        state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1);
+        if (!state.cart[id]) delete state.cart[id];
+        saveStorage();
+        updateBadges();
+        renderFavorites();
+      }
+      return;
+    }
+    const select = e.target.closest('input[data-fav-select]');
+    if (select) {
+      const id = select.dataset.favSelect;
+      if (select.checked) state.selectedFavorites.add(id); else state.selectedFavorites.delete(id);
+      saveStorage();
+      return;
+    }
   });
 
   ui.favoritesButton.addEventListener('click', () => { renderFavorites(); setScreen('favorites'); closeDrawer(); });
@@ -480,10 +522,18 @@ function bindEvents() {
   });
 
   ui.favoritesToCart.addEventListener('click', () => {
-    state.favorites.forEach((id) => addToCart(id));
+    const ids = state.selectedFavorites.size ? Array.from(state.selectedFavorites) : Array.from(state.favorites);
+    ids.forEach((id) => addToCart(id));
     renderFavorites();
   });
-  ui.favoritesClear.addEventListener('click', () => { state.favorites.clear(); saveStorage(); renderFavorites(); updateBadges(); });
+  ui.favoritesClear.addEventListener('click', () => {
+    const ids = state.selectedFavorites.size ? Array.from(state.selectedFavorites) : Array.from(state.favorites);
+    ids.forEach((id) => state.favorites.delete(id));
+    state.selectedFavorites.clear();
+    saveStorage();
+    renderFavorites();
+    updateBadges();
+  });
 
   ui.cartList.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
@@ -503,6 +553,37 @@ function bindEvents() {
     if (btn.dataset.action === 'inc') { addToCart(id); }
     else if (btn.dataset.action === 'dec') { state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1); if (!state.cart[id]) delete state.cart[id]; saveStorage(); updateBadges(); }
     else if (btn.dataset.remove) { delete state.cart[id]; saveStorage(); updateBadges(); }
+    renderCart();
+  });
+
+  ui.cartList.addEventListener('change', (e) => {
+    const select = e.target.closest('input[data-cart-select]');
+    if (!select) return;
+    const id = select.dataset.cartSelect;
+    if (select.checked) state.selectedCart.add(id); else state.selectedCart.delete(id);
+    saveStorage();
+    renderCart();
+  });
+
+  if (ui.favoritesSelectAll) ui.favoritesSelectAll.addEventListener('change', () => {
+    const list = state.products.filter((p) => state.favorites.has(p.id));
+    state.selectedFavorites = new Set(ui.favoritesSelectAll.checked ? list.map((p) => p.id) : []);
+    saveStorage();
+    renderFavorites();
+  });
+
+  if (ui.cartSelectAll) ui.cartSelectAll.addEventListener('change', () => {
+    const items = cartItems();
+    state.selectedCart = new Set(ui.cartSelectAll.checked ? items.map((i) => i.id) : []);
+    saveStorage();
+    renderCart();
+  });
+
+  if (ui.cartRemoveSelected) ui.cartRemoveSelected.addEventListener('click', () => {
+    state.selectedCart.forEach((id) => delete state.cart[id]);
+    state.selectedCart.clear();
+    saveStorage();
+    updateBadges();
     renderCart();
   });
 
