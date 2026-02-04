@@ -564,6 +564,7 @@ function bindEvents() {
     const id = btn.dataset.qty || btn.dataset.remove;
     if (!id && btn.dataset.favorite) {
       toggleFavorite(btn.dataset.favorite);
+      renderCart();
       return;
     }
     if (!id) return;
