@@ -404,9 +404,9 @@ img { max-width: 100%; display: block; }
 }
 .icon-btn .icon-svg { width: 16px; height: 16px; }
 .icon-btn.active {
-  background: var(--primary);
+  background: #0a2f46;
   color: #fff;
-  border-color: var(--primary);
+  border-color: #0a2f46;
 }
 
 .cart-summary { margin: 12px 0; font-weight: 700; }
@@ -623,11 +623,16 @@ img { max-width: 100%; display: block; }
 
 .bottom-item.active {
   color: var(--primary);
-  background: rgba(12, 61, 90, 0.12);
+  background: rgba(12, 61, 90, 0.18);
+  border: 1px solid rgba(12, 61, 90, 0.5);
 }
 
 .bottom-center.active {
   background: var(--primary-dark);
+}
+
+.bottom-center .icon-svg {
+  stroke: #fff;
 }
 
 .menu-open .bottom-nav {
