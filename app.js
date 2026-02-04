@@ -299,6 +299,21 @@ function toggleFavorite(id) {
   if (state.favorites.has(id)) state.favorites.delete(id); else state.favorites.add(id);
   saveStorage();
   updateBadges();
+  refreshFavoriteViews();
+}
+
+function refreshFavoriteViews() {
+  if (state.currentScreen === 'products' || state.currentScreen === 'categories' || state.currentScreen === 'home') {
+    renderProducts();
+  }
+  if (state.currentScreen === 'favorites') {
+    renderFavorites();
+  } else {
+    renderFavorites();
+  }
+  if (state.currentScreen === 'product') {
+    renderProductView();
+  }
 }
 
 function addToCart(id) {
@@ -350,8 +365,6 @@ function bindEvents() {
     const btn = e.target.closest('button');
     if (btn && btn.dataset.favorite) {
       toggleFavorite(btn.dataset.favorite);
-      renderProducts();
-      renderFavorites();
       e.stopPropagation();
       return;
     }
@@ -387,7 +400,7 @@ function bindEvents() {
   ui.productView.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
-    if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); renderProductView(); }
+    if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
     if (btn.dataset.cart) { addToCart(btn.dataset.cart); renderProductView(); }
     if (btn.dataset.qtyInc) { addToCart(btn.dataset.qtyInc); renderProductView(); }
     if (btn.dataset.qtyDec) {
@@ -406,7 +419,6 @@ function bindEvents() {
       const id = ui.productFavoriteTop.dataset.favorite;
       if (!id) return;
       toggleFavorite(id);
-      renderProductView();
       e.stopPropagation();
     });
   }
@@ -415,7 +427,7 @@ function bindEvents() {
   ui.favoritesList.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
-    if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); renderFavorites(); }
+    if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
     if (btn.dataset.cart) { addToCart(btn.dataset.cart); }
   });
 
