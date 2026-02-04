@@ -413,6 +413,12 @@ function bindEvents() {
       setScreen('categories');
     });
   });
+  // Ensure categories grid has data on load
+  if (!state.currentGroup) {
+    state.currentGroup = 'equipment';
+    ui.categoriesTitle.textContent = 'Каталог оборудования';
+    renderCategories();
+  }
 
   if (ui.menuCatalogList) {
     ui.menuCatalogList.addEventListener('click', (e) => {
