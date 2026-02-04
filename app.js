@@ -11,6 +11,7 @@ const state = {
   selectedCart: new Set(),
   cartSelectionTouched: false,
   favoritesSelectionTouched: false,
+  productionSlide: 0,
   profile: {},
   orders: [],
 };
@@ -447,6 +448,22 @@ function bindEvents() {
     });
   });
 
+  const productionSlider = document.querySelector('.production-slider');
+  if (productionSlider) {
+    let prodStartX = 0;
+    productionSlider.addEventListener('touchstart', (e) => {
+      prodStartX = e.touches[0].clientX;
+    }, { passive: true });
+    productionSlider.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - prodStartX;
+      if (Math.abs(dx) < 40) return;
+      const totalSlides = document.querySelectorAll('.production-track img').length || 1;
+      const dir = dx < 0 ? 1 : -1;
+      const next = Math.max(0, Math.min(totalSlides - 1, state.productionSlide + dir));
+      if (next !== state.productionSlide) setProductionSlide(next);
+    });
+  }
+
   ui.categoriesGrid.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-category]');
     if (!btn) return;
@@ -713,6 +730,7 @@ function bindEvents() {
 function setProductionSlide(index) {
   if (!ui.productionTrack) return;
   ui.productionTrack.style.transform = `translateX(-${index * 100}%)`;
+  state.productionSlide = index;
   document.querySelectorAll('[data-prod-dot]').forEach((dot) => {
     dot.classList.toggle('active', Number(dot.dataset.prodDot) === index);
   });

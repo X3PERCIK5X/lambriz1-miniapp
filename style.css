@@ -115,17 +115,17 @@ img { max-width: 100%; display: block; }
 .hero-image[data-image="stainless"] { background-image: url("https://images.unsplash.com/photo-1501045661006-fcebe0257c3f?auto=format&fit=crop&w=900&q=70"); }
 
 .about-card {
-  margin-top: 18px;
+  margin-top: 6px;
   background: var(--about-bg);
   border-radius: var(--radius-lg);
-  padding: 18px;
+  padding: 14px;
   display: grid;
   gap: 12px;
   box-shadow: var(--shadow-soft);
 }
 
 .about-title {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: 800;
 }
 
@@ -136,16 +136,22 @@ img { max-width: 100%; display: block; }
 }
 
 .about-text {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.45;
   color: #2b2b2b;
 }
 
 .about-button {
-  width: 180px;
-  padding: 12px 14px;
+  width: 170px;
+  padding: 10px 12px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 14px;
+}
+.home-section-title {
+  margin: 10px 4px 4px;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
 }
 
 .screen-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
