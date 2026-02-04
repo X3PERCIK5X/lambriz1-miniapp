@@ -297,6 +297,46 @@ img { max-width: 100%; display: block; }
 .checkbox { grid-template-columns: 20px 1fr; align-items: start; }
 .status { font-size: 13px; color: var(--ink-soft); }
 
+.cart-head {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: center;
+}
+
+.cart-checkout {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 22px rgba(7, 25, 42, 0.08);
+}
+
+.order-form.flat {
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  gap: 12px;
+}
+
+.order-form.flat input {
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 8px 2px;
+}
+
+.cart-totals {
+  display: grid;
+  gap: 6px;
+  padding-top: 8px;
+}
+
+.cart-totals div {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+
 .confirmation { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
 
 .text-card {

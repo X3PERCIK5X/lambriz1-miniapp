@@ -35,10 +35,12 @@ const ui = {
   favoritesClear: document.getElementById('favoritesClear'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
+  cartItemsCount: document.getElementById('cartItemsCount'),
   orderForm: document.getElementById('orderForm'),
   inputName: document.getElementById('inputName'),
   inputPhone: document.getElementById('inputPhone'),
   inputEmail: document.getElementById('inputEmail'),
+  inputComment: document.getElementById('inputComment'),
   policyCheck: document.getElementById('policyCheck'),
   policyLink: document.getElementById('policyLink'),
   orderStatus: document.getElementById('orderStatus'),
@@ -268,6 +270,9 @@ function renderCart() {
     </div>
   `).join('');
   ui.cartTotal.textContent = formatPrice(cartTotal());
+  if (ui.cartItemsCount) {
+    ui.cartItemsCount.textContent = items.reduce((s, i) => s + i.qty, 0);
+  }
 }
 
 function renderOrders() {
@@ -446,7 +451,7 @@ function bindEvents() {
     const order = {
       id: Date.now(),
       createdAt: new Date().toISOString(),
-      customer: profile,
+      customer: { ...profile, comment: ui.inputComment ? ui.inputComment.value.trim() : '' },
       items: items.map((i) => ({ id: i.id, title: i.title, sku: i.sku, price: i.price, qty: i.qty })),
       total: cartTotal(),
       telegramUserId: null,

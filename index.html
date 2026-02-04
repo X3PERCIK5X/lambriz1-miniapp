@@ -105,25 +105,31 @@
       </section>
 
       <section id="screen-cart" class="screen">
-        <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+        <div class="screen-head cart-head">
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Корзина</h2>
         </div>
         <div id="cartList" class="cart-list"></div>
-        <div class="cart-summary">Итого: <span id="cartTotal">0</span> ₽</div>
 
-        <form id="orderForm" class="order-form">
-          <h3>Оформление заявки</h3>
-          <label>ФИО *<input id="inputName" type="text" required /></label>
-          <label>Телефон *<input id="inputPhone" type="tel" required /></label>
-          <label>Email *<input id="inputEmail" type="email" required /></label>
-          <label class="checkbox">
-            <input id="policyCheck" type="checkbox" />
-            <span>Согласен(а) с <a id="policyLink" href="#" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
-          </label>
-          <div id="orderStatus" class="status"></div>
-          <button id="orderSubmit" class="primary-button" type="submit">Оформить заявку</button>
-        </form>
+        <div class="cart-checkout">
+          <div class="section-title">Данные получателя</div>
+          <form id="orderForm" class="order-form flat">
+            <label>ФИО *<input id="inputName" type="text" required placeholder="Имя, телефон, почта" /></label>
+            <label>Телефон *<input id="inputPhone" type="tel" required placeholder="+7" /></label>
+            <label>Email *<input id="inputEmail" type="email" required placeholder="name@mail.ru" /></label>
+            <label>Комментарий к заказу<input id="inputComment" type="text" placeholder="Комментарий" /></label>
+            <label class="checkbox">
+              <input id="policyCheck" type="checkbox" />
+              <span>Согласен(а) с <a id="policyLink" href="#" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
+            </label>
+            <div class="cart-totals">
+              <div><span>Товаров</span><strong id="cartItemsCount">0</strong></div>
+              <div><span>Итого</span><strong id="cartTotal">0 ₽</strong></div>
+            </div>
+            <div id="orderStatus" class="status"></div>
+            <button id="orderSubmit" class="primary-button" type="submit">Отправить заявку</button>
+          </form>
+        </div>
       </section>
 
       <section id="screen-confirmation" class="screen">
