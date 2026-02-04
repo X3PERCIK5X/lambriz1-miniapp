@@ -234,7 +234,21 @@
           <button class="back-button" data-back="home">Назад</button>
           <h2>Производство</h2>
         </div>
-        <div class="text-card">Информация о производстве будет добавлена позже.</div>
+        <div class="production-slider">
+          <div id="productionTrack" class="production-track">
+            <img src="assets/production-1.jpg" alt="Производство металлоизделий" />
+            <img src="assets/production-2.jpg" alt="Лазерная резка металла" />
+          </div>
+          <div class="production-dots">
+            <button class="dot active" data-prod-dot="0" aria-label="Слайд 1"></button>
+            <button class="dot" data-prod-dot="1" aria-label="Слайд 2"></button>
+          </div>
+        </div>
+        <div id="productionText" class="text-card"></div>
+        <div class="text-card">
+          <div class="section-title">Мы предлагаем следующие услуги:</div>
+          <ul id="productionServices" class="production-list"></ul>
+        </div>
       </section>
 
       <section id="screen-contacts" class="screen">

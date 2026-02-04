@@ -531,6 +531,53 @@ img { max-width: 100%; display: block; }
   height: 20px;
   display: block;
 }
+
+.production-slider {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.production-track {
+  display: flex;
+  transition: transform 0.25s ease;
+}
+
+.production-track img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.production-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 0;
+  background: #fff;
+}
+
+.production-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #dfe6eb;
+  cursor: pointer;
+}
+
+.production-dots .dot.active {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.production-list {
+  display: grid;
+  gap: 6px;
+  padding-left: 16px;
+}
 .call-button {
   display: inline-flex;
   justify-content: center;

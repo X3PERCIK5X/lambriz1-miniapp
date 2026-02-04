@@ -56,6 +56,9 @@ const ui = {
   aboutText: document.getElementById('aboutText'),
   paymentText: document.getElementById('paymentText'),
   contactsCard: document.getElementById('contactsCard'),
+  productionText: document.getElementById('productionText'),
+  productionServices: document.getElementById('productionServices'),
+  productionTrack: document.getElementById('productionTrack'),
 };
 
 function setScreen(name) {
@@ -432,6 +435,13 @@ function bindEvents() {
     });
   }
 
+  document.querySelectorAll('[data-prod-dot]').forEach((dot) => {
+    dot.addEventListener('click', () => {
+      const index = Number(dot.dataset.prodDot || 0);
+      setProductionSlide(index);
+    });
+  });
+
   ui.categoriesGrid.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-category]');
     if (!btn) return;
@@ -695,12 +705,27 @@ function bindEvents() {
   });
 }
 
+function setProductionSlide(index) {
+  if (!ui.productionTrack) return;
+  ui.productionTrack.style.transform = `translateX(-${index * 100}%)`;
+  document.querySelectorAll('[data-prod-dot]').forEach((dot) => {
+    dot.classList.toggle('active', Number(dot.dataset.prodDot) === index);
+  });
+}
+
 async function loadConfig() {
   const res = await fetch('config.json', { cache: 'no-store' });
   state.config = await res.json();
   ui.policyLink.href = state.config.privacyPolicyUrl || '#';
   ui.aboutText.innerHTML = formatMultiline(state.config.aboutText || 'Текст будет добавлен позже.');
   ui.paymentText.innerHTML = formatMultiline(state.config.paymentText || 'Информация будет добавлена позже.');
+  if (ui.productionText) {
+    ui.productionText.innerHTML = formatMultiline(state.config.productionText || 'Информация будет добавлена позже.');
+  }
+  if (ui.productionServices) {
+    const list = state.config.productionServices || [];
+    ui.productionServices.innerHTML = list.map((item) => `<li>${item}</li>`).join('');
+  }
   if (state.config.contactsText) {
     ui.contactsCard.innerHTML = formatMultiline(state.config.contactsText);
   } else {
