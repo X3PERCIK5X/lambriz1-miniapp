@@ -33,8 +33,6 @@ const ui = {
   favoritesClear: document.getElementById('favoritesClear'),
   cartList: document.getElementById('cartList'),
   cartTotal: document.getElementById('cartTotal'),
-  cartBar: document.getElementById('cartBar'),
-  cartBarTotal: document.getElementById('cartBarTotal'),
   orderForm: document.getElementById('orderForm'),
   inputName: document.getElementById('inputName'),
   inputPhone: document.getElementById('inputPhone'),
@@ -137,12 +135,6 @@ function updateBadges() {
   const cartCount = Object.values(state.cart).reduce((s, q) => s + q, 0);
   ui.cartCount.textContent = cartCount;
   ui.favoritesCount.textContent = state.favorites.size;
-  if (cartCount > 0) {
-    ui.cartBar.classList.remove('hidden');
-    ui.cartBarTotal.textContent = `${formatPrice(cartTotal())} ₽`;
-  } else {
-    ui.cartBar.classList.add('hidden');
-  }
 }
 
 function renderCategories() {
@@ -329,7 +321,6 @@ function bindEvents() {
   ui.cartButton.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
   ui.ordersButton.addEventListener('click', () => { renderOrders(); setScreen('orders'); closeDrawer(); });
   ui.homeButton.addEventListener('click', () => { setScreen('home'); closeDrawer(); });
-  ui.cartBar.addEventListener('click', () => { renderCart(); setScreen('cart'); closeDrawer(); });
 
   document.querySelectorAll('.back-button').forEach((btn) => {
     btn.addEventListener('click', () => goBack());
