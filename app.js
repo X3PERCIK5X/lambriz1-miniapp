@@ -199,7 +199,15 @@ function renderProductView() {
     <div class="product-price">${formatPrice(p.price)} ₽</div>
     <div class="product-actions">
       <button class="ghost-button" data-favorite="${p.id}">${state.favorites.has(p.id) ? 'Удалить' : 'В избранное'}</button>
-      <button class="primary-button" data-cart="${p.id}">В корзину</button>
+      ${state.cart[p.id]
+        ? `
+          <div class="product-qty" data-qty="${p.id}">
+            <button class="qty-btn" data-qty-dec="${p.id}" type="button">−</button>
+            <span class="qty-count">${state.cart[p.id]}</span>
+            <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
+          </div>
+        `
+        : `<button class="primary-button" data-cart="${p.id}">В корзину</button>`}
     </div>
     <div class="text-card"><strong>Описание</strong><p>${p.description}</p></div>
     <div class="product-specs"><strong>Характеристики</strong>${specs}</div>
@@ -350,7 +358,16 @@ function bindEvents() {
     const btn = e.target.closest('button');
     if (!btn) return;
     if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); renderProductView(); }
-    if (btn.dataset.cart) { addToCart(btn.dataset.cart); }
+    if (btn.dataset.cart) { addToCart(btn.dataset.cart); renderProductView(); }
+    if (btn.dataset.qtyInc) { addToCart(btn.dataset.qtyInc); renderProductView(); }
+    if (btn.dataset.qtyDec) {
+      const id = btn.dataset.qtyDec;
+      state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1);
+      if (!state.cart[id]) delete state.cart[id];
+      saveStorage();
+      updateBadges();
+      renderProductView();
+    }
   });
 
   ui.favoritesList.addEventListener('click', (e) => {
