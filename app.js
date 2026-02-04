@@ -317,9 +317,12 @@ function renderCart() {
         <input type="checkbox" data-cart-select="${p.id}" ${state.selectedCart.has(p.id) ? 'checked' : ''} />
         <span></span>
       </label>
-      <div><button class="cart-title-link" data-open="${p.id}">${p.title}</button></div>
-      <div class="cart-sku">Артикул: ${p.sku}</div>
-      <div>${formatPrice(p.price)} ₽</div>
+      <img class="cart-image" src="${p.images[0]}" alt="${p.title}" />
+      <div class="cart-info">
+        <button class="cart-title-link" data-open="${p.id}">${p.title}</button>
+        <div class="cart-sku">Артикул: ${p.sku}</div>
+        <div class="cart-price">${formatPrice(p.price)} ₽</div>
+      </div>
       <div class="cart-controls">
         <button class="qty-btn" data-qty="${p.id}" data-action="dec">−</button>
         <span class="qty-count">${p.qty}</span>
