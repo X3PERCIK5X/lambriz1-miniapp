@@ -193,12 +193,14 @@ function renderProductView() {
     return `<div><span>${s.label}</span><span>${s.value}</span></div>`;
   }).join('');
   ui.productView.innerHTML = `
-    <div class="product-gallery">${p.images.map((src) => `<img src="${src}" alt="${p.title}" />`).join('')}</div>
+    <div class="product-hero">
+      <button class="product-back" type="button" data-back="products" aria-label="Назад">←</button>
+      <div class="product-gallery">${p.images.map((src) => `<img src="${src}" alt="${p.title}" />`).join('')}</div>
+    </div>
     <div class="product-title">${p.title}</div>
     <div class="product-meta">Артикул: ${p.sku}</div>
-    <div class="product-price">${formatPrice(p.price)} ₽</div>
-    <div class="product-actions">
-      <button class="ghost-button" data-favorite="${p.id}">${state.favorites.has(p.id) ? 'Удалить' : 'В избранное'}</button>
+    <div class="product-price-row">
+      <div class="product-price">${formatPrice(p.price)} ₽</div>
       ${state.cart[p.id]
         ? `
           <div class="product-qty" data-qty="${p.id}">
@@ -209,8 +211,14 @@ function renderProductView() {
         `
         : `<button class="primary-button" data-cart="${p.id}">В корзину</button>`}
     </div>
-    <div class="text-card"><strong>Описание</strong><p>${p.description}</p></div>
-    <div class="product-specs"><strong>Характеристики</strong>${specs}</div>
+    <div class="detail-section">
+      <div class="section-title">Описание</div>
+      <div class="section-body">${p.description}</div>
+    </div>
+    <div class="detail-section">
+      <div class="section-title">Характеристики</div>
+      <div class="product-specs">${specs}</div>
+    </div>
   `;
 }
 
