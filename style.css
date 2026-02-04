@@ -608,11 +608,13 @@ img { max-width: 100%; display: block; }
   padding: 6px 5px;
   margin-top: -14px;
   box-shadow: 0 10px 20px rgba(8, 43, 64, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .bottom-center .icon-svg {
   width: 24px;
   height: 24px;
+  stroke: #fff;
 }
 
 .bottom-item .badge {
@@ -631,6 +633,8 @@ img { max-width: 100%; display: block; }
 
 .bottom-center.active {
   background: var(--primary-dark);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 26px rgba(8, 43, 64, 0.28);
 }
 
 .bottom-center .icon-svg {
