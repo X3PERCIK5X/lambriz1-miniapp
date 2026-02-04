@@ -28,6 +28,8 @@ const ui = {
   productsTitle: document.getElementById('productsTitle'),
   productsList: document.getElementById('productsList'),
   productView: document.getElementById('productView'),
+  productTitle: document.getElementById('productTitle'),
+  productFavoriteTop: document.getElementById('productFavoriteTop'),
   favoritesList: document.getElementById('favoritesList'),
   favoritesToCart: document.getElementById('favoritesToCart'),
   favoritesClear: document.getElementById('favoritesClear'),
@@ -58,6 +60,12 @@ function setScreen(name) {
 
 function goBack() {
   if (state.screenStack.length <= 1) return;
+  const current = state.currentScreen;
+  const currentEl = document.getElementById(`screen-${current}`);
+  if (currentEl) {
+    currentEl.classList.add('closing');
+    setTimeout(() => currentEl.classList.remove('closing'), 220);
+  }
   state.screenStack.pop();
   const prev = state.screenStack[state.screenStack.length - 1];
   state.currentScreen = prev;
@@ -188,13 +196,17 @@ function renderProducts() {
 function renderProductView() {
   const p = getProduct(state.currentProduct);
   if (!p) return;
+  if (ui.productTitle) ui.productTitle.textContent = p.title || '';
+  if (ui.productFavoriteTop) {
+    ui.productFavoriteTop.dataset.favorite = p.id;
+    ui.productFavoriteTop.classList.toggle('active', state.favorites.has(p.id));
+  }
   const specs = (p.specs || []).map((s) => {
     if (typeof s === 'string') return `<div>${s}</div>`;
     return `<div><span>${s.label}</span><span>${s.value}</span></div>`;
   }).join('');
   ui.productView.innerHTML = `
     <div class="product-hero">
-      <button class="product-back" type="button" data-back="products" aria-label="Назад">←</button>
       <div class="product-gallery">${p.images.map((src) => `<img src="${src}" alt="${p.title}" />`).join('')}</div>
     </div>
     <div class="product-title">${p.title}</div>
@@ -377,6 +389,18 @@ function bindEvents() {
       renderProductView();
     }
   });
+
+  if (ui.productFavoriteTop && !ui.productFavoriteTop.dataset.bound) {
+    ui.productFavoriteTop.dataset.bound = '1';
+    ui.productFavoriteTop.addEventListener('click', (e) => {
+      const id = ui.productFavoriteTop.dataset.favorite;
+      if (!id) return;
+      toggleFavorite(id);
+      renderProductView();
+      e.stopPropagation();
+    });
+  }
+
 
   ui.favoritesList.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
