@@ -150,18 +150,26 @@ function renderCategories() {
 function renderProducts() {
   const list = state.products.filter((p) => p.categoryId === state.currentCategory);
   ui.productsList.innerHTML = list.map((p) => `
-    <article class="product-card">
+    <article class="product-card" data-open="${p.id}">
+      <button class="card-icon favorite" data-favorite="${p.id}" aria-label="В избранное">
+        <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+        </svg>
+      </button>
       <img src="${p.images[0]}" alt="${p.title}" />
       <div>
         <div class="product-title">${p.title}</div>
         <div class="product-meta">${p.shortDescription}</div>
         <div class="product-meta">Артикул: ${p.sku}</div>
         <div class="product-price">${formatPrice(p.price)} ₽</div>
-        <div class="product-actions">
-          <button class="ghost-button" data-favorite="${p.id}">${state.favorites.has(p.id) ? 'Удалить' : 'В избранное'}</button>
-          <button class="primary-button" data-cart="${p.id}">В корзину</button>
-          <button class="secondary-button" data-open="${p.id}">Подробнее</button>
-        </div>
+        <button class="card-icon cart" data-cart="${p.id}" aria-label="В корзину">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m15 11-1 9" />
+            <path d="m19 11-4-7" />
+            <path d="M2 11h20" />
+            <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
+          </svg>
+        </button>
       </div>
     </article>
   `).join('');
@@ -292,15 +300,23 @@ function bindEvents() {
 
   ui.productsList.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
-    if (!btn) return;
-    if (btn.dataset.open) {
-      state.currentProduct = btn.dataset.open;
-      renderProductView();
-      setScreen('product');
+    if (btn && btn.dataset.favorite) {
+      toggleFavorite(btn.dataset.favorite);
+      renderProducts();
+      renderFavorites();
+      e.stopPropagation();
       return;
     }
-    if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); renderProducts(); renderFavorites(); }
-    if (btn.dataset.cart) { addToCart(btn.dataset.cart); }
+    if (btn && btn.dataset.cart) {
+      addToCart(btn.dataset.cart);
+      e.stopPropagation();
+      return;
+    }
+    const card = e.target.closest('[data-open]');
+    if (!card) return;
+    state.currentProduct = card.dataset.open;
+    renderProductView();
+    setScreen('product');
   });
 
   ui.productView.addEventListener('click', (e) => {
