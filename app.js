@@ -162,14 +162,24 @@ function renderProducts() {
         <div class="product-meta">${p.shortDescription}</div>
         <div class="product-meta">Артикул: ${p.sku}</div>
         <div class="product-price">${formatPrice(p.price)} ₽</div>
-        <button class="card-icon cart" data-cart="${p.id}" aria-label="В корзину">
-          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="m15 11-1 9" />
-            <path d="m19 11-4-7" />
-            <path d="M2 11h20" />
-            <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
-          </svg>
-        </button>
+        ${state.cart[p.id]
+          ? `
+            <div class="card-qty" data-qty="${p.id}">
+              <button class="qty-btn" data-qty-dec="${p.id}" type="button">−</button>
+              <span class="qty-count">${state.cart[p.id]}</span>
+              <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
+            </div>
+          `
+          : `
+            <button class="card-icon cart" data-cart="${p.id}" aria-label="В корзину">
+              <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m15 11-1 9" />
+                <path d="m19 11-4-7" />
+                <path d="M2 11h20" />
+                <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
+              </svg>
+            </button>
+          `}
       </div>
     </article>
   `).join('');
@@ -309,6 +319,23 @@ function bindEvents() {
     }
     if (btn && btn.dataset.cart) {
       addToCart(btn.dataset.cart);
+      renderProducts();
+      e.stopPropagation();
+      return;
+    }
+    if (btn && btn.dataset.qtyInc) {
+      addToCart(btn.dataset.qtyInc);
+      renderProducts();
+      e.stopPropagation();
+      return;
+    }
+    if (btn && btn.dataset.qtyDec) {
+      const id = btn.dataset.qtyDec;
+      state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1);
+      if (!state.cart[id]) delete state.cart[id];
+      saveStorage();
+      updateBadges();
+      renderProducts();
       e.stopPropagation();
       return;
     }

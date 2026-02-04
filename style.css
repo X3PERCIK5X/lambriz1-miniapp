@@ -186,6 +186,38 @@ img { max-width: 100%; display: block; }
   right: 8px;
 }
 
+.card-qty {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 8px;
+  box-shadow: 0 6px 14px rgba(8, 43, 64, 0.12);
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.qty-count {
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--primary);
+}
+
 .primary-button, .secondary-button, .ghost-button {
   border: none; border-radius: 10px; padding: 8px 10px; font-weight: 700; cursor: pointer;
 }
