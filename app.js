@@ -260,14 +260,27 @@ function renderCart() {
   const items = cartItems();
   ui.cartList.innerHTML = items.map((p) => `
     <div class="cart-item">
-      <div><strong>${p.title}</strong></div>
+      <div><button class="cart-title-link" data-open="${p.id}">${p.title}</button></div>
       <div>Артикул: ${p.sku}</div>
       <div>${formatPrice(p.price)} ₽</div>
       <div class="cart-controls">
-        <button data-qty="${p.id}" data-action="dec">−</button>
-        <span>${p.qty}</span>
-        <button data-qty="${p.id}" data-action="inc">+</button>
-        <button class="ghost-button" data-remove="${p.id}">Удалить</button>
+        <button class="qty-btn" data-qty="${p.id}" data-action="dec">−</button>
+        <span class="qty-count">${p.qty}</span>
+        <button class="qty-btn" data-qty="${p.id}" data-action="inc">+</button>
+        <button class="icon-btn" data-favorite="${p.id}" aria-label="В избранное">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+          </svg>
+        </button>
+        <button class="icon-btn" data-remove="${p.id}" aria-label="Удалить">
+          <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 6h18" />
+            <path d="M8 6V4h8v2" />
+            <path d="M6 6l1 14h10l1-14" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+          </svg>
+        </button>
       </div>
     </div>
   `).join('');
@@ -450,7 +463,17 @@ function bindEvents() {
   ui.cartList.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
+    if (btn.dataset.open) {
+      state.currentProduct = btn.dataset.open;
+      renderProductView();
+      setScreen('product');
+      return;
+    }
     const id = btn.dataset.qty || btn.dataset.remove;
+    if (!id && btn.dataset.favorite) {
+      toggleFavorite(btn.dataset.favorite);
+      return;
+    }
     if (!id) return;
     if (btn.dataset.action === 'inc') { addToCart(id); }
     else if (btn.dataset.action === 'dec') { state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1); if (!state.cart[id]) delete state.cart[id]; saveStorage(); updateBadges(); }
