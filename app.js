@@ -108,7 +108,12 @@ function updateBottomNav(screen) {
 
 function formatPrice(v) { return Number(v || 0).toLocaleString('ru-RU'); }
 function formatMultiline(text) {
-  return String(text || '').replace(/\n{2,}/g, '<br><br>').replace(/\n/g, '<br>');
+  const raw = String(text || '').trim();
+  if (!raw) return '';
+  const parts = raw.split(/\n{2,}/g);
+  return parts
+    .map((part) => `<p>${part.replace(/\n/g, '<br>')}</p>`)
+    .join('');
 }
 
 function loadStorage() {
@@ -720,7 +725,15 @@ async function loadConfig() {
   ui.aboutText.innerHTML = formatMultiline(state.config.aboutText || 'Текст будет добавлен позже.');
   ui.paymentText.innerHTML = formatMultiline(state.config.paymentText || 'Информация будет добавлена позже.');
   if (ui.productionText) {
-    ui.productionText.innerHTML = formatMultiline(state.config.productionText || 'Информация будет добавлена позже.');
+    const prodRaw = state.config.productionText || 'Информация будет добавлена позже.';
+    const prodLines = String(prodRaw).split('\n');
+    const prodTitle = prodLines.shift()?.trim();
+    const prodBody = prodLines.join('\n').trim();
+    if (prodTitle && prodBody) {
+      ui.productionText.innerHTML = `<div class="section-title">${prodTitle}</div>` + formatMultiline(prodBody);
+    } else {
+      ui.productionText.innerHTML = formatMultiline(prodRaw);
+    }
   }
   if (ui.productionServices) {
     const list = state.config.productionServices || [];

@@ -486,6 +486,12 @@ img { max-width: 100%; display: block; }
   color: var(--ink);
   box-shadow: var(--shadow-soft);
 }
+.text-card p {
+  margin: 0 0 12px;
+}
+.text-card p:last-child {
+  margin-bottom: 0;
+}
 
 .menu-head { margin-bottom: 6px; }
 .menu-list { display: grid; gap: 12px; margin-top: 8px; }
