@@ -207,6 +207,13 @@ function updateBottomNav(screen) {
 }
 
 function formatPrice(v) { return Number(v || 0).toLocaleString('ru-RU'); }
+function safeSrc(src) {
+  try {
+    return encodeURI(src);
+  } catch {
+    return src;
+  }
+}
 function formatMultiline(text) {
   const raw = String(text || '').trim();
   if (!raw) return '';
@@ -258,7 +265,7 @@ function renderCategories() {
   const list = state.categories.filter((c) => c.groupId === state.currentGroup);
   ui.categoriesGrid.innerHTML = list.map((c) => `
     <button class="category-card" data-category="${c.id}">
-      <img src="${c.image}" alt="${c.title}" />
+      <img src="${safeSrc(c.image)}" alt="${c.title}" />
       <span>${c.title}</span>
     </button>
   `).join('');
@@ -273,7 +280,7 @@ function renderProducts() {
           <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
         </svg>
       </button>
-      <img src="${p.images[0]}" alt="${p.title}" />
+      <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div>
         <div class="product-title">${p.title}</div>
         <div class="product-meta">${p.shortDescription}</div>
@@ -316,7 +323,7 @@ function renderProductView() {
   }).join('');
   ui.productView.innerHTML = `
     <div class="product-hero">
-      <div class="product-gallery">${p.images.map((src) => `<img src="${src}" alt="${p.title}" />`).join('')}</div>
+      <div class="product-gallery">${p.images.map((src) => `<img src="${safeSrc(src)}" alt="${p.title}" />`).join('')}</div>
     </div>
     <div class="product-title">${p.title}</div>
     <div class="product-meta">Артикул: ${p.sku}</div>
@@ -358,7 +365,7 @@ function renderFavorites() {
         <input type="checkbox" data-fav-select="${p.id}" ${state.selectedFavorites.has(p.id) ? 'checked' : ''} />
         <span></span>
       </label>
-      <img src="${p.images[0]}" alt="${p.title}" />
+      <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div>
         <div class="product-title">${p.title}</div>
         <div class="product-meta">${p.shortDescription}</div>
@@ -409,7 +416,7 @@ function renderCart() {
         <input type="checkbox" data-cart-select="${p.id}" ${state.selectedCart.has(p.id) ? 'checked' : ''} />
         <span></span>
       </label>
-      <img class="cart-image" src="${p.images[0]}" alt="${p.title}" />
+      <img class="cart-image" src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div class="cart-info">
         <button class="cart-title-link" data-open="${p.id}">${p.title}</button>
         <div class="cart-sku">Артикул: ${p.sku}</div>
