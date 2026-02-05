@@ -52,7 +52,64 @@
         <div class="screen-head menu-head"></div>
         <nav class="menu-list">
           <button id="menuCatalogToggle" class="menu-item">Каталог <span class="menu-caret">▾</span></button>
-          <div id="menuCatalogList" class="menu-sublist hidden"></div>
+          <div id="menuCatalogList" class="menu-sublist hidden">
+            <div class="menu-catalog-card">
+              <button class="menu-catalog-item" data-menu-index="0" data-category="equipment-chemistry" data-has-children="0">
+                <span>Автохимия</span>
+              </button>
+              <button class="menu-catalog-item has-children" data-menu-index="1" data-category="equipment-accessories" data-has-children="1">
+                <span>Аксессуары для АВД</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="1">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Пистолеты и копья</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Шланги высокого давления</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Насадки и форсунки</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="2" data-category="equipment-wash-accessories" data-has-children="1">
+                <span>Аксессуары для автомоек</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="2">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Щётки и держатели</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Пистолеты пены</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Крепёж и соединители</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="3" data-category="equipment-high-pressure" data-has-children="1">
+                <span>Аппараты высокого давления</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="3">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Бензиновые АВД</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Электрические АВД</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Профессиональные АВД</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="4" data-category="equipment-engines" data-has-children="1">
+                <span>Насосы ВД и двигатели</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="4">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Насосы высокого давления</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Электродвигатели</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Комплекты</button>
+              </div>
+              <button class="menu-catalog-item" data-menu-index="5" data-category="equipment-foam" data-has-children="0">
+                <span>Пеногенераторы</span>
+              </button>
+              <button class="menu-catalog-item has-children" data-menu-index="6" data-category="equipment-sweepers" data-has-children="1">
+                <span>Поломоечные и подметальные машины</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="6">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-cleaning">Поломоечные машины</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-sweepers">Подметальные машины</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-sweepers">Комбинированные</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="7" data-category="equipment-vacuums" data-has-children="1">
+                <span>Пылесосы и Химчистка</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="7">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Моющие пылесосы</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Пылесосы сухой уборки</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Химчистка салона</button>
+              </div>
+            </div>
+          </div>
           <button data-screen="promo" class="menu-item">Акции</button>
           <button data-screen="about" class="menu-item">О компании</button>
           <button data-screen="production" class="menu-item">Производство</button>
@@ -211,7 +268,85 @@
           <button class="back-button" data-back="home">Назад</button>
           <h2>О компании</h2>
         </div>
-        <div id="aboutText" class="text-card"></div>
+        <div id="aboutText" class="text-card">
+          <div class="about-sections">
+            <div class="about-section">
+              <div class="about-heading">О компании</div>
+              <div class="about-lead">ЛАМБРИЗ — надежные решения для автомоек, промышленности, сельского хозяйства и пищевой отрасли.</div>
+              <div class="about-lead">Компания ЛАМБРИЗ обладая значительным опытом в индустрии высокого давления, создала собственное производственное подразделения. Основная цель данного проекта — разработка и внедрение высокоэффективных решений для обеспечения надежности, экологичности и экономической целесообразности работы автомоечных предприятий, систем промышленного клининга, сельхозпредприятий и пищевой промышленности.</div>
+            </div>
+            <div class="about-section">
+              <div class="about-step">1</div>
+              <div class="about-heading">Высокотехнологичные решения для автомоек и промышленного клининга:</div>
+              <ul class="about-list">
+                <li>Поставки оборудования от ведущих мировых производителей. (Мы сотрудничаем на прямую с крупнейшим Китайским поставщиком оборудования высокого давления)</li>
+                <li>Разработка комплексных решений для бизнеса и частных клиентов.</li>
+                <li>Производство металлоконструкций и изделий из нержавеющей стали.</li>
+              </ul>
+            </div>
+            <div class="about-section">
+              <div class="about-step">2</div>
+              <div class="about-heading">Производство оборудования высокого давления:</div>
+              <ul class="about-list">
+                <li>Изготовление аппаратов высокого давления (АВД) и аксессуаров для автомоек.</li>
+                <li>Использование передовых технологий и материалов для обеспечения долговечности и эффективности оборудования.</li>
+              </ul>
+            </div>
+            <div class="about-section">
+              <div class="about-step">3</div>
+              <div class="about-heading">Консультационные услуги:</div>
+              <ul class="about-list">
+                <li>Предоставление экспертных консультаций по всем аспектам автомоечного бизнеса.</li>
+                <li>Анализ потребностей клиентов и разработка индивидуальных решений.</li>
+              </ul>
+            </div>
+            <div class="about-section">
+              <div class="about-step">4</div>
+              <div class="about-heading">Сервисное обслуживание и поддержка:</div>
+              <ul class="about-list">
+                <li>Полный спектр услуг по техническому обслуживанию и ремонту оборудования.</li>
+                <li>Гарантийное и постгарантийное обслуживание.</li>
+              </ul>
+            </div>
+            <div class="about-section">
+              <div class="about-step">5</div>
+              <div class="about-heading">Логистика и доставка:</div>
+              <ul class="about-list">
+                <li>Осуществление доставки продукции по всей территории Российской Федерации и странам СНГ.</li>
+                <li>Оптимизация логистических процессов для минимизации временных и финансовых затрат клиентов.</li>
+              </ul>
+            </div>
+            <div class="about-section">
+              <div class="about-heading">Профессиональный подход к разработке и производству</div>
+              <div class="about-lead">Реализация проекта компании ЛАМБРИЗ базируется на применении современных методов проектирования и производства. Это позволяет предложить клиентам решения, сочетающие высокую производительность, надежность и минимальные эксплуатационные затраты. Использование передовых технологий и материалов обеспечивает долговечность и эффективность оборудования, что особенно важно в условиях интенсивной эксплуатации.</div>
+            </div>
+            <div class="about-section">
+              <div class="about-heading">Опыт и компетенции команды</div>
+              <div class="about-lead">Команда компании ЛАМБРИЗ обладает значительным опытом и глубокими знаниями в сфере оборудования для автомоек, промышленных систем очистки, сельского хозяйства и пищевой промышленности.</div>
+              <div class="about-lead">Внедрение современных методов и передовых технологий в проектирование и эксплуатацию автомоек позволяет компании предлагать клиентам решения, соответствующие самым высоким стандартам качества и эффективности.</div>
+            </div>
+            <div class="about-section">
+              <div class="about-heading">Ассортимент продукции</div>
+              <div class="about-lead">Компания ЛАМБРИЗ занимается производством оборудования и аксессуаров для автомоек, промышленных систем очистки, сельского хозяйства и пищевой промышленности.</div>
+              <div class="about-lead">В нашем каталоге представлены:</div>
+              <ul class="about-list">
+                <li>Аппараты высокого давления (АВД).</li>
+                <li>Комплектующие и аксессуары для автомоечного оборудования.</li>
+                <li>Металлоконструкции и изделия из нержавеющей стали.</li>
+                <li>Системы промышленного клининга.</li>
+              </ul>
+            </div>
+            <div class="about-section">
+              <div class="about-heading">Комплексный подход к обслуживанию</div>
+              <div class="about-lead">Компания ЛАМБРИЗ обеспечивает полный цикл обслуживания, начиная с подбора оборудования и заканчивая его ремонтом и технической поддержкой.</div>
+              <div class="about-lead">Это позволяет клиентам получать высококачественные услуги на всех этапах взаимодействия с компанией.</div>
+            </div>
+            <div class="about-section">
+              <div class="about-lead">Компания ЛАМБРИЗ стремится стать надежным партнером для автомоечных предприятий систем промышленного клининга, сельхоз Мы предлагаем инновационные решения, основанные на передовых технологиях и опыте, что позволяет нашим клиентам достигать высоких результатов в своей деятельности.</div>
+              <div class="about-lead">Будем рады сотрудничеству и готовы предложить индивидуальные решения, соответствующие потребностям каждого клиента!</div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="screen-payment" class="screen">
