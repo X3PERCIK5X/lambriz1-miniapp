@@ -158,35 +158,7 @@ function openCategoryById(categoryId) {
 
 function buildMenuCatalog() {
   if (!ui.menuCatalogList) return;
-  const titleToId = new Map(menuCatalogFallback);
-  state.categories.forEach((c) => titleToId.set(c.title, c.id));
-  const card = document.createElement('div');
-  card.className = 'menu-catalog-card';
-  menuCatalogTree.forEach((item, idx) => {
-    const id = titleToId.get(item.title) || '';
-    const hasChildren = Array.isArray(item.children) && item.children.length;
-    const row = document.createElement('button');
-    row.type = 'button';
-    row.className = `menu-catalog-item${hasChildren ? ' has-children' : ''}`;
-    row.dataset.menuIndex = String(idx);
-    row.dataset.category = id;
-    row.dataset.hasChildren = hasChildren ? '1' : '0';
-    row.innerHTML = `<span>${item.title}</span>${hasChildren ? '<span class="menu-caret">▾</span>' : ''}`;
-    card.appendChild(row);
-
-    if (hasChildren) {
-      const sub = document.createElement('div');
-      sub.className = 'menu-catalog-children hidden';
-      sub.dataset.menuChildren = String(idx);
-      sub.innerHTML = item.children.map((child) => {
-        const childId = titleToId.get(child) || id;
-        return `<button type="button" class="menu-subitem" data-menu-subitem="1" data-category="${childId || ''}">${child}</button>`;
-      }).join('');
-      card.appendChild(sub);
-    }
-  });
-  ui.menuCatalogList.innerHTML = '';
-  ui.menuCatalogList.appendChild(card);
+  if (ui.menuCatalogList.children.length) return;
 }
 
 function setScreen(name) {
@@ -877,10 +849,12 @@ async function loadConfig() {
   ui.policyLink.href = state.config.privacyPolicyUrl || '#';
   if (ui.aboutText) {
     const aboutRaw = state.config.aboutText || 'Текст будет добавлен позже.';
-    if (String(aboutRaw).includes('<')) {
-      ui.aboutText.innerHTML = aboutRaw;
-    } else {
-      ui.aboutText.innerHTML = formatMultiline(aboutRaw);
+    if (!ui.aboutText.innerHTML.trim()) {
+      if (String(aboutRaw).includes('<')) {
+        ui.aboutText.innerHTML = aboutRaw;
+      } else {
+        ui.aboutText.innerHTML = formatMultiline(aboutRaw);
+      }
     }
   }
   ui.paymentText.innerHTML = formatMultiline(state.config.paymentText || 'Информация будет добавлена позже.');

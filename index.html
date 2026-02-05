@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260205-9" />
+    <link rel="stylesheet" href="style.css?v=20260205-10" />
   </head>
   <body>
     <header class="header">
@@ -52,7 +52,85 @@
         <div class="screen-head menu-head"></div>
         <nav class="menu-list">
           <button id="menuCatalogToggle" class="menu-item">Каталог <span class="menu-caret">▾</span></button>
-          <div id="menuCatalogList" class="menu-sublist hidden"></div>
+          <div id="menuCatalogList" class="menu-sublist hidden">
+            <div class="menu-catalog-card">
+              <button class="menu-catalog-item" data-menu-index="0" data-category="equipment-chemistry" data-has-children="0">
+                <span>Автохимия</span>
+              </button>
+              <button class="menu-catalog-item has-children" data-menu-index="1" data-category="equipment-accessories" data-has-children="1">
+                <span>Аксессуары для АВД</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="1">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Быстросъёмные соединения</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Грязевые фрезы</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Копья</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Курки высокого давления</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Насадки для мойки емкостей</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Насадки для очистки поверхностей</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Пенообразующие аксессуары</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Пескоструйное оборудование</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Форсунки и форсункодержатели</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-accessories">Шланги для автомойки</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="2" data-category="equipment-wash-accessories" data-has-children="1">
+                <span>Аксессуары для автомоек</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="2">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Барабаны для шлангов</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Держатели автомобильных ковриков</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Держатели канистр</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Держатели шлангов высокого давления</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Комплектующие для поворотных консолей</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Магистрали высокого давления</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Поворотные консоли для автомойки</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Подставки для мойки автомобиля</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Полки для автомоек</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Рукомойники для автомоек</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-wash-accessories">Стенды под автомобильные коврики</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="3" data-category="equipment-high-pressure" data-has-children="1">
+                <span>Аппараты высокого давления</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="3">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">АВД с подогревом</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Бензиновые АВД</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Бойлеры нагрева воды</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Бытовые АВД до 200 бар</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Мобильные АВД на колёсах</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Моноблоки АВД</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-high-pressure">Профессиональные стационарные мойки</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="4" data-category="equipment-engines" data-has-children="1">
+                <span>Насосы ВД и двигатели</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="4">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Бензиновые двигатели</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Насосы для бензиновых двигателей</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Насосы для горячей воды</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Плунжерные насосы</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-engines">Электродвигатели</button>
+              </div>
+              <button class="menu-catalog-item" data-menu-index="5" data-category="equipment-foam" data-has-children="0">
+                <span>Пеногенераторы</span>
+              </button>
+              <button class="menu-catalog-item has-children" data-menu-index="6" data-category="equipment-sweepers" data-has-children="1">
+                <span>Поломоечные и подметальные машины</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="6">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-cleaning">Поломоечные машины</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-sweepers">Подметальные машины</button>
+              </div>
+              <button class="menu-catalog-item has-children" data-menu-index="7" data-category="equipment-vacuums" data-has-children="1">
+                <span>Пылесосы и Химчистка</span><span class="menu-caret">▾</span>
+              </button>
+              <div class="menu-catalog-children hidden" data-menu-children="7">
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Пылеводососы</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Торнадоры</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Турбосушки</button>
+                <button class="menu-subitem" data-menu-subitem="1" data-category="equipment-vacuums">Химчистка</button>
+              </div>
+            </div>
+          </div>
           <button data-screen="promo" class="menu-item">Акции</button>
           <button data-screen="about" class="menu-item">О компании</button>
           <button data-screen="production" class="menu-item">Производство</button>
@@ -323,6 +401,6 @@
       </button>
     </nav>
 
-    <script src="app.js?v=20260205-9"></script>
+    <script src="app.js?v=20260205-10"></script>
   </body>
 </html>
