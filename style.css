@@ -564,14 +564,15 @@ img { max-width: 100%; display: block; }
   text-align: left;
   padding: 14px 18px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
 }
 .menu-catalog-item + .menu-catalog-item {
-  border-top: 1px solid var(--border);
+  border-top: none;
 }
 .menu-catalog-item .menu-caret {
   font-size: 14px;
