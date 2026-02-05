@@ -16,6 +16,17 @@ const state = {
   orders: [],
 };
 
+const menuCatalogTree = [
+  { title: 'Автохимия' },
+  { title: 'Аксессуары для АВД', children: ['Пистолеты и копья', 'Шланги высокого давления', 'Насадки и форсунки'] },
+  { title: 'Аксессуары для автомоек', children: ['Щётки и держатели', 'Пистолеты пены', 'Крепёж и соединители'] },
+  { title: 'Аппараты высокого давления', children: ['Бензиновые АВД', 'Электрические АВД', 'Профессиональные АВД'] },
+  { title: 'Насосы ВД и двигатели', children: ['Насосы высокого давления', 'Электродвигатели', 'Комплекты'] },
+  { title: 'Пеногенераторы' },
+  { title: 'Поломоечные и подметальные машины', children: ['Поломоечные машины', 'Подметальные машины', 'Комбинированные'] },
+  { title: 'Пылесосы и Химчистка', children: ['Моющие пылесосы', 'Пылесосы сухой уборки', 'Химчистка салона'] },
+];
+
 const ui = {
   screens: document.querySelectorAll('.screen'),
   menuButton: document.getElementById('menuButton'),
@@ -61,6 +72,47 @@ const ui = {
   productionServices: document.getElementById('productionServices'),
   productionTrack: document.getElementById('productionTrack'),
 };
+
+function openCategoryById(categoryId) {
+  if (!categoryId) return;
+  state.currentCategory = categoryId;
+  const cat = state.categories.find((c) => c.id === categoryId);
+  ui.productsTitle.textContent = cat ? cat.title : 'Категория';
+  renderProducts();
+  setScreen('products');
+}
+
+function buildMenuCatalog() {
+  if (!ui.menuCatalogList) return;
+  const titleToId = new Map(state.categories.map((c) => [c.title, c.id]));
+  const card = document.createElement('div');
+  card.className = 'menu-catalog-card';
+  menuCatalogTree.forEach((item, idx) => {
+    const id = titleToId.get(item.title) || '';
+    const hasChildren = Array.isArray(item.children) && item.children.length;
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = `menu-catalog-item${hasChildren ? ' has-children' : ''}`;
+    row.dataset.menuIndex = String(idx);
+    row.dataset.category = id;
+    row.dataset.hasChildren = hasChildren ? '1' : '0';
+    row.innerHTML = `<span>${item.title}</span>${hasChildren ? '<span class="menu-caret">▾</span>' : ''}`;
+    card.appendChild(row);
+
+    if (hasChildren) {
+      const sub = document.createElement('div');
+      sub.className = 'menu-catalog-children hidden';
+      sub.dataset.menuChildren = String(idx);
+      sub.innerHTML = item.children.map((child) => {
+        const childId = titleToId.get(child) || id;
+        return `<button type="button" class="menu-subitem" data-menu-subitem="1" data-category="${childId || ''}">${child}</button>`;
+      }).join('');
+      card.appendChild(sub);
+    }
+  });
+  ui.menuCatalogList.innerHTML = '';
+  ui.menuCatalogList.appendChild(card);
+}
 
 function setScreen(name) {
   if (state.currentScreen === name) return;
@@ -431,13 +483,25 @@ function bindEvents() {
 
   if (ui.menuCatalogList) {
     ui.menuCatalogList.addEventListener('click', (e) => {
-      const btn = e.target.closest('button[data-category]');
-      if (!btn) return;
-      state.currentCategory = btn.dataset.category;
-      const cat = state.categories.find((c) => c.id === state.currentCategory);
-      ui.productsTitle.textContent = cat ? cat.title : 'Категория';
-      renderProducts();
-      setScreen('products');
+      const subItem = e.target.closest('[data-menu-subitem]');
+      if (subItem) {
+        const id = subItem.dataset.category;
+        openCategoryById(id);
+        return;
+      }
+      const row = e.target.closest('[data-menu-index]');
+      if (!row) return;
+      const hasChildren = row.dataset.hasChildren === '1';
+      if (hasChildren) {
+        const idx = row.dataset.menuIndex;
+        const block = ui.menuCatalogList.querySelector(`[data-menu-children="${idx}"]`);
+        if (block) {
+          block.classList.toggle('hidden');
+          row.classList.toggle('open');
+        }
+        return;
+      }
+      openCategoryById(row.dataset.category);
     });
   }
 
@@ -467,11 +531,7 @@ function bindEvents() {
   ui.categoriesGrid.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-category]');
     if (!btn) return;
-    state.currentCategory = btn.dataset.category;
-    const cat = state.categories.find((c) => c.id === state.currentCategory);
-    ui.productsTitle.textContent = cat ? cat.title : 'Категория';
-    renderProducts();
-    setScreen('products');
+    openCategoryById(btn.dataset.category);
   });
 
   ui.productsList.addEventListener('click', (e) => {
@@ -793,11 +853,7 @@ async function loadData() {
   ]);
   state.categories = await catRes.json();
   state.products = await prodRes.json();
-  if (ui.menuCatalogList) {
-    ui.menuCatalogList.innerHTML = state.categories.map((c) => `
-      <button data-category="${c.id}">${c.title}</button>
-    `).join('');
-  }
+  buildMenuCatalog();
 }
 
 async function init() {

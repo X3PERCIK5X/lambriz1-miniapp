@@ -6,10 +6,28 @@
     "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
   },
   {
+    "id": "equipment-engines",
+    "groupId": "equipment",
+    "title": "Насосы ВД и двигатели",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
     "id": "equipment-cleaning",
     "groupId": "equipment",
     "title": "Поломоечные машины",
     "image": "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-sweepers",
+    "groupId": "equipment",
+    "title": "Поломоечные и подметальные машины",
+    "image": "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-vacuums",
+    "groupId": "equipment",
+    "title": "Пылесосы и Химчистка",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
   },
   {
     "id": "equipment-accessories",
@@ -18,10 +36,22 @@
     "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
   },
   {
+    "id": "equipment-wash-accessories",
+    "groupId": "equipment",
+    "title": "Аксессуары для автомоек",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
     "id": "equipment-chemistry",
     "groupId": "equipment",
     "title": "Автохимия",
     "image": "https://images.unsplash.com/photo-1489515217757-5fd1be406fef?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-foam",
+    "groupId": "equipment",
+    "title": "Пеногенераторы",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
   },
   {
     "id": "stainless-sinks",
