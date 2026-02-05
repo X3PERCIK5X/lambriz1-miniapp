@@ -903,12 +903,31 @@ async function loadConfig() {
 }
 
 async function loadData() {
-  const [catRes, prodRes] = await Promise.all([
-    fetch('data/categories.json'),
-    fetch('data/products.json'),
-  ]);
-  state.categories = await catRes.json();
-  state.products = await prodRes.json();
+  const catRes = await fetch('data/categories.json');
+  if (catRes.ok) {
+    state.categories = await catRes.json();
+  } else {
+    console.error('Failed to load categories.json', catRes.status);
+  }
+
+  try {
+    const prodRes = await fetch('data/products.json');
+    if (prodRes.ok) {
+      state.products = await prodRes.json();
+    } else {
+      console.error('Failed to load products.json', prodRes.status);
+    }
+  } catch (err) {
+    console.error('Failed to load products.json', err);
+  }
+
+  if (!state.currentGroup) {
+    state.currentGroup = 'equipment';
+  }
+  if (ui.categoriesTitle) {
+    ui.categoriesTitle.textContent = state.currentGroup === 'equipment' ? 'Каталог оборудования' : 'Изделия из нержавейки';
+  }
+  renderCategories();
   buildMenuCatalog();
 }
 
