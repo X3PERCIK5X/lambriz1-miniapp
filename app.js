@@ -26,6 +26,17 @@ const menuCatalogTree = [
   { title: 'Поломоечные и подметальные машины', children: ['Поломоечные машины', 'Подметальные машины', 'Комбинированные'] },
   { title: 'Пылесосы и Химчистка', children: ['Моющие пылесосы', 'Пылесосы сухой уборки', 'Химчистка салона'] },
 ];
+const menuCatalogFallback = new Map([
+  ['Автохимия', 'equipment-chemistry'],
+  ['Аксессуары для АВД', 'equipment-accessories'],
+  ['Аксессуары для автомоек', 'equipment-wash-accessories'],
+  ['Аппараты высокого давления', 'equipment-high-pressure'],
+  ['Насосы ВД и двигатели', 'equipment-engines'],
+  ['Пеногенераторы', 'equipment-foam'],
+  ['Поломоечные и подметальные машины', 'equipment-sweepers'],
+  ['Пылесосы и Химчистка', 'equipment-vacuums'],
+  ['Поломоечные машины', 'equipment-cleaning'],
+]);
 
 const ui = {
   screens: document.querySelectorAll('.screen'),
@@ -84,7 +95,8 @@ function openCategoryById(categoryId) {
 
 function buildMenuCatalog() {
   if (!ui.menuCatalogList) return;
-  const titleToId = new Map(state.categories.map((c) => [c.title, c.id]));
+  const titleToId = new Map(menuCatalogFallback);
+  state.categories.forEach((c) => titleToId.set(c.title, c.id));
   const card = document.createElement('div');
   card.className = 'menu-catalog-card';
   menuCatalogTree.forEach((item, idx) => {
@@ -866,11 +878,15 @@ async function init() {
   renderFavorites();
   renderCart();
   closeDrawer();
+  buildMenuCatalog();
 
   try {
     await loadConfig();
   } catch (err) {
     console.error('loadConfig failed', err);
+    if (ui.aboutText && !ui.aboutText.innerHTML.trim()) {
+      ui.aboutText.textContent = 'Не удалось загрузить данные. Обновите страницу.';
+    }
   }
 
   try {
@@ -878,6 +894,7 @@ async function init() {
   } catch (err) {
     console.error('loadData failed', err);
   }
+  buildMenuCatalog();
 }
 
 init();
