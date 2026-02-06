@@ -903,8 +903,9 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
+const DATA_VERSION = '20260205-15';
 async function loadData() {
-  const catRes = await fetch('data/categories.json');
+  const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
   if (catRes.ok) {
     state.categories = await catRes.json();
   } else {
@@ -912,7 +913,7 @@ async function loadData() {
   }
 
   try {
-    const prodRes = await fetch('data/products.json');
+    const prodRes = await fetch(`data/products.json?v=${DATA_VERSION}`, { cache: 'no-store' });
     if (prodRes.ok) {
       state.products = await prodRes.json();
     } else {
