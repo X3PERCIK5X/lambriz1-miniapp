@@ -147,6 +147,7 @@ const ui = {
   productionText: document.getElementById('productionText'),
   productionServices: document.getElementById('productionServices'),
   productionTrack: document.getElementById('productionTrack'),
+  dataStatus: document.getElementById('dataStatus'),
 };
 
 function openCategoryById(categoryId) {
@@ -953,11 +954,20 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-15';
+const DATA_VERSION = '20260205-21';
 async function loadData() {
+  if (ui.dataStatus) {
+    ui.dataStatus.classList.remove('hidden');
+    ui.dataStatus.textContent = 'Загружаем каталог…';
+  }
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
   if (catRes.ok) {
-    state.categories = await catRes.json();
+    try {
+      const catText = await catRes.text();
+      state.categories = JSON.parse(catText.replace(/^\uFEFF/, ''));
+    } catch (err) {
+      console.error('Failed to parse categories.json', err);
+    }
   } else {
     console.error('Failed to load categories.json', catRes.status);
   }
@@ -965,7 +975,15 @@ async function loadData() {
   try {
     const prodRes = await fetch(`data/products.json?v=${DATA_VERSION}`, { cache: 'no-store' });
     if (prodRes.ok) {
-      state.products = await prodRes.json();
+      const prodText = await prodRes.text();
+      try {
+        state.products = JSON.parse(prodText.replace(/^\uFEFF/, ''));
+      } catch (err) {
+        console.error('Failed to parse products.json', err);
+        if (ui.dataStatus) {
+          ui.dataStatus.textContent = `Ошибка чтения products.json (${prodText.slice(0, 120)}…)`;
+        }
+      }
     } else {
       console.error('Failed to load products.json', prodRes.status);
     }
@@ -988,6 +1006,9 @@ async function loadData() {
     openCategoryById(pending);
   } else if (state.currentScreen === 'products') {
     renderProducts();
+  }
+  if (ui.dataStatus) {
+    ui.dataStatus.textContent = `Категорий: ${state.categories.length} • Товаров: ${state.products.length}`;
   }
 }
 
