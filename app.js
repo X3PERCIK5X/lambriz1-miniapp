@@ -2,6 +2,8 @@ const state = {
   config: {},
   categories: [],
   products: [],
+  dataLoaded: false,
+  pendingCategory: null,
   currentGroup: null,
   currentCategory: null,
   currentProduct: null,
@@ -149,6 +151,18 @@ const ui = {
 
 function openCategoryById(categoryId) {
   if (!categoryId) return;
+  if (!state.products.length) {
+    state.pendingCategory = categoryId;
+    ui.productsTitle.textContent = 'Каталог';
+    ui.productsList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-title">Загружаем товары…</div>
+        <div class="empty-text">Пожалуйста, подождите.</div>
+      </div>
+    `;
+    setScreen('products');
+    return;
+  }
   const available = new Set(state.products.map((p) => p.categoryId));
   const fallbackMap = {
     'equipment-sweepers': 'equipment-cleaning',
@@ -959,6 +973,7 @@ async function loadData() {
     console.error('Failed to load products.json', err);
   }
 
+  state.dataLoaded = true;
   if (!state.currentGroup) {
     state.currentGroup = 'equipment';
   }
@@ -967,6 +982,13 @@ async function loadData() {
   }
   renderCategories();
   buildMenuCatalog();
+  if (state.pendingCategory) {
+    const pending = state.pendingCategory;
+    state.pendingCategory = null;
+    openCategoryById(pending);
+  } else if (state.currentScreen === 'products') {
+    renderProducts();
+  }
 }
 
 async function init() {
