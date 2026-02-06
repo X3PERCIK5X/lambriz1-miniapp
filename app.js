@@ -156,6 +156,11 @@ function reportStatus(message) {
   ui.dataStatus.textContent = message;
 }
 
+function on(el, event, handler, options) {
+  if (!el) return;
+  el.addEventListener(event, handler, options);
+}
+
 function openCategoryById(categoryId) {
   if (!categoryId) return;
   if (!state.products.length) {
@@ -564,7 +569,7 @@ function addToCart(id) {
 }
 
 function bindEvents() {
-  ui.menuButton.addEventListener('click', openMenu);
+  on(ui.menuButton, 'click', openMenu);
 
 
   document.querySelectorAll('[data-screen]').forEach((btn) => {
@@ -580,11 +585,9 @@ function bindEvents() {
     });
   });
 
-  if (ui.menuCatalogToggle) {
-    ui.menuCatalogToggle.addEventListener('click', () => {
-      ui.menuCatalogList.classList.toggle('hidden');
-    });
-  }
+  on(ui.menuCatalogToggle, 'click', () => {
+    if (ui.menuCatalogList) ui.menuCatalogList.classList.toggle('hidden');
+  });
 
   document.querySelectorAll('.hero-tile').forEach((tile) => {
     tile.addEventListener('click', () => {
@@ -648,13 +651,13 @@ function bindEvents() {
     });
   }
 
-  ui.categoriesGrid.addEventListener('click', (e) => {
+  on(ui.categoriesGrid, 'click', (e) => {
     const btn = e.target.closest('[data-category]');
     if (!btn) return;
     openCategoryById(btn.dataset.category);
   });
 
-  ui.productsList.addEventListener('click', (e) => {
+  on(ui.productsList, 'click', (e) => {
     const btn = e.target.closest('button');
     if (btn && btn.dataset.favorite) {
       toggleFavorite(btn.dataset.favorite);
@@ -690,7 +693,7 @@ function bindEvents() {
     setScreen('product');
   });
 
-  ui.productView.addEventListener('click', (e) => {
+  on(ui.productView, 'click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
     if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
@@ -708,7 +711,7 @@ function bindEvents() {
 
   if (ui.productFavoriteTop && !ui.productFavoriteTop.dataset.bound) {
     ui.productFavoriteTop.dataset.bound = '1';
-    ui.productFavoriteTop.addEventListener('click', (e) => {
+    on(ui.productFavoriteTop, 'click', (e) => {
       const id = ui.productFavoriteTop.dataset.favorite;
       if (!id) return;
       toggleFavorite(id);
@@ -717,7 +720,7 @@ function bindEvents() {
   }
 
 
-  ui.favoritesList.addEventListener('click', (e) => {
+  on(ui.favoritesList, 'click', (e) => {
     const btn = e.target.closest('button');
     if (btn) {
       if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
@@ -735,7 +738,7 @@ function bindEvents() {
     }
   });
 
-  ui.favoritesList.addEventListener('change', (e) => {
+  on(ui.favoritesList, 'change', (e) => {
     const select = e.target.closest('input[data-fav-select]');
     if (!select) return;
     state.favoritesSelectionTouched = true;
@@ -745,22 +748,22 @@ function bindEvents() {
     renderFavorites();
   });
 
-  ui.favoritesButton.addEventListener('click', () => { renderFavorites(); setScreen('favorites'); });
-  ui.cartButton.addEventListener('click', () => { renderCart(); setScreen('cart'); });
-  ui.ordersButton.addEventListener('click', () => { renderOrders(); setScreen('orders'); });
-  ui.homeButton.addEventListener('click', () => { setScreen('home'); });
-  ui.checkoutButton.addEventListener('click', () => { renderCart(); setScreen('checkout'); });
+  on(ui.favoritesButton, 'click', () => { renderFavorites(); setScreen('favorites'); });
+  on(ui.cartButton, 'click', () => { renderCart(); setScreen('cart'); });
+  on(ui.ordersButton, 'click', () => { renderOrders(); setScreen('orders'); });
+  on(ui.homeButton, 'click', () => { setScreen('home'); });
+  on(ui.checkoutButton, 'click', () => { renderCart(); setScreen('checkout'); });
 
   document.querySelectorAll('.back-button').forEach((btn) => {
     btn.addEventListener('click', () => goBack());
   });
 
-  ui.favoritesToCart.addEventListener('click', () => {
+  on(ui.favoritesToCart, 'click', () => {
     const ids = state.selectedFavorites.size ? Array.from(state.selectedFavorites) : Array.from(state.favorites);
     ids.forEach((id) => addToCart(id));
     renderFavorites();
   });
-  ui.favoritesClear.addEventListener('click', () => {
+  on(ui.favoritesClear, 'click', () => {
     const ids = state.selectedFavorites.size ? Array.from(state.selectedFavorites) : Array.from(state.favorites);
     ids.forEach((id) => state.favorites.delete(id));
     state.selectedFavorites.clear();
@@ -769,7 +772,7 @@ function bindEvents() {
     updateBadges();
   });
 
-  ui.cartList.addEventListener('click', (e) => {
+  on(ui.cartList, 'click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
     if (btn.dataset.open) {
@@ -791,7 +794,7 @@ function bindEvents() {
     renderCart();
   });
 
-  ui.cartList.addEventListener('change', (e) => {
+  on(ui.cartList, 'change', (e) => {
     const select = e.target.closest('input[data-cart-select]');
     if (!select) return;
     state.cartSelectionTouched = true;
@@ -825,7 +828,7 @@ function bindEvents() {
     renderCart();
   });
 
-  ui.orderForm.addEventListener('submit', async (e) => {
+  on(ui.orderForm, 'submit', async (e) => {
     e.preventDefault();
     if (!ui.policyCheck.checked) { ui.orderStatus.textContent = 'Подтвердите согласие с политикой.'; return; }
     const items = cartItems();
@@ -871,20 +874,20 @@ function bindEvents() {
 
   let touchStartX = 0;
   let touchStartY = 0;
-  ui.menuDrawer.addEventListener('touchstart', (e) => {
+  on(ui.menuDrawer, 'touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
-  ui.menuDrawer.addEventListener('touchend', (e) => {
+  on(ui.menuDrawer, 'touchend', (e) => {
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
     if (dx > 40 && dy < 30) closeDrawer();
   });
-  ui.overlay.addEventListener('touchstart', (e) => {
+  on(ui.overlay, 'touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
-  ui.overlay.addEventListener('touchend', (e) => {
+  on(ui.overlay, 'touchend', (e) => {
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
     if (dx > 40 && dy < 30) closeDrawer();
@@ -968,7 +971,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-22';
+const DATA_VERSION = '20260205-23';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
