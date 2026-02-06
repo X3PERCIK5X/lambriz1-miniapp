@@ -262,7 +262,8 @@ function updateBadges() {
 }
 
 function renderCategories() {
-  const list = state.categories.filter((c) => c.groupId === state.currentGroup);
+  const filtered = state.categories.filter((c) => c.groupId === state.currentGroup);
+  const list = filtered.length ? filtered : state.categories;
   ui.categoriesGrid.innerHTML = list.map((c) => `
     <button class="category-card" data-category="${c.id}">
       <img src="${safeSrc(c.image)}" alt="${c.title}" />
