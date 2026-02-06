@@ -150,6 +150,12 @@ const ui = {
   dataStatus: document.getElementById('dataStatus'),
 };
 
+function reportStatus(message) {
+  if (!ui.dataStatus) return;
+  ui.dataStatus.classList.remove('hidden');
+  ui.dataStatus.textContent = message;
+}
+
 function openCategoryById(categoryId) {
   if (!categoryId) return;
   if (!state.products.length) {
@@ -249,13 +255,21 @@ function formatMultiline(text) {
     .join('');
 }
 
+function safeParse(value, fallback) {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
 function loadStorage() {
-  state.favorites = new Set(JSON.parse(localStorage.getItem('lambriz_favorites') || '[]'));
-  state.cart = JSON.parse(localStorage.getItem('lambriz_cart') || '{}');
-  state.selectedCart = new Set(JSON.parse(localStorage.getItem('lambriz_cart_selected') || '[]'));
-  state.selectedFavorites = new Set(JSON.parse(localStorage.getItem('lambriz_fav_selected') || '[]'));
-  state.profile = JSON.parse(localStorage.getItem('lambriz_profile') || '{}');
-  state.orders = JSON.parse(localStorage.getItem('lambriz_orders') || '[]');
+  state.favorites = new Set(safeParse(localStorage.getItem('lambriz_favorites') || '[]', []));
+  state.cart = safeParse(localStorage.getItem('lambriz_cart') || '{}', {});
+  state.selectedCart = new Set(safeParse(localStorage.getItem('lambriz_cart_selected') || '[]', []));
+  state.selectedFavorites = new Set(safeParse(localStorage.getItem('lambriz_fav_selected') || '[]', []));
+  state.profile = safeParse(localStorage.getItem('lambriz_profile') || '{}', {});
+  state.orders = safeParse(localStorage.getItem('lambriz_orders') || '[]', []);
 }
 
 function saveStorage() {
@@ -954,12 +968,9 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-21';
+const DATA_VERSION = '20260205-22';
 async function loadData() {
-  if (ui.dataStatus) {
-    ui.dataStatus.classList.remove('hidden');
-    ui.dataStatus.textContent = 'Загружаем каталог…';
-  }
+  reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
   if (catRes.ok) {
     try {
@@ -980,9 +991,7 @@ async function loadData() {
         state.products = JSON.parse(prodText.replace(/^\uFEFF/, ''));
       } catch (err) {
         console.error('Failed to parse products.json', err);
-        if (ui.dataStatus) {
-          ui.dataStatus.textContent = `Ошибка чтения products.json (${prodText.slice(0, 120)}…)`;
-        }
+        reportStatus(`Ошибка чтения products.json (${prodText.slice(0, 120)}…)`);
       }
     } else {
       console.error('Failed to load products.json', prodRes.status);
@@ -1007,9 +1016,7 @@ async function loadData() {
   } else if (state.currentScreen === 'products') {
     renderProducts();
   }
-  if (ui.dataStatus) {
-    ui.dataStatus.textContent = `Категорий: ${state.categories.length} • Товаров: ${state.products.length}`;
-  }
+  reportStatus(`Категорий: ${state.categories.length} • Товаров: ${state.products.length}`);
 }
 
 async function init() {
@@ -1037,8 +1044,16 @@ async function init() {
     await loadData();
   } catch (err) {
     console.error('loadData failed', err);
+    reportStatus('Ошибка загрузки каталога. Обновите страницу.');
   }
   buildMenuCatalog();
 }
 
 init();
+
+window.addEventListener('error', (e) => {
+  reportStatus(`Ошибка JS: ${e.message || 'unknown'}`);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  reportStatus(`Ошибка JS: ${e.reason || 'unknown'}`);
+});
