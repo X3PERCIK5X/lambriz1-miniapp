@@ -265,6 +265,18 @@ function formatMultiline(text) {
     .join('');
 }
 
+function getSku(p) {
+  if (p && p.sku) return p.sku;
+  if (p && Array.isArray(p.specs)) {
+    const skuLine = p.specs.find((s) => typeof s === 'string' && s.toLowerCase().startsWith('артикул'));
+    if (skuLine) {
+      const parts = skuLine.split(':');
+      if (parts.length > 1) return parts.slice(1).join(':').trim();
+    }
+  }
+  return '';
+}
+
 function safeParse(value, fallback) {
   try {
     return JSON.parse(value);
@@ -360,7 +372,7 @@ function renderProducts() {
       <div>
         <div class="product-title">${p.title}</div>
         <div class="product-meta">${p.shortDescription}</div>
-        <div class="product-meta">Артикул: ${p.sku}</div>
+        <div class="product-meta">Артикул: ${getSku(p) || '—'}</div>
         <div class="product-price">${formatPrice(p.price)} ₽</div>
         ${state.cart[p.id]
           ? `
@@ -402,7 +414,7 @@ function renderProductView() {
       <div class="product-gallery">${p.images.map((src) => `<img src="${safeSrc(src)}" alt="${p.title}" />`).join('')}</div>
     </div>
     <div class="product-title">${p.title}</div>
-    <div class="product-meta">Артикул: ${p.sku}</div>
+    <div class="product-meta">Артикул: ${getSku(p) || '—'}</div>
     <div class="product-price-row">
       <div class="product-price">${formatPrice(p.price)} ₽</div>
       ${state.cart[p.id]
@@ -495,7 +507,7 @@ function renderCart() {
       <img class="cart-image" src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div class="cart-info">
         <button class="cart-title-link" data-open="${p.id}">${p.title}</button>
-        <div class="cart-sku">Артикул: ${p.sku}</div>
+        <div class="cart-sku">Артикул: ${getSku(p) || '—'}</div>
         <div class="cart-price">${formatPrice(p.price)} ₽</div>
       </div>
       <div class="cart-controls">
