@@ -405,10 +405,26 @@ function renderProductView() {
     ui.productFavoriteTop.dataset.favorite = p.id;
     ui.productFavoriteTop.classList.toggle('active', state.favorites.has(p.id));
   }
-  const specs = (p.specs || []).map((s) => {
-    if (typeof s === 'string') return `<div>${s}</div>`;
-    return `<div><span>${s.label}</span><span>${s.value}</span></div>`;
-  }).join('');
+  const desc = String(p.description || '').trim();
+  const specs = (p.specs || [])
+    .filter((s) => {
+      if (!s) return false;
+      if (typeof s === 'string') {
+        const text = s.trim();
+        if (!text) return false;
+        if (text.toLowerCase().startsWith('описание')) return false;
+        if (desc && (text === desc || text.includes(desc.slice(0, 40)))) return false;
+        return true;
+      }
+      const label = String(s.label || '').toLowerCase();
+      if (label === 'описание') return false;
+      return true;
+    })
+    .map((s) => {
+      if (typeof s === 'string') return `<div>${s}</div>`;
+      return `<div><span>${s.label}</span><span>${s.value}</span></div>`;
+    })
+    .join('');
   ui.productView.innerHTML = `
     <div class="product-hero">
       <div class="product-gallery">${p.images.map((src) => `<img src="${safeSrc(src)}" alt="${p.title}" />`).join('')}</div>
@@ -429,7 +445,7 @@ function renderProductView() {
     </div>
     <div class="detail-section">
       <div class="section-title">Описание</div>
-      <div class="section-body">${p.description}</div>
+      <div class="section-body">${desc || 'Описание будет добавлено позже.'}</div>
     </div>
     <div class="detail-section">
       <div class="section-title">Характеристики</div>
@@ -988,7 +1004,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-24';
+const DATA_VERSION = '20260205-26';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
