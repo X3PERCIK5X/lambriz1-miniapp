@@ -149,12 +149,18 @@ const ui = {
 
 function openCategoryById(categoryId) {
   if (!categoryId) return;
-  state.currentCategory = categoryId;
-  const cat = state.categories.find((c) => c.id === categoryId);
-  if (!cat && state.products.length) {
-    const fallback = state.products[0].categoryId;
-    state.currentCategory = fallback;
+  const available = new Set(state.products.map((p) => p.categoryId));
+  const fallbackMap = {
+    'equipment-sweepers': 'equipment-cleaning',
+  };
+  let target = categoryId;
+  if (!available.has(target)) {
+    target = fallbackMap[target] || target;
   }
+  if (!available.has(target) && state.products.length) {
+    target = state.products[0].categoryId;
+  }
+  state.currentCategory = target;
   const resolved = state.categories.find((c) => c.id === state.currentCategory);
   ui.productsTitle.textContent = resolved ? resolved.title : 'Каталог';
   renderProducts();
@@ -269,7 +275,16 @@ function updateBadges() {
 function renderCategories() {
   const available = new Set(state.products.map((p) => p.categoryId));
   const filtered = state.categories.filter((c) => c.groupId === state.currentGroup && (available.size === 0 || available.has(c.id)));
-  const list = filtered.length ? filtered : state.categories;
+  const list = filtered.length ? filtered : state.categories.filter((c) => available.has(c.id));
+  if (!list.length) {
+    ui.categoriesGrid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-title">Нет категорий с товарами</div>
+        <div class="empty-text">Попробуйте другой раздел.</div>
+      </div>
+    `;
+    return;
+  }
   ui.categoriesGrid.innerHTML = list.map((c) => `
     <button class="category-card" data-category="${c.id}">
       <img src="${safeSrc(c.image)}" alt="${c.title}" />
