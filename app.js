@@ -294,7 +294,13 @@ function renderCategories() {
 }
 
 function renderProducts() {
-  const list = state.products.filter((p) => p.categoryId === state.currentCategory);
+  let list = state.products.filter((p) => p.categoryId === state.currentCategory);
+  if (!list.length && state.products.length) {
+    state.currentCategory = state.products[0].categoryId;
+    const resolved = state.categories.find((c) => c.id === state.currentCategory);
+    ui.productsTitle.textContent = resolved ? resolved.title : 'Каталог';
+    list = state.products.filter((p) => p.categoryId === state.currentCategory);
+  }
   if (!list.length) {
     ui.productsList.innerHTML = `
       <div class="empty-state">
