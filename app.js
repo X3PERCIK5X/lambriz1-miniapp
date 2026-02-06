@@ -151,7 +151,12 @@ function openCategoryById(categoryId) {
   if (!categoryId) return;
   state.currentCategory = categoryId;
   const cat = state.categories.find((c) => c.id === categoryId);
-  ui.productsTitle.textContent = cat ? cat.title : 'Категория';
+  if (!cat && state.products.length) {
+    const fallback = state.products[0].categoryId;
+    state.currentCategory = fallback;
+  }
+  const resolved = state.categories.find((c) => c.id === state.currentCategory);
+  ui.productsTitle.textContent = resolved ? resolved.title : 'Каталог';
   renderProducts();
   setScreen('products');
 }
@@ -262,7 +267,8 @@ function updateBadges() {
 }
 
 function renderCategories() {
-  const filtered = state.categories.filter((c) => c.groupId === state.currentGroup);
+  const available = new Set(state.products.map((p) => p.categoryId));
+  const filtered = state.categories.filter((c) => c.groupId === state.currentGroup && (available.size === 0 || available.has(c.id)));
   const list = filtered.length ? filtered : state.categories;
   ui.categoriesGrid.innerHTML = list.map((c) => `
     <button class="category-card" data-category="${c.id}">
@@ -274,6 +280,15 @@ function renderCategories() {
 
 function renderProducts() {
   const list = state.products.filter((p) => p.categoryId === state.currentCategory);
+  if (!list.length) {
+    ui.productsList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-title">Пока нет товаров в этом разделе</div>
+        <div class="empty-text">Попробуйте открыть другую категорию.</div>
+      </div>
+    `;
+    return;
+  }
   ui.productsList.innerHTML = list.map((p) => `
     <article class="product-card" data-open="${p.id}">
       <button class="card-icon favorite ${state.favorites.has(p.id) ? 'active' : ''}" data-favorite="${p.id}" aria-label="В избранное">
