@@ -227,6 +227,11 @@ function openMenu() {
   setScreen('menu');
 }
 
+function closeDrawer() {
+  if (ui.menuDrawer) ui.menuDrawer.classList.remove('drawer-open');
+  if (ui.overlay) ui.overlay.classList.remove('show');
+}
+
 function updateBottomNav(screen) {
   const map = {
     home: ui.homeButton,
@@ -901,7 +906,7 @@ function bindEvents() {
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
     if (dx > 40 && dy < 30) {
-      if (ui.menuDrawer.classList.contains('drawer-open')) {
+      if (ui.menuDrawer && ui.menuDrawer.classList.contains('drawer-open')) {
         closeDrawer();
       } else {
         goBack();
@@ -971,7 +976,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-23';
+const DATA_VERSION = '20260205-24';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
