@@ -220,13 +220,15 @@ def main():
 
             pid = f"{slugify(title)}-{hashlib.md5(str(rel).encode()).hexdigest()[:8]}"
             dest_dir = ASSETS / pid
+            if dest_dir.exists():
+                shutil.rmtree(dest_dir)
             dest_dir.mkdir(parents=True, exist_ok=True)
 
             img_paths = []
-            for img in images:
-                dest = dest_dir / img.name
-                if not dest.exists():
-                    shutil.copy2(img, dest)
+            for idx, img in enumerate(images):
+                safe_name = f"{slugify(title)}-{idx + 1}{img.suffix.lower()}"
+                dest = dest_dir / safe_name
+                shutil.copy2(img, dest)
                 img_paths.append(str(dest.relative_to(ROOT)).replace("\\", "/"))
 
             products.append({
