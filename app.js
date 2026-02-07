@@ -9,6 +9,7 @@ const state = {
   currentProduct: null,
   favorites: new Set(),
   selectedFavorites: new Set(),
+  favoritesQty: {},
   cart: {},
   selectedCart: new Set(),
   cartSelectionTouched: false,
@@ -290,6 +291,7 @@ function loadStorage() {
   state.cart = safeParse(localStorage.getItem('lambriz_cart') || '{}', {});
   state.selectedCart = new Set(safeParse(localStorage.getItem('lambriz_cart_selected') || '[]', []));
   state.selectedFavorites = new Set(safeParse(localStorage.getItem('lambriz_fav_selected') || '[]', []));
+  state.favoritesQty = safeParse(localStorage.getItem('lambriz_fav_qty') || '{}', {});
   state.profile = safeParse(localStorage.getItem('lambriz_profile') || '{}', {});
   state.orders = safeParse(localStorage.getItem('lambriz_orders') || '[]', []);
 }
@@ -299,6 +301,7 @@ function saveStorage() {
   localStorage.setItem('lambriz_cart', JSON.stringify(state.cart));
   localStorage.setItem('lambriz_cart_selected', JSON.stringify(Array.from(state.selectedCart)));
   localStorage.setItem('lambriz_fav_selected', JSON.stringify(Array.from(state.selectedFavorites)));
+  localStorage.setItem('lambriz_fav_qty', JSON.stringify(state.favoritesQty));
   localStorage.setItem('lambriz_profile', JSON.stringify(state.profile));
   localStorage.setItem('lambriz_orders', JSON.stringify(state.orders));
 }
@@ -484,24 +487,19 @@ function renderFavorites() {
               <path d="M14 11v6" />
             </svg>
           </button>
-          ${state.cart[p.id]
-            ? `
-              <div class="product-qty" data-qty="${p.id}">
-                <button class="qty-btn" data-qty-dec="${p.id}" type="button">−</button>
-                <span class="qty-count">${state.cart[p.id]}</span>
-                <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
-              </div>
-            `
-            : `
-              <button class="icon-btn" data-cart="${p.id}" aria-label="В корзину">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="m15 11-1 9" />
-                  <path d="m19 11-4-7" />
-                  <path d="M2 11h20" />
-                  <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
-                </svg>
-              </button>
-            `}
+          <div class="product-qty" data-qty="${p.id}">
+            <button class="qty-btn" data-qty-dec="${p.id}" type="button">−</button>
+            <span class="qty-count">${state.favoritesQty[p.id] || 1}</span>
+            <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
+          </div>
+          <button class="icon-btn" data-cart="${p.id}" aria-label="В корзину">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m15 11-1 9" />
+              <path d="m19 11-4-7" />
+              <path d="M2 11h20" />
+              <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
+            </svg>
+          </button>
         </div>
       </div>
     </article>
@@ -768,16 +766,32 @@ function bindEvents() {
   on(ui.favoritesList, 'click', (e) => {
     const btn = e.target.closest('button');
     if (btn) {
-      if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
-      if (btn.dataset.cart) { addToCart(btn.dataset.cart); renderFavorites(); }
-      if (btn.dataset.qtyInc) { addToCart(btn.dataset.qtyInc); renderFavorites(); }
+      if (btn.dataset.favorite) {
+        const id = btn.dataset.favorite;
+        toggleFavorite(id);
+        delete state.favoritesQty[id];
+        saveStorage();
+        renderFavorites();
+        return;
+      }
+      if (btn.dataset.cart) {
+        addToCart(btn.dataset.cart);
+        renderFavorites();
+        return;
+      }
+      if (btn.dataset.qtyInc) {
+        const id = btn.dataset.qtyInc;
+        state.favoritesQty[id] = (state.favoritesQty[id] || 1) + 1;
+        saveStorage();
+        renderFavorites();
+        return;
+      }
       if (btn.dataset.qtyDec) {
         const id = btn.dataset.qtyDec;
-        state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1);
-        if (!state.cart[id]) delete state.cart[id];
+        state.favoritesQty[id] = Math.max(1, (state.favoritesQty[id] || 1) - 1);
         saveStorage();
-        updateBadges();
         renderFavorites();
+        return;
       }
       return;
     }
@@ -1016,7 +1030,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-28';
+const DATA_VERSION = '20260205-29';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
