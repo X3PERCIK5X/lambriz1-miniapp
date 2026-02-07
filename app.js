@@ -641,7 +641,19 @@ function bindEvents() {
     ui.menuCatalogList.addEventListener('click', (e) => {
       const subItem = e.target.closest('[data-menu-subitem]');
       if (subItem) {
-        const id = subItem.dataset.category;
+        let id = subItem.dataset.category;
+        if (!id) {
+          const parent = subItem.closest('[data-menu-children]');
+          if (parent) {
+            const idx = parent.dataset.menuChildren;
+            const row = ui.menuCatalogList.querySelector(`[data-menu-index="${idx}"]`);
+            if (row) id = row.dataset.category;
+          }
+        }
+        if (!id) {
+          const label = subItem.textContent.trim();
+          id = menuCatalogFallback.get(label);
+        }
         openCategoryById(id);
         return;
       }
@@ -1004,7 +1016,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-27';
+const DATA_VERSION = '20260205-28';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
