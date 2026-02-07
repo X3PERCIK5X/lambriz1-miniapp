@@ -21,6 +21,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "НАШ САЙТ АКВИЛОН"
+EXTRA_SOURCE = ROOT / "Взрывозащищенные АВД"
+SOURCES = [SOURCE, EXTRA_SOURCE]
 ASSETS = ROOT / "assets" / "products"
 OUT = ROOT / "data" / "products.json"
 
@@ -170,66 +172,74 @@ def main():
 
     products = []
 
-    for docx in SOURCE.rglob("Документ Microsoft Word.docx"):
-        rel = docx.relative_to(SOURCE)
-        top = rel.parts[0]
-        if top == "Страницы сайта":
+    for source_root in SOURCES:
+        if not source_root.exists():
             continue
-        category_id = CATEGORY_MAP.get(top)
-        if not category_id:
-            continue
+        for docx in source_root.rglob("Документ Microsoft Word.docx"):
+            rel = docx.relative_to(source_root)
+            if source_root == EXTRA_SOURCE:
+                top = "Аппараты высокого давления(+-)"
+                category_id = "equipment-high-pressure-explosion"
+            else:
+                top = rel.parts[0]
+                if top == "Страницы сайта":
+                    continue
+                category_id = CATEGORY_MAP.get(top)
+                if not category_id:
+                    continue
 
-        # Override category by subfolder name when needed (e.g. explosion-proof AVD)
-        subfolder = rel.parts[1] if len(rel.parts) > 1 else ""
-        subfolder_norm = subfolder.lower()
-        if top == "Аппараты высокого давления(+-)":
-            for key, cid in SUBCATEGORY_MAP.items():
-                if key in subfolder_norm:
-                    category_id = cid
-                    break
+            product_dir = docx.parent
+            title = product_dir.name.strip()
+            # Override category by subfolder name when needed (e.g. explosion-proof AVD)
+            subfolder = rel.parts[1] if len(rel.parts) > 1 else ""
+            subfolder_norm = subfolder.lower()
+            if top == "Аппараты высокого давления(+-)":
+                for key, cid in SUBCATEGORY_MAP.items():
+                    if key in subfolder_norm:
+                        category_id = cid
+                        break
 
-        # Override by keywords in title for subcategories
-        subcat_id = match_subcategory(top, title)
-        if subcat_id:
-            category_id = subcat_id
+            # Prefer subfolder-based match, then title-based match for subcategories
+            subcat_id = match_subcategory(top, subfolder) if subfolder else None
+            if not subcat_id:
+                subcat_id = match_subcategory(top, title)
+            if subcat_id:
+                category_id = subcat_id
 
-        product_dir = docx.parent
-        title = product_dir.name.strip()
+            try:
+                text = extract_text(docx)
+            except Exception:
+                continue
 
-        try:
-            text = extract_text(docx)
-        except Exception:
-            continue
+            sku, specs, desc = parse_specs(text)
+            short_desc = (desc[:160].strip() if desc else "")
 
-        sku, specs, desc = parse_specs(text)
-        short_desc = (desc[:160].strip() if desc else "")
+            images = sorted([p for p in product_dir.iterdir() if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}])
+            if not images:
+                continue
 
-        images = sorted([p for p in product_dir.iterdir() if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}])
-        if not images:
-            continue
+            pid = f"{slugify(title)}-{hashlib.md5(str(rel).encode()).hexdigest()[:8]}"
+            dest_dir = ASSETS / pid
+            dest_dir.mkdir(parents=True, exist_ok=True)
 
-        pid = f"{slugify(title)}-{hashlib.md5(str(rel).encode()).hexdigest()[:8]}"
-        dest_dir = ASSETS / pid
-        dest_dir.mkdir(parents=True, exist_ok=True)
+            img_paths = []
+            for img in images:
+                dest = dest_dir / img.name
+                if not dest.exists():
+                    shutil.copy2(img, dest)
+                img_paths.append(str(dest.relative_to(ROOT)).replace("\\", "/"))
 
-        img_paths = []
-        for img in images:
-            dest = dest_dir / img.name
-            if not dest.exists():
-                shutil.copy2(img, dest)
-            img_paths.append(str(dest.relative_to(ROOT)).replace("\\", "/"))
-
-        products.append({
-            "id": pid,
-            "title": title,
-            "price": 0,
-            "sku": sku,
-            "shortDescription": short_desc or "Описание будет добавлено позже.",
-            "description": desc or "Описание будет добавлено позже.",
-            "specs": specs,
-            "images": img_paths,
-            "categoryId": category_id,
-        })
+            products.append({
+                "id": pid,
+                "title": title,
+                "price": 0,
+                "sku": sku,
+                "shortDescription": short_desc or "Описание будет добавлено позже.",
+                "description": desc or "Описание будет добавлено позже.",
+                "specs": specs,
+                "images": img_paths,
+                "categoryId": category_id,
+            })
 
     OUT.write_text(json.dumps(products, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Imported products: {len(products)}")
