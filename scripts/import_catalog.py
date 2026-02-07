@@ -35,6 +35,11 @@ CATEGORY_MAP = {
     "Пылесосы и Химчистка(+)": "equipment-vacuums",
 }
 
+SUBCATEGORY_MAP = {
+    # High pressure subcategories
+    "взрыв": "equipment-high-pressure-explosion",
+}
+
 LABELS = [
     "Артикул", "Торговая марка", "Производитель", "Страна", "Габаритные размеры",
     "Вес", "Материал", "Вход", "Выход", "Давление", "Рабочее давление",
@@ -102,6 +107,15 @@ def main():
         category_id = CATEGORY_MAP.get(top)
         if not category_id:
             continue
+
+        # Override category by subfolder name when needed (e.g. explosion-proof AVD)
+        subfolder = rel.parts[1] if len(rel.parts) > 1 else ""
+        subfolder_norm = subfolder.lower()
+        if top == "Аппараты высокого давления(+-)":
+            for key, cid in SUBCATEGORY_MAP.items():
+                if key in subfolder_norm:
+                    category_id = cid
+                    break
 
         product_dir = docx.parent
         title = product_dir.name.strip()
