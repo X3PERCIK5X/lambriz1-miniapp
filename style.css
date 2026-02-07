@@ -155,8 +155,7 @@ img { max-width: 100%; display: block; }
 }
 
 .screen-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.back-button { display: none; }
-.product-head .back-button { display: grid; }
+.back-button { display: grid; }
 
 .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .empty-state {

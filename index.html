@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260207-2" />
+    <link rel="stylesheet" href="style.css?v=20260207-3" />
   </head>
   <body>
     <header class="header">
@@ -43,7 +43,7 @@
 
       <section id="screen-categories" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2 id="categoriesTitle">Каталог</h2>
         </div>
         <div id="categoriesGrid" class="category-grid"></div>
@@ -163,7 +163,7 @@
 
       <section id="screen-products" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="categories">Назад</button>
+          <button class="back-button icon-only" data-back="categories" aria-label="Назад">←</button>
           <h2 id="productsTitle">Категория</h2>
         </div>
         <div id="productsList" class="product-list"></div>
@@ -184,7 +184,6 @@
 
       <section id="screen-favorites" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
           <h2>Избранное</h2>
         </div>
         <div class="select-row">
@@ -271,8 +270,11 @@
       </section>
 
       <section id="screen-confirmation" class="screen">
-        <div class="confirmation">
+        <div class="screen-head">
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Заявка отправлена</h2>
+        </div>
+        <div class="confirmation">
           <p>Мы свяжемся с вами в ближайшее время.</p>
           <button class="primary-button" data-screen="home">Вернуться в каталог</button>
         </div>
@@ -280,7 +282,6 @@
 
       <section id="screen-orders" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
           <h2>Мои заказы</h2>
         </div>
         <div id="ordersList" class="orders-list"></div>
@@ -288,7 +289,7 @@
 
       <section id="screen-about" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>О компании</h2>
         </div>
         <div id="aboutText" class="text-card">
@@ -374,7 +375,7 @@
 
       <section id="screen-payment" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Оплата и доставка</h2>
         </div>
         <div id="paymentText" class="text-card"></div>
@@ -382,7 +383,7 @@
 
       <section id="screen-promo" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Акции</h2>
         </div>
         <div class="text-card">Информация об акциях будет добавлена позже.</div>
@@ -390,7 +391,7 @@
 
       <section id="screen-production" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Производство</h2>
         </div>
         <div id="productionText" class="text-card">
@@ -432,7 +433,7 @@
 
       <section id="screen-contacts" class="screen">
         <div class="screen-head">
-          <button class="back-button" data-back="home">Назад</button>
+          <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Контакты</h2>
         </div>
         <div id="contactsCard" class="text-card"></div>
@@ -481,6 +482,6 @@
       </button>
     </nav>
 
-    <script src="app.js?v=20260207-2"></script>
+    <script src="app.js?v=20260207-3"></script>
   </body>
 </html>

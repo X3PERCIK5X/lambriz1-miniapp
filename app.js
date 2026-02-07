@@ -9,7 +9,6 @@ const state = {
   currentProduct: null,
   favorites: new Set(),
   selectedFavorites: new Set(),
-  favoritesQty: {},
   cart: {},
   selectedCart: new Set(),
   cartSelectionTouched: false,
@@ -280,7 +279,6 @@ function loadStorage() {
   state.cart = safeParse(localStorage.getItem('lambriz_cart') || '{}', {});
   state.selectedCart = new Set(safeParse(localStorage.getItem('lambriz_cart_selected') || '[]', []));
   state.selectedFavorites = new Set(safeParse(localStorage.getItem('lambriz_fav_selected') || '[]', []));
-  state.favoritesQty = safeParse(localStorage.getItem('lambriz_fav_qty') || '{}', {});
   state.profile = safeParse(localStorage.getItem('lambriz_profile') || '{}', {});
   state.orders = safeParse(localStorage.getItem('lambriz_orders') || '[]', []);
 }
@@ -290,7 +288,6 @@ function saveStorage() {
   localStorage.setItem('lambriz_cart', JSON.stringify(state.cart));
   localStorage.setItem('lambriz_cart_selected', JSON.stringify(Array.from(state.selectedCart)));
   localStorage.setItem('lambriz_fav_selected', JSON.stringify(Array.from(state.selectedFavorites)));
-  localStorage.setItem('lambriz_fav_qty', JSON.stringify(state.favoritesQty));
   localStorage.setItem('lambriz_profile', JSON.stringify(state.profile));
   localStorage.setItem('lambriz_orders', JSON.stringify(state.orders));
 }
@@ -470,11 +467,6 @@ function renderFavorites() {
               <path d="M14 11v6" />
             </svg>
           </button>
-          <div class="product-qty" data-qty="${p.id}">
-            <button class="qty-btn" data-qty-dec="${p.id}" type="button">−</button>
-            <span class="qty-count">${state.favoritesQty[p.id] || 1}</span>
-            <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
-          </div>
           <button class="icon-btn" data-cart="${p.id}" aria-label="В корзину">
             <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="m15 11-1 9" />
@@ -752,27 +744,12 @@ function bindEvents() {
       if (btn.dataset.favorite) {
         const id = btn.dataset.favorite;
         toggleFavorite(id);
-        delete state.favoritesQty[id];
         saveStorage();
         renderFavorites();
         return;
       }
       if (btn.dataset.cart) {
         addToCart(btn.dataset.cart);
-        renderFavorites();
-        return;
-      }
-      if (btn.dataset.qtyInc) {
-        const id = btn.dataset.qtyInc;
-        state.favoritesQty[id] = (state.favoritesQty[id] || 1) + 1;
-        saveStorage();
-        renderFavorites();
-        return;
-      }
-      if (btn.dataset.qtyDec) {
-        const id = btn.dataset.qtyDec;
-        state.favoritesQty[id] = Math.max(1, (state.favoritesQty[id] || 1) - 1);
-        saveStorage();
         renderFavorites();
         return;
       }
@@ -935,21 +912,6 @@ function bindEvents() {
     if (dx > 40 && dy < 30) closeDrawer();
   });
 
-  document.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
-  document.addEventListener('touchend', (e) => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
-    if (dx > 40 && dy < 30) {
-      if (ui.menuDrawer && ui.menuDrawer.classList.contains('drawer-open')) {
-        closeDrawer();
-      } else {
-        goBack();
-      }
-    }
-  });
 }
 
 function setProductionSlide(index) {
@@ -1013,7 +975,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260207-2';
+const DATA_VERSION = '20260207-3';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
@@ -1061,7 +1023,10 @@ async function loadData() {
   } else if (state.currentScreen === 'products') {
     renderProducts();
   }
-  reportStatus(`Категорий: ${state.categories.length} • Товаров: ${state.products.length}`);
+  if (ui.dataStatus && state.categories.length && state.products.length) {
+    ui.dataStatus.classList.add('hidden');
+    ui.dataStatus.textContent = '';
+  }
 }
 
 async function init() {
