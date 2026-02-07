@@ -176,18 +176,7 @@ function openCategoryById(categoryId) {
     setScreen('products');
     return;
   }
-  const available = new Set(state.products.map((p) => p.categoryId));
-  const fallbackMap = {
-    'equipment-sweepers': 'equipment-cleaning',
-  };
-  let target = categoryId;
-  if (!available.has(target)) {
-    target = fallbackMap[target] || target;
-  }
-  if (!available.has(target) && state.products.length) {
-    target = state.products[0].categoryId;
-  }
-  state.currentCategory = target;
+  state.currentCategory = categoryId;
   const resolved = state.categories.find((c) => c.id === state.currentCategory);
   ui.productsTitle.textContent = resolved ? resolved.title : 'Каталог';
   renderProducts();
@@ -348,13 +337,7 @@ function renderCategories() {
 }
 
 function renderProducts() {
-  let list = state.products.filter((p) => p.categoryId === state.currentCategory);
-  if (!list.length && state.products.length) {
-    state.currentCategory = state.products[0].categoryId;
-    const resolved = state.categories.find((c) => c.id === state.currentCategory);
-    ui.productsTitle.textContent = resolved ? resolved.title : 'Каталог';
-    list = state.products.filter((p) => p.categoryId === state.currentCategory);
-  }
+  const list = state.products.filter((p) => p.categoryId === state.currentCategory);
   if (!list.length) {
     ui.productsList.innerHTML = `
       <div class="empty-state">
@@ -1030,7 +1013,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260205-30';
+const DATA_VERSION = '20260205-31';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
