@@ -40,6 +40,61 @@ SUBCATEGORY_MAP = {
     "взрыв": "equipment-high-pressure-explosion",
 }
 
+SUBCATEGORY_RULES = {
+    "Аппараты высокого давления(+-)": [
+        ("equipment-high-pressure-explosion", ["взрыв"]),
+        ("equipment-high-pressure-heated", ["подогрев"]),
+        ("equipment-high-pressure-gas", ["бензин"]),
+        ("equipment-high-pressure-boilers", ["бойлер", "нагрев"]),
+        ("equipment-high-pressure-household", ["бытов", "200"]),
+        ("equipment-high-pressure-mobile", ["мобильн", "колес"]),
+        ("equipment-high-pressure-monoblock", ["моноблок"]),
+        ("equipment-high-pressure-stationary", ["стационар", "профес"]),
+    ],
+    "Насосы ВД и двигатели(+)": [
+        ("equipment-engines-gas", ["бензин", "двиг"]),
+        ("equipment-engines-pumps-gas", ["насос", "бензин"]),
+        ("equipment-engines-pumps-hotwater", ["горяч", "вода"]),
+        ("equipment-engines-plunger", ["плунжер"]),
+        ("equipment-engines-electric", ["электро", "двиг"]),
+    ],
+    "Пылесосы и Химчистка(+)": [
+        ("equipment-vacuums-wetdry", ["пылеводосос"]),
+        ("equipment-vacuums-tornador", ["торнадор"]),
+        ("equipment-vacuums-turbodry", ["турбосуш"]),
+        ("equipment-vacuums-dryclean", ["химчист"]),
+    ],
+    "Поломоечные машины(+)": [
+        ("equipment-cleaning-scrubbers", ["поломоеч"]),
+        ("equipment-sweepers-sweepers", ["подмет"]),
+    ],
+    "Аксессуары для АВД": [
+        ("equipment-accessories-quick", ["быстрос", "соедин"]),
+        ("equipment-accessories-mud", ["грязев"]),
+        ("equipment-accessories-lances", ["копь"]),
+        ("equipment-accessories-guns", ["курк", "пистолет"]),
+        ("equipment-accessories-tank", ["емкост"]),
+        ("equipment-accessories-surface", ["поверхн"]),
+        ("equipment-accessories-foam", ["пенообраз", "пеноген"]),
+        ("equipment-accessories-sandblast", ["пескостру"]),
+        ("equipment-accessories-nozzles", ["форсун"]),
+        ("equipment-accessories-hoses", ["шланг"]),
+    ],
+    "Аксессуары для автомоек": [
+        ("equipment-wash-accessories-reels", ["барабан"]),
+        ("equipment-wash-accessories-mat-holders", ["коврик"]),
+        ("equipment-wash-accessories-canisters", ["канистр"]),
+        ("equipment-wash-accessories-hose-holders", ["держател", "шланг"]),
+        ("equipment-wash-accessories-swivel-parts", ["поворотн", "консол"]),
+        ("equipment-wash-accessories-high-pressure-lines", ["магистрал"]),
+        ("equipment-wash-accessories-swivel-booms", ["консол"]),
+        ("equipment-wash-accessories-car-stands", ["подстав"]),
+        ("equipment-wash-accessories-shelves", ["полк"]),
+        ("equipment-wash-accessories-sinks", ["рукомойн"]),
+        ("equipment-wash-accessories-mat-stands", ["стенд", "коврик"]),
+    ],
+}
+
 LABELS = [
     "Артикул", "Торговая марка", "Производитель", "Страна", "Габаритные размеры",
     "Вес", "Материал", "Вход", "Выход", "Давление", "Рабочее давление",
@@ -91,6 +146,22 @@ def slugify(value: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
     return slug or "item"
 
+def normalize(text: str) -> str:
+    return text.lower().replace("ё", "е")
+
+def match_subcategory(top: str, title: str) -> str | None:
+    rules = SUBCATEGORY_RULES.get(top)
+    if not rules:
+        return None
+    t = normalize(title)
+    for cid, keywords in rules:
+        if all(k in t for k in keywords):
+            return cid
+    for cid, keywords in rules:
+        if any(k in t for k in keywords):
+            return cid
+    return None
+
 
 def main():
     if not SOURCE.exists():
@@ -116,6 +187,11 @@ def main():
                 if key in subfolder_norm:
                     category_id = cid
                     break
+
+        # Override by keywords in title for subcategories
+        subcat_id = match_subcategory(top, title)
+        if subcat_id:
+            category_id = subcat_id
 
         product_dir = docx.parent
         title = product_dir.name.strip()

@@ -6,6 +6,48 @@
     "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
   },
   {
+    "id": "equipment-high-pressure-heated",
+    "groupId": "equipment",
+    "title": "АВД с подогревом",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-high-pressure-gas",
+    "groupId": "equipment",
+    "title": "Бензиновые АВД",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-high-pressure-boilers",
+    "groupId": "equipment",
+    "title": "Бойлеры нагрева воды",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-high-pressure-household",
+    "groupId": "equipment",
+    "title": "Бытовые АВД до 200 бар",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-high-pressure-mobile",
+    "groupId": "equipment",
+    "title": "Мобильные АВД на колёсах",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-high-pressure-monoblock",
+    "groupId": "equipment",
+    "title": "Моноблоки АВД",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-high-pressure-stationary",
+    "groupId": "equipment",
+    "title": "Профессиональные стационарные мойки",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
     "id": "equipment-high-pressure-explosion",
     "groupId": "equipment",
     "title": "Взрывозащитные АВД",
@@ -18,7 +60,43 @@
     "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
   },
   {
+    "id": "equipment-engines-gas",
+    "groupId": "equipment",
+    "title": "Бензиновые двигатели",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-engines-pumps-gas",
+    "groupId": "equipment",
+    "title": "Насосы для бензиновых двигателей",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-engines-pumps-hotwater",
+    "groupId": "equipment",
+    "title": "Насосы для горячей воды",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-engines-plunger",
+    "groupId": "equipment",
+    "title": "Плунжерные насосы",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-engines-electric",
+    "groupId": "equipment",
+    "title": "Электродвигатели",
+    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=70"
+  },
+  {
     "id": "equipment-cleaning",
+    "groupId": "equipment",
+    "title": "Поломоечные машины",
+    "image": "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-cleaning-scrubbers",
     "groupId": "equipment",
     "title": "Поломоечные машины",
     "image": "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=800&q=70"
@@ -30,9 +108,39 @@
     "image": "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=800&q=70"
   },
   {
+    "id": "equipment-sweepers-sweepers",
+    "groupId": "equipment",
+    "title": "Подметальные машины",
+    "image": "https://images.unsplash.com/photo-1504362453368-5c0c4ea5c0a6?auto=format&fit=crop&w=800&q=70"
+  },
+  {
     "id": "equipment-vacuums",
     "groupId": "equipment",
     "title": "Пылесосы и Химчистка",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-vacuums-wetdry",
+    "groupId": "equipment",
+    "title": "Пылеводососы",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-vacuums-tornador",
+    "groupId": "equipment",
+    "title": "Торнадоры",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-vacuums-turbodry",
+    "groupId": "equipment",
+    "title": "Турбосушки",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-vacuums-dryclean",
+    "groupId": "equipment",
+    "title": "Химчистка",
     "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
   },
   {
@@ -42,9 +150,135 @@
     "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
   },
   {
+    "id": "equipment-accessories-quick",
+    "groupId": "equipment",
+    "title": "Быстросъёмные соединения",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-mud",
+    "groupId": "equipment",
+    "title": "Грязевые фрезы",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-lances",
+    "groupId": "equipment",
+    "title": "Копья",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-guns",
+    "groupId": "equipment",
+    "title": "Курки высокого давления",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-tank",
+    "groupId": "equipment",
+    "title": "Насадки для мойки емкостей",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-surface",
+    "groupId": "equipment",
+    "title": "Насадки для очистки поверхностей",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-foam",
+    "groupId": "equipment",
+    "title": "Пенообразующие аксессуары",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-sandblast",
+    "groupId": "equipment",
+    "title": "Пескоструйное оборудование",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-nozzles",
+    "groupId": "equipment",
+    "title": "Форсунки и форсункодержатели",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-accessories-hoses",
+    "groupId": "equipment",
+    "title": "Шланги для автомойки",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
     "id": "equipment-wash-accessories",
     "groupId": "equipment",
     "title": "Аксессуары для автомоек",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-reels",
+    "groupId": "equipment",
+    "title": "Барабаны для шлангов",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-mat-holders",
+    "groupId": "equipment",
+    "title": "Держатели автомобильных ковриков",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-canisters",
+    "groupId": "equipment",
+    "title": "Держатели канистр",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-hose-holders",
+    "groupId": "equipment",
+    "title": "Держатели шлангов высокого давления",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-swivel-parts",
+    "groupId": "equipment",
+    "title": "Комплектующие для поворотных консолей",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-high-pressure-lines",
+    "groupId": "equipment",
+    "title": "Магистрали высокого давления",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-swivel-booms",
+    "groupId": "equipment",
+    "title": "Поворотные консоли для автомойки",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-car-stands",
+    "groupId": "equipment",
+    "title": "Подставки для мойки автомобиля",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-shelves",
+    "groupId": "equipment",
+    "title": "Полки для автомоек",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-sinks",
+    "groupId": "equipment",
+    "title": "Рукомойники для автомоек",
+    "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
+  },
+  {
+    "id": "equipment-wash-accessories-mat-stands",
+    "groupId": "equipment",
+    "title": "Стенды под автомобильные коврики",
     "image": "https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=800&q=70"
   },
   {
