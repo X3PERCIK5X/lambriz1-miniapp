@@ -147,6 +147,8 @@ const ui = {
   productionText: document.getElementById('productionText'),
   productionServices: document.getElementById('productionServices'),
   productionTrack: document.getElementById('productionTrack'),
+  promoTrack: document.getElementById('promoTrack'),
+  homeProductionButton: document.getElementById('homeProductionButton'),
   dataStatus: document.getElementById('dataStatus'),
 };
 
@@ -380,6 +382,22 @@ function renderProducts() {
   `).join('');
 }
 
+function renderPromos() {
+  if (!ui.promoTrack) return;
+  const list = state.products.filter((p) => p.price > 0).slice(0, 12);
+  if (!list.length) {
+    ui.promoTrack.innerHTML = '';
+    return;
+  }
+  ui.promoTrack.innerHTML = list.map((p) => `
+    <article class="promo-card" data-open="${p.id}">
+      <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
+      <div class="promo-title">${p.title}</div>
+      <div class="promo-price">${formatPrice(p.price)} ₽</div>
+    </article>
+  `).join('');
+}
+
 function renderProductView() {
   const p = getProduct(state.currentProduct);
   if (!p) return;
@@ -598,7 +616,7 @@ function bindEvents() {
   document.querySelectorAll('.hero-tile').forEach((tile) => {
     tile.addEventListener('click', () => {
       state.currentGroup = tile.dataset.group;
-      ui.categoriesTitle.textContent = tile.dataset.group === 'equipment' ? 'Каталог оборудования' : 'Изделия из нержавейки';
+      ui.categoriesTitle.textContent = tile.dataset.group === 'equipment' ? 'Каталог оборудования' : 'Собственное производство';
       renderCategories();
       setScreen('categories');
     });
@@ -709,6 +727,21 @@ function bindEvents() {
     state.currentProduct = card.dataset.open;
     renderProductView();
     setScreen('product');
+  });
+
+  on(ui.promoTrack, 'click', (e) => {
+    const card = e.target.closest('[data-open]');
+    if (!card) return;
+    state.currentProduct = card.dataset.open;
+    renderProductView();
+    setScreen('product');
+  });
+
+  on(ui.homeProductionButton, 'click', () => {
+    state.currentGroup = 'stainless';
+    ui.categoriesTitle.textContent = 'Собственное производство';
+    renderCategories();
+    setScreen('categories');
   });
 
   on(ui.productView, 'click', (e) => {
@@ -975,7 +1008,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260207-3';
+const DATA_VERSION = '20260208-1';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
@@ -1012,9 +1045,10 @@ async function loadData() {
     state.currentGroup = 'equipment';
   }
   if (ui.categoriesTitle) {
-    ui.categoriesTitle.textContent = state.currentGroup === 'equipment' ? 'Каталог оборудования' : 'Изделия из нержавейки';
+    ui.categoriesTitle.textContent = state.currentGroup === 'equipment' ? 'Каталог оборудования' : 'Собственное производство';
   }
   renderCategories();
+  renderPromos();
   buildMenuCatalog();
   if (state.pendingCategory) {
     const pending = state.pendingCategory;

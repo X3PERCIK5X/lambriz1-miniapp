@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260207-3" />
+    <link rel="stylesheet" href="style.css?v=20260208-1" />
   </head>
   <body>
     <header class="header">
@@ -29,16 +29,27 @@
           <button class="primary-button about-button" data-screen="about">Подробнее</button>
         </section>
         <div class="home-section-title">Каталог</div>
-        <div class="hero-grid">
+        <div class="hero-grid hero-grid-inline">
           <button class="hero-tile" data-group="equipment">
             <div class="hero-image" data-image="equipment"></div>
             <div class="hero-label">Каталог оборудования</div>
           </button>
           <button class="hero-tile" data-group="stainless">
             <div class="hero-image" data-image="stainless"></div>
-            <div class="hero-label">Изделия из нержавейки</div>
+            <div class="hero-label">Собственное производство</div>
           </button>
         </div>
+        <div class="home-section-title">Акции</div>
+        <div class="promo-row">
+          <div id="promoTrack" class="promo-track"></div>
+        </div>
+        <section class="production-card">
+          <div class="production-title">Собственное производство металлоизделий</div>
+          <div class="production-text">
+            Мы выполняем полный цикл работ — от проектирования до финальной обработки изделий, используя современные технологии и оборудование.
+          </div>
+          <button id="homeProductionButton" class="primary-button">Подробнее</button>
+        </section>
       </section>
 
       <section id="screen-categories" class="screen">
@@ -482,6 +493,6 @@
       </button>
     </nav>
 
-    <script src="app.js?v=20260207-3"></script>
+    <script src="app.js?v=20260208-1"></script>
   </body>
 </html>
