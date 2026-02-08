@@ -738,10 +738,7 @@ function bindEvents() {
   });
 
   on(ui.homeProductionButton, 'click', () => {
-    state.currentGroup = 'stainless';
-    ui.categoriesTitle.textContent = 'Собственное производство';
-    renderCategories();
-    setScreen('categories');
+    setScreen('production');
   });
 
   on(ui.productView, 'click', (e) => {
@@ -1008,7 +1005,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-1';
+const DATA_VERSION = '20260208-2';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
