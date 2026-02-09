@@ -146,9 +146,9 @@ img { max-width: 100%; display: block; }
 }
 
 .about-button {
-  width: 170px;
-  padding: 10px 12px;
-  border-radius: 12px;
+  width: auto;
+  padding: 8px 10px;
+  border-radius: 10px;
   font-size: 14px;
 }
 .home-section-title {
