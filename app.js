@@ -15,8 +15,8 @@ const state = {
   cartSelectionTouched: false,
   favoritesSelectionTouched: false,
   filters: {
-    products: { sort: 'default', brand: 'all' },
-    promo: { sort: 'default', brand: 'all' },
+    products: { sort: 'default' },
+    promo: { sort: 'default' },
   },
   productionSlide: 0,
   profile: {},
@@ -155,9 +155,7 @@ const ui = {
   promoTrack: document.getElementById('promoTrack'),
   promoList: document.getElementById('promoList'),
   productsSort: document.getElementById('productsSort'),
-  productsBrand: document.getElementById('productsBrand'),
   promoSort: document.getElementById('promoSort'),
-  promoBrand: document.getElementById('promoBrand'),
   homeProductionButton: document.getElementById('homeProductionButton'),
   dataStatus: document.getElementById('dataStatus'),
 };
@@ -397,69 +395,18 @@ function buildProductCards(list) {
   `).join('');
 }
 
-function getBrand(p) {
-  if (!p) return 'Без бренда';
-  if (Array.isArray(p.specs)) {
-    for (const s of p.specs) {
-      if (typeof s === 'string') {
-        const m = s.match(/^\\s*бренд\\s*[:\\-]\\s*(.+)$/i);
-        if (m) return m[1].trim();
-      } else if (s && typeof s === 'object') {
-        const label = String(s.label || '').toLowerCase();
-        if (label === 'бренд') return String(s.value || '').trim() || 'Без бренда';
-      }
-    }
-  }
-  const title = String(p.title || '').trim();
-  if (!title) return 'Без бренда';
-  const stop = new Set([
-    'аппарат', 'аппараты', 'пылесос', 'пылесосы', 'шланг', 'шланги',
-    'мойка', 'мойки', 'машина', 'машины', 'насос', 'насосы', 'двигатель',
-    'двигатели', 'аксессуар', 'аксессуары', 'комплект', 'комплекты',
-    'держатель', 'держатели', 'насадка', 'насадки', 'пистолет', 'фильтр',
-    'пеногенератор', 'пеногенераторы', 'торнадор', 'турбосушка', 'авд',
-    'высокого', 'давления', 'для', 'и',
-  ]);
-  const tokens = title.replace(/[()"]/g, ' ').split(/\\s+/).filter(Boolean);
-  for (const raw of tokens) {
-    const token = raw.replace(/[^\\p{L}\\p{N}]/gu, '');
-    if (token.length < 3) continue;
-    const lower = token.toLowerCase();
-    if (stop.has(lower)) continue;
-    if (/^\\d+$/.test(token)) continue;
-    return token;
-  }
-  return 'Без бренда';
-}
-
 function applyFilters(list, filter) {
   let out = list.slice();
-  if (filter.brand && filter.brand !== 'all') {
-    out = out.filter((p) => getBrand(p) === filter.brand);
-  }
   if (filter.sort === 'price-asc') {
     out.sort((a, b) => (a.price || 0) - (b.price || 0));
   }
   return out;
 }
 
-function syncBrandOptions(selectEl, list, current) {
-  if (!selectEl) return current;
-  const brands = Array.from(new Set(list.map(getBrand))).filter(Boolean);
-  const options = ['all', ...brands];
-  selectEl.innerHTML = options
-    .map((b) => `<option value="${b}">${b === 'all' ? 'Все бренды' : b}</option>`)
-    .join('');
-  if (!options.includes(current)) current = 'all';
-  selectEl.value = current;
-  return current;
-}
-
 function renderProducts() {
   const base = state.currentCategoryIds
     ? state.products.filter((p) => state.currentCategoryIds.includes(p.categoryId))
     : state.products.filter((p) => p.categoryId === state.currentCategory);
-  state.filters.products.brand = syncBrandOptions(ui.productsBrand, base, state.filters.products.brand);
   const list = applyFilters(base, state.filters.products);
   if (!list.length) {
     ui.productsList.innerHTML = `
@@ -490,7 +437,6 @@ function getPromoProducts() {
 
 function renderPromos() {
   const list = getPromoProducts();
-  state.filters.promo.brand = syncBrandOptions(ui.promoBrand, list, state.filters.promo.brand);
   const filtered = applyFilters(list, state.filters.promo);
   if (ui.promoTrack) {
     ui.promoTrack.innerHTML = list.map((p) => {
@@ -877,10 +823,6 @@ function bindEvents() {
     state.filters.products.sort = ui.productsSort.value;
     renderProducts();
   });
-  on(ui.productsBrand, 'change', () => {
-    state.filters.products.brand = ui.productsBrand.value;
-    renderProducts();
-  });
 
   on(ui.promoList, 'click', (e) => {
     const btn = e.target.closest('button');
@@ -920,10 +862,6 @@ function bindEvents() {
 
   on(ui.promoSort, 'change', () => {
     state.filters.promo.sort = ui.promoSort.value;
-    renderPromos();
-  });
-  on(ui.promoBrand, 'change', () => {
-    state.filters.promo.brand = ui.promoBrand.value;
     renderPromos();
   });
 
@@ -1204,7 +1142,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-14';
+const DATA_VERSION = '20260208-16';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
