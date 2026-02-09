@@ -394,6 +394,25 @@ function getBrand(p) {
       }
     }
   }
+  const title = String(p.title || '').trim();
+  if (!title) return 'Без бренда';
+  const stop = new Set([
+    'аппарат', 'аппараты', 'пылесос', 'пылесосы', 'шланг', 'шланги',
+    'мойка', 'мойки', 'машина', 'машины', 'насос', 'насосы', 'двигатель',
+    'двигатели', 'аксессуар', 'аксессуары', 'комплект', 'комплекты',
+    'держатель', 'держатели', 'насадка', 'насадки', 'пистолет', 'фильтр',
+    'пеногенератор', 'пеногенераторы', 'торнадор', 'турбосушка', 'авд',
+    'высокого', 'давления', 'для', 'и',
+  ]);
+  const tokens = title.replace(/[()"]/g, ' ').split(/\\s+/).filter(Boolean);
+  for (const raw of tokens) {
+    const token = raw.replace(/[^\\p{L}\\p{N}]/gu, '');
+    if (token.length < 3) continue;
+    const lower = token.toLowerCase();
+    if (stop.has(lower)) continue;
+    if (/^\\d+$/.test(token)) continue;
+    return token;
+  }
   return 'Без бренда';
 }
 
@@ -1154,7 +1173,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-11';
+const DATA_VERSION = '20260208-12';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
