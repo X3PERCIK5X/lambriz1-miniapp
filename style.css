@@ -188,6 +188,8 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
   box-shadow: var(--shadow-soft);
   scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
 }
 .promo-badge {
   position: absolute;
@@ -215,12 +217,14 @@ img { max-width: 100%; display: block; }
   font-weight: 700;
   color: var(--ink);
   min-height: 28px;
+  flex: 1;
 }
 .promo-card .promo-price {
   padding: 3px 8px 8px;
   display: flex;
   gap: 6px;
   align-items: baseline;
+  margin-top: auto;
 }
 .promo-card .promo-price .promo-new {
   font-size: 11px;
