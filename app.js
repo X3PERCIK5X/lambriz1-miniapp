@@ -336,18 +336,8 @@ function renderCategories() {
   `).join('');
 }
 
-function renderProducts() {
-  const list = state.products.filter((p) => p.categoryId === state.currentCategory);
-  if (!list.length) {
-    ui.productsList.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-title">Пока нет товаров в этом разделе</div>
-        <div class="empty-text">Попробуйте открыть другую категорию.</div>
-      </div>
-    `;
-    return;
-  }
-  ui.productsList.innerHTML = list.map((p) => `
+function buildProductCards(list) {
+  return list.map((p) => `
     <article class="product-card" data-open="${p.id}">
       <button class="card-icon favorite ${state.favorites.has(p.id) ? 'active' : ''}" data-favorite="${p.id}" aria-label="В избранное">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -381,6 +371,20 @@ function renderProducts() {
       </div>
     </article>
   `).join('');
+}
+
+function renderProducts() {
+  const list = state.products.filter((p) => p.categoryId === state.currentCategory);
+  if (!list.length) {
+    ui.productsList.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-title">Пока нет товаров в этом разделе</div>
+        <div class="empty-text">Попробуйте открыть другую категорию.</div>
+      </div>
+    `;
+    return;
+  }
+  ui.productsList.innerHTML = buildProductCards(list);
 }
 
 function getPromoProducts() {
@@ -417,21 +421,16 @@ function renderPromos() {
     }).join('');
   }
   if (ui.promoList) {
-    ui.promoList.innerHTML = list.map((p) => {
-      const newPrice = Math.round((p.price || 0) * 0.9);
-      return `
-      <article class="promo-card" data-open="${p.id}">
-        <div class="promo-badge">-10%</div>
-        <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
-        <div class="promo-title">${p.title}</div>
-        <div class="promo-price">
-          <span class="promo-new">${formatPrice(newPrice)} ₽</span>
-          <span class="promo-old">${formatPrice(p.price)} ₽</span>
+    if (!list.length) {
+      ui.promoList.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-title">Пока нет товаров в этом разделе</div>
+          <div class="empty-text">Попробуйте позже.</div>
         </div>
-        <button class="primary-button" data-cart="${p.id}" type="button">В корзину</button>
-      </article>
-    `;
-    }).join('');
+      `;
+    } else {
+      ui.promoList.innerHTML = buildProductCards(list);
+    }
   }
 }
 
@@ -773,18 +772,33 @@ function bindEvents() {
     setScreen('product');
   });
 
-  on(ui.promoTrack, 'click', (e) => {
-    const card = e.target.closest('[data-open]');
-    if (!card) return;
-    state.currentProduct = card.dataset.open;
-    renderProductView();
-    setScreen('product');
-  });
-
   on(ui.promoList, 'click', (e) => {
     const btn = e.target.closest('button');
+    if (btn && btn.dataset.favorite) {
+      toggleFavorite(btn.dataset.favorite);
+      e.stopPropagation();
+      return;
+    }
     if (btn && btn.dataset.cart) {
       addToCart(btn.dataset.cart);
+      renderPromos();
+      e.stopPropagation();
+      return;
+    }
+    if (btn && btn.dataset.qtyInc) {
+      addToCart(btn.dataset.qtyInc);
+      renderPromos();
+      e.stopPropagation();
+      return;
+    }
+    if (btn && btn.dataset.qtyDec) {
+      const id = btn.dataset.qtyDec;
+      state.cart[id] = Math.max(0, (state.cart[id] || 0) - 1);
+      if (!state.cart[id]) delete state.cart[id];
+      saveStorage();
+      updateBadges();
+      renderPromos();
+      e.stopPropagation();
       return;
     }
     const card = e.target.closest('[data-open]');
@@ -793,6 +807,15 @@ function bindEvents() {
     renderProductView();
     setScreen('product');
   });
+
+  on(ui.promoTrack, 'click', (e) => {
+    const card = e.target.closest('[data-open]');
+    if (!card) return;
+    state.currentProduct = card.dataset.open;
+    renderProductView();
+    setScreen('product');
+  });
+
 
   on(ui.homeProductionButton, 'click', () => {
     setScreen('production');
@@ -1062,7 +1085,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-8';
+const DATA_VERSION = '20260208-9';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
