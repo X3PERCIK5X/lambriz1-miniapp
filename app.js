@@ -336,12 +336,16 @@ function renderCategories() {
     `;
     return;
   }
-  ui.categoriesGrid.innerHTML = list.map((c) => `
+  ui.categoriesGrid.innerHTML = list.map((c) => {
+    const firstProduct = state.products.find((p) => p.categoryId === c.id);
+    const image = firstProduct && Array.isArray(firstProduct.images) && firstProduct.images[0] ? firstProduct.images[0] : c.image;
+    return `
     <button class="category-card" data-category="${c.id}">
-      <img src="${safeSrc(c.image)}" alt="${c.title}" />
+      <img src="${safeSrc(image)}" alt="${c.title}" />
       <span>${c.title}</span>
     </button>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function buildProductCards(list) {
@@ -1173,7 +1177,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-12';
+const DATA_VERSION = '20260208-13';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
