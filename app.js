@@ -148,6 +148,7 @@ const ui = {
   productionServices: document.getElementById('productionServices'),
   productionTrack: document.getElementById('productionTrack'),
   promoTrack: document.getElementById('promoTrack'),
+  promoList: document.getElementById('promoList'),
   homeProductionButton: document.getElementById('homeProductionButton'),
   dataStatus: document.getElementById('dataStatus'),
 };
@@ -382,20 +383,56 @@ function renderProducts() {
   `).join('');
 }
 
-function renderPromos() {
-  if (!ui.promoTrack) return;
-  const list = state.products.filter((p) => p.price > 0).slice(0, 12);
-  if (!list.length) {
-    ui.promoTrack.innerHTML = '';
-    return;
+function getPromoProducts() {
+  const keywords = ['сатеко', 'sateco', 'комета', 'камета', 'титан', 'titan', 'пан сатеко'];
+  const matched = [];
+  const seen = new Set();
+  for (const p of state.products) {
+    const title = (p.title || '').toLowerCase();
+    if (!title) continue;
+    if (!keywords.some((k) => title.includes(k))) continue;
+    if (seen.has(p.id)) continue;
+    seen.add(p.id);
+    matched.push(p);
   }
-  ui.promoTrack.innerHTML = list.map((p) => `
+  return matched;
+}
+
+function renderPromos() {
+  const list = getPromoProducts();
+  if (ui.promoTrack) {
+    ui.promoTrack.innerHTML = list.map((p) => {
+      const newPrice = Math.round((p.price || 0) * 0.9);
+      return `
     <article class="promo-card" data-open="${p.id}">
+      <div class="promo-badge">-10%</div>
       <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div class="promo-title">${p.title}</div>
-      <div class="promo-price">${formatPrice(p.price)} ₽</div>
+      <div class="promo-price">
+        <span class="promo-new">${formatPrice(newPrice)} ₽</span>
+        <span class="promo-old">${formatPrice(p.price)} ₽</span>
+      </div>
     </article>
-  `).join('');
+  `;
+    }).join('');
+  }
+  if (ui.promoList) {
+    ui.promoList.innerHTML = list.map((p) => {
+      const newPrice = Math.round((p.price || 0) * 0.9);
+      return `
+      <article class="promo-card" data-open="${p.id}">
+        <div class="promo-badge">-10%</div>
+        <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
+        <div class="promo-title">${p.title}</div>
+        <div class="promo-price">
+          <span class="promo-new">${formatPrice(newPrice)} ₽</span>
+          <span class="promo-old">${formatPrice(p.price)} ₽</span>
+        </div>
+        <button class="primary-button" data-cart="${p.id}" type="button">В корзину</button>
+      </article>
+    `;
+    }).join('');
+  }
 }
 
 function renderProductView() {
@@ -744,6 +781,19 @@ function bindEvents() {
     setScreen('product');
   });
 
+  on(ui.promoList, 'click', (e) => {
+    const btn = e.target.closest('button');
+    if (btn && btn.dataset.cart) {
+      addToCart(btn.dataset.cart);
+      return;
+    }
+    const card = e.target.closest('[data-open]');
+    if (!card) return;
+    state.currentProduct = card.dataset.open;
+    renderProductView();
+    setScreen('product');
+  });
+
   on(ui.homeProductionButton, 'click', () => {
     setScreen('production');
   });
@@ -1012,7 +1062,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-5';
+const DATA_VERSION = '20260208-6';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });

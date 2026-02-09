@@ -162,6 +162,15 @@ img { max-width: 100%; display: block; }
   padding-bottom: 4px;
   overflow: hidden;
 }
+.promo-strip {
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(12, 61, 90, 0.12);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+}
 .promo-track {
   display: flex;
   gap: 12px;
@@ -172,12 +181,27 @@ img { max-width: 100%; display: block; }
 .promo-track::-webkit-scrollbar { display: none; }
 .promo-card {
   flex: 0 0 calc((100% - 24px) / 3);
+  position: relative;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
   box-shadow: var(--shadow-soft);
   scroll-snap-align: start;
+}
+.promo-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #2aa645;
+  color: #fff;
+  font-weight: 800;
+  font-size: 12px;
+  display: grid;
+  place-items: center;
 }
 .promo-card img {
   width: 100%;
@@ -194,10 +218,28 @@ img { max-width: 100%; display: block; }
 }
 .promo-card .promo-price {
   padding: 4px 10px 10px;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+.promo-card .promo-price .promo-new {
   font-size: 12px;
   color: var(--primary);
-  font-weight: 700;
+  font-weight: 800;
 }
+.promo-card .promo-price .promo-old {
+  font-size: 11px;
+  color: #8a97a5;
+  text-decoration: line-through;
+}
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.promo-grid .promo-card img { height: 120px; }
+.promo-grid .promo-card .promo-title { font-size: 13px; min-height: 40px; }
+.promo-grid .promo-card .promo-price .promo-new { font-size: 13px; }
 .production-card {
   margin-top: 12px;
   padding: 12px;
