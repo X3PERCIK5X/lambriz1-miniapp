@@ -152,6 +152,20 @@ img { max-width: 100%; display: block; }
   font-weight: 800;
   color: var(--ink);
 }
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin: 4px 0 12px;
+}
+.filter-select {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+}
 .promo-row {
   margin-top: 6px;
   padding-bottom: 4px;

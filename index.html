@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260208-9" />
+    <link rel="stylesheet" href="style.css?v=20260208-10" />
   </head>
   <body>
     <header class="header">
@@ -177,6 +177,15 @@
         <div class="screen-head">
           <button class="back-button icon-only" data-back="categories" aria-label="Назад">←</button>
           <h2 id="productsTitle">Категория</h2>
+        </div>
+        <div class="filter-bar">
+          <select id="productsSort" class="filter-select">
+            <option value="default">Сортировка</option>
+            <option value="price-asc">Цена по возрастанию</option>
+          </select>
+          <select id="productsBrand" class="filter-select">
+            <option value="all">Все бренды</option>
+          </select>
         </div>
         <div id="productsList" class="product-list"></div>
       </section>
@@ -398,6 +407,15 @@
           <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Акции</h2>
         </div>
+        <div class="filter-bar">
+          <select id="promoSort" class="filter-select">
+            <option value="default">Сортировка</option>
+            <option value="price-asc">Цена по возрастанию</option>
+          </select>
+          <select id="promoBrand" class="filter-select">
+            <option value="all">Все бренды</option>
+          </select>
+        </div>
         <div id="promoList" class="product-list"></div>
       </section>
 
@@ -494,6 +512,6 @@
       </button>
     </nav>
 
-    <script src="app.js?v=20260208-9"></script>
+    <script src="app.js?v=20260208-10"></script>
   </body>
 </html>

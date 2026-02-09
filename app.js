@@ -13,6 +13,10 @@ const state = {
   selectedCart: new Set(),
   cartSelectionTouched: false,
   favoritesSelectionTouched: false,
+  filters: {
+    products: { sort: 'default', brand: 'all' },
+    promo: { sort: 'default', brand: 'all' },
+  },
   productionSlide: 0,
   profile: {},
   orders: [],
@@ -149,6 +153,10 @@ const ui = {
   productionTrack: document.getElementById('productionTrack'),
   promoTrack: document.getElementById('promoTrack'),
   promoList: document.getElementById('promoList'),
+  productsSort: document.getElementById('productsSort'),
+  productsBrand: document.getElementById('productsBrand'),
+  promoSort: document.getElementById('promoSort'),
+  promoBrand: document.getElementById('promoBrand'),
   homeProductionButton: document.getElementById('homeProductionButton'),
   dataStatus: document.getElementById('dataStatus'),
 };
@@ -373,8 +381,49 @@ function buildProductCards(list) {
   `).join('');
 }
 
+function getBrand(p) {
+  if (!p) return 'Без бренда';
+  if (Array.isArray(p.specs)) {
+    for (const s of p.specs) {
+      if (typeof s === 'string') {
+        const m = s.match(/^\\s*бренд\\s*[:\\-]\\s*(.+)$/i);
+        if (m) return m[1].trim();
+      } else if (s && typeof s === 'object') {
+        const label = String(s.label || '').toLowerCase();
+        if (label === 'бренд') return String(s.value || '').trim() || 'Без бренда';
+      }
+    }
+  }
+  return 'Без бренда';
+}
+
+function applyFilters(list, filter) {
+  let out = list.slice();
+  if (filter.brand && filter.brand !== 'all') {
+    out = out.filter((p) => getBrand(p) === filter.brand);
+  }
+  if (filter.sort === 'price-asc') {
+    out.sort((a, b) => (a.price || 0) - (b.price || 0));
+  }
+  return out;
+}
+
+function syncBrandOptions(selectEl, list, current) {
+  if (!selectEl) return current;
+  const brands = Array.from(new Set(list.map(getBrand))).filter(Boolean);
+  const options = ['all', ...brands];
+  selectEl.innerHTML = options
+    .map((b) => `<option value="${b}">${b === 'all' ? 'Все бренды' : b}</option>`)
+    .join('');
+  if (!options.includes(current)) current = 'all';
+  selectEl.value = current;
+  return current;
+}
+
 function renderProducts() {
-  const list = state.products.filter((p) => p.categoryId === state.currentCategory);
+  const base = state.products.filter((p) => p.categoryId === state.currentCategory);
+  state.filters.products.brand = syncBrandOptions(ui.productsBrand, base, state.filters.products.brand);
+  const list = applyFilters(base, state.filters.products);
   if (!list.length) {
     ui.productsList.innerHTML = `
       <div class="empty-state">
@@ -404,6 +453,8 @@ function getPromoProducts() {
 
 function renderPromos() {
   const list = getPromoProducts();
+  state.filters.promo.brand = syncBrandOptions(ui.promoBrand, list, state.filters.promo.brand);
+  const filtered = applyFilters(list, state.filters.promo);
   if (ui.promoTrack) {
     ui.promoTrack.innerHTML = list.map((p) => {
       const newPrice = Math.round((p.price || 0) * 0.9);
@@ -421,7 +472,7 @@ function renderPromos() {
     }).join('');
   }
   if (ui.promoList) {
-    if (!list.length) {
+    if (!filtered.length) {
       ui.promoList.innerHTML = `
         <div class="empty-state">
           <div class="empty-title">Пока нет товаров в этом разделе</div>
@@ -429,7 +480,7 @@ function renderPromos() {
         </div>
       `;
     } else {
-      ui.promoList.innerHTML = buildProductCards(list);
+      ui.promoList.innerHTML = buildProductCards(filtered);
     }
   }
 }
@@ -772,6 +823,15 @@ function bindEvents() {
     setScreen('product');
   });
 
+  on(ui.productsSort, 'change', () => {
+    state.filters.products.sort = ui.productsSort.value;
+    renderProducts();
+  });
+  on(ui.productsBrand, 'change', () => {
+    state.filters.products.brand = ui.productsBrand.value;
+    renderProducts();
+  });
+
   on(ui.promoList, 'click', (e) => {
     const btn = e.target.closest('button');
     if (btn && btn.dataset.favorite) {
@@ -806,6 +866,15 @@ function bindEvents() {
     state.currentProduct = card.dataset.open;
     renderProductView();
     setScreen('product');
+  });
+
+  on(ui.promoSort, 'change', () => {
+    state.filters.promo.sort = ui.promoSort.value;
+    renderPromos();
+  });
+  on(ui.promoBrand, 'change', () => {
+    state.filters.promo.brand = ui.promoBrand.value;
+    renderPromos();
   });
 
   on(ui.promoTrack, 'click', (e) => {
@@ -1085,7 +1154,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-9';
+const DATA_VERSION = '20260208-10';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
