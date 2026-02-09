@@ -6,6 +6,7 @@ const state = {
   pendingCategory: null,
   currentGroup: null,
   currentCategory: null,
+  currentCategoryIds: null,
   currentProduct: null,
   favorites: new Set(),
   selectedFavorites: new Set(),
@@ -174,6 +175,7 @@ function on(el, event, handler, options) {
 
 function openCategoryById(categoryId) {
   if (!categoryId) return;
+  state.currentCategoryIds = null;
   if (!state.products.length) {
     state.pendingCategory = categoryId;
     ui.productsTitle.textContent = 'Каталог';
@@ -189,6 +191,16 @@ function openCategoryById(categoryId) {
   state.currentCategory = categoryId;
   const resolved = state.categories.find((c) => c.id === state.currentCategory);
   ui.productsTitle.textContent = resolved ? resolved.title : 'Каталог';
+  renderProducts();
+  setScreen('products');
+}
+
+function openCategoryBundle(ids, title) {
+  const list = (ids || []).filter(Boolean);
+  if (!list.length) return;
+  state.currentCategory = null;
+  state.currentCategoryIds = list;
+  ui.productsTitle.textContent = title || 'Каталог';
   renderProducts();
   setScreen('products');
 }
@@ -444,7 +456,9 @@ function syncBrandOptions(selectEl, list, current) {
 }
 
 function renderProducts() {
-  const base = state.products.filter((p) => p.categoryId === state.currentCategory);
+  const base = state.currentCategoryIds
+    ? state.products.filter((p) => state.currentCategoryIds.includes(p.categoryId))
+    : state.products.filter((p) => p.categoryId === state.currentCategory);
   state.filters.products.brand = syncBrandOptions(ui.productsBrand, base, state.filters.products.brand);
   const list = applyFilters(base, state.filters.products);
   if (!list.length) {
@@ -730,7 +744,20 @@ function bindEvents() {
         state.currentGroup = 'equipment';
         ui.categoriesTitle.textContent = 'Каталог оборудования';
         renderCategories();
-        openCategoryById('equipment-wash-accessories');
+        openCategoryBundle([
+          'equipment-wash-accessories',
+          'equipment-wash-accessories-reels',
+          'equipment-wash-accessories-mat-holders',
+          'equipment-wash-accessories-canisters',
+          'equipment-wash-accessories-hose-holders',
+          'equipment-wash-accessories-swivel-parts',
+          'equipment-wash-accessories-high-pressure-lines',
+          'equipment-wash-accessories-swivel-booms',
+          'equipment-wash-accessories-car-stands',
+          'equipment-wash-accessories-shelves',
+          'equipment-wash-accessories-sinks',
+          'equipment-wash-accessories-mat-stands',
+        ], 'Собственное производство');
         return;
       }
       ui.categoriesTitle.textContent = 'Каталог оборудования';
@@ -1177,7 +1204,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-13';
+const DATA_VERSION = '20260208-14';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
