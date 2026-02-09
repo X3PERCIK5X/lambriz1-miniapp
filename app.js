@@ -616,7 +616,14 @@ function bindEvents() {
   document.querySelectorAll('.hero-tile').forEach((tile) => {
     tile.addEventListener('click', () => {
       state.currentGroup = tile.dataset.group;
-      ui.categoriesTitle.textContent = tile.dataset.group === 'equipment' ? 'Каталог оборудования' : 'Собственное производство';
+      if (tile.dataset.group === 'stainless') {
+        state.currentGroup = 'equipment';
+        ui.categoriesTitle.textContent = 'Каталог оборудования';
+        renderCategories();
+        openCategoryById('equipment-wash-accessories');
+        return;
+      }
+      ui.categoriesTitle.textContent = 'Каталог оборудования';
       renderCategories();
       setScreen('categories');
     });
@@ -1005,7 +1012,7 @@ async function loadConfig() {
   ui.inputEmail.value = state.profile.email || '';
 }
 
-const DATA_VERSION = '20260208-3';
+const DATA_VERSION = '20260208-5';
 async function loadData() {
   reportStatus('Загружаем каталог…');
   const catRes = await fetch(`data/categories.json?v=${DATA_VERSION}`, { cache: 'no-store' });
