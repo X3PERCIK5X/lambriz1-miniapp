@@ -312,7 +312,12 @@ img { max-width: 100%; display: block; }
   object-fit: contain;
   background: #fff;
 }
-.category-card span { display: block; padding: 10px; font-weight: 700; }
+.category-card span {
+  display: block;
+  padding: 10px;
+  font-weight: 700;
+  color: var(--primary);
+}
 
 .product-list { display: grid; gap: 12px; }
 .product-card {
