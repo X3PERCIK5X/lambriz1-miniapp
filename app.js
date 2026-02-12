@@ -626,11 +626,26 @@ function renderOrders() {
     return;
   }
   ui.ordersList.innerHTML = state.orders.slice().reverse().map((o) => `
-    <div class="cart-item">
-      <div><strong>Заявка №${o.id}</strong></div>
-      <div>${new Date(o.createdAt).toLocaleString('ru-RU')}</div>
-      <div>${o.items.map((i) => `${i.title} × ${i.qty}`).join('<br/>')}</div>
-      <div><strong>Итого: ${formatPrice(o.total)} ₽</strong></div>
+    <div class="order-card" data-order-id="${o.id}">
+      <div class="order-head">
+        <div class="order-title">Заявка №${o.id}</div>
+        <div class="order-date">${new Date(o.createdAt).toLocaleString('ru-RU')}</div>
+      </div>
+      <div class="order-summary">
+        <div class="order-total">Сумма: ${formatPrice(o.total)} ₽</div>
+        <button class="order-repeat" type="button">Повторить</button>
+      </div>
+      <button class="order-toggle" type="button">Состав заказа</button>
+      <div class="order-items hidden">
+        <ul>
+          ${o.items.map((i) => `
+            <li>
+              <span class="order-item-title">${i.title}</span>
+              <span class="order-item-qty">× ${i.qty}</span>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
     </div>
   `).join('');
 }
@@ -1078,6 +1093,33 @@ function bindEvents() {
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
     if (dx > 40 && dy < 30) closeDrawer();
   });
+
+  if (ui.ordersList) {
+    ui.ordersList.addEventListener('click', (e) => {
+      const card = e.target.closest('.order-card');
+      if (!card) return;
+      const orderId = Number(card.dataset.orderId);
+      const order = state.orders.find((o) => o.id === orderId);
+      if (!order) return;
+
+      if (e.target.closest('.order-toggle')) {
+        const items = card.querySelector('.order-items');
+        if (items) items.classList.toggle('hidden');
+        return;
+      }
+
+      if (e.target.closest('.order-repeat')) {
+        order.items.forEach((i) => {
+          if (!i.id) return;
+          state.cart[i.id] = (state.cart[i.id] || 0) + (i.qty || 1);
+        });
+        saveStorage();
+        updateBadges();
+        renderCart();
+        setScreen('cart');
+      }
+    });
+  }
 
 }
 
