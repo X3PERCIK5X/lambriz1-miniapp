@@ -15,7 +15,7 @@ const state = {
   cartSelectionTouched: false,
   favoritesSelectionTouched: false,
   filters: {
-    products: { sort: 'default' },
+    products: { sort: 'default', search: '' },
     promo: { sort: 'default' },
   },
   productionSlide: 0,
@@ -142,9 +142,11 @@ const ui = {
   inputPhone: document.getElementById('inputPhone'),
   inputEmail: document.getElementById('inputEmail'),
   inputComment: document.getElementById('inputComment'),
+  contactMethod: document.getElementById('contactMethod'),
   policyCheck: document.getElementById('policyCheck'),
   policyLink: document.getElementById('policyLink'),
   orderStatus: document.getElementById('orderStatus'),
+  orderRetry: document.getElementById('orderRetry'),
   ordersList: document.getElementById('ordersList'),
   aboutText: document.getElementById('aboutText'),
   paymentText: document.getElementById('paymentText'),
@@ -155,6 +157,7 @@ const ui = {
   promoTrack: document.getElementById('promoTrack'),
   promoList: document.getElementById('promoList'),
   productsSort: document.getElementById('productsSort'),
+  productsSearch: document.getElementById('productsSearch'),
   promoSort: document.getElementById('promoSort'),
   homeProductionButton: document.getElementById('homeProductionButton'),
   dataStatus: document.getElementById('dataStatus'),
@@ -259,6 +262,13 @@ function updateBottomNav(screen) {
 }
 
 function formatPrice(v) { return Number(v || 0).toLocaleString('ru-RU'); }
+function hasPrice(p) { return Number(p && p.price) > 0; }
+function priceLabel(p) { return hasPrice(p) ? `${formatPrice(p.price)} ₽` : 'Цена по запросу'; }
+function discountedPrice(p, percent) {
+  if (!hasPrice(p)) return null;
+  const factor = 1 - (percent || 0) / 100;
+  return Math.round(Number(p.price) * factor);
+}
 function safeSrc(src) {
   try {
     return encodeURI(src);
@@ -321,10 +331,21 @@ function cartItems() {
     .filter((p) => p.id);
 }
 
-function cartTotal() {
-  if (!state.selectedCart.size) return 0;
+function cartSummary() {
+  if (!state.selectedCart.size) return { sum: 0, missing: false, count: 0 };
   const selected = cartItems().filter((i) => state.selectedCart.has(i.id));
-  return selected.reduce((sum, item) => sum + item.price * item.qty, 0);
+  let sum = 0;
+  let missing = false;
+  let count = 0;
+  selected.forEach((item) => {
+    count += item.qty || 0;
+    if (!hasPrice(item)) {
+      missing = true;
+      return;
+    }
+    sum += item.price * item.qty;
+  });
+  return { sum, missing, count };
 }
 
 function updateBadges() {
@@ -358,9 +379,15 @@ function renderCategories() {
   }).join('');
 }
 
-function buildProductCards(list) {
-  return list.map((p) => `
+function buildProductCards(list, options = {}) {
+  const promoMode = options.promo === true;
+  return list.map((p) => {
+    const hasValidPrice = hasPrice(p);
+    const promoNew = promoMode ? discountedPrice(p, 10) : null;
+    const showPromo = promoMode && hasValidPrice;
+    return `
     <article class="product-card" data-open="${p.id}">
+      ${showPromo ? `<div class="promo-badge promo-badge-inline">-10%</div>` : ''}
       <button class="card-icon favorite ${state.favorites.has(p.id) ? 'active' : ''}" data-favorite="${p.id}" aria-label="В избранное">
         <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
@@ -369,9 +396,13 @@ function buildProductCards(list) {
       <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div>
         <div class="product-title">${p.title}</div>
-        <div class="product-meta">${p.shortDescription}</div>
+        <div class="product-meta">${p.shortDescription || ''}</div>
         <div class="product-meta">Артикул: ${getSku(p) || '—'}</div>
-        <div class="product-price">${formatPrice(p.price)} ₽</div>
+        <div class="product-price">
+          ${promoMode && hasValidPrice
+            ? `<span class="promo-new">${formatPrice(promoNew)} ₽</span><span class="promo-old">${formatPrice(p.price)} ₽</span>`
+            : priceLabel(p)}
+        </div>
         ${state.cart[p.id]
           ? `
             <div class="card-qty" data-qty="${p.id}">
@@ -380,7 +411,7 @@ function buildProductCards(list) {
               <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
             </div>
           `
-          : `
+          : hasValidPrice ? `
             <button class="card-icon cart" data-cart="${p.id}" aria-label="В корзину">
               <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="m15 11-1 9" />
@@ -389,16 +420,25 @@ function buildProductCards(list) {
                 <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" />
               </svg>
             </button>
-          `}
+          ` : `<button class="primary-button request-button" data-request="${p.id}" type="button">Запросить</button>`}
       </div>
     </article>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function applyFilters(list, filter) {
   let out = list.slice();
+  if (filter.search) {
+    const q = filter.search.toLowerCase();
+    out = out.filter((p) => (p.title || '').toLowerCase().includes(q));
+  }
   if (filter.sort === 'price-asc') {
-    out.sort((a, b) => (a.price || 0) - (b.price || 0));
+    out.sort((a, b) => {
+      const ap = hasPrice(a) ? a.price : Infinity;
+      const bp = hasPrice(b) ? b.price : Infinity;
+      return ap - bp;
+    });
   }
   return out;
 }
@@ -463,7 +503,7 @@ function renderPromos() {
         </div>
       `;
     } else {
-      ui.promoList.innerHTML = buildProductCards(filtered);
+      ui.promoList.innerHTML = buildProductCards(filtered, { promo: true });
     }
   }
 }
@@ -503,7 +543,7 @@ function renderProductView() {
     <div class="product-title">${p.title}</div>
     <div class="product-meta">Артикул: ${getSku(p) || '—'}</div>
     <div class="product-price-row">
-      <div class="product-price">${formatPrice(p.price)} ₽</div>
+      <div class="product-price">${priceLabel(p)}</div>
       ${state.cart[p.id]
         ? `
           <div class="product-qty" data-qty="${p.id}">
@@ -512,7 +552,9 @@ function renderProductView() {
             <button class="qty-btn" data-qty-inc="${p.id}" type="button">+</button>
           </div>
         `
-        : `<button class="primary-button" data-cart="${p.id}">В корзину</button>`}
+        : hasPrice(p)
+          ? `<button class="primary-button" data-cart="${p.id}">В корзину</button>`
+          : `<button class="primary-button" data-request="${p.id}">Запросить</button>`}
     </div>
     <div class="detail-section">
       <div class="section-title">Описание</div>
@@ -526,7 +568,7 @@ function renderProductView() {
 }
 
 function renderFavorites() {
-  const list = state.products.filter((p) => state.favorites.has(p.id));
+  const list = Array.from(state.favorites).map((id) => getProduct(id) || ({ id, missing: true, title: 'Товар недоступен', shortDescription: '', images: ['assets/placeholder.png'] }));
   if (!state.selectedFavorites.size && list.length && !state.favoritesSelectionTouched) {
     state.selectedFavorites = new Set(list.map((p) => p.id));
     saveStorage();
@@ -543,8 +585,8 @@ function renderFavorites() {
       <img src="${safeSrc(p.images[0])}" alt="${p.title}" />
       <div>
         <div class="product-title">${p.title}</div>
-        <div class="product-meta">${p.shortDescription}</div>
-        <div class="product-price">${formatPrice(p.price)} ₽</div>
+        <div class="product-meta">${p.shortDescription || ''}</div>
+        <div class="product-price">${priceLabel(p)}</div>
         <div class="product-actions icon-actions">
           <button class="icon-btn" data-favorite="${p.id}" aria-label="Удалить из избранного">
             <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -555,7 +597,7 @@ function renderFavorites() {
               <path d="M14 11v6" />
             </svg>
           </button>
-          <button class="icon-btn" data-cart="${p.id}" aria-label="В корзину">
+          <button class="icon-btn" data-cart="${p.id}" aria-label="В корзину" ${p.missing ? 'disabled' : ''}>
             <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="m15 11-1 9" />
               <path d="m19 11-4-7" />
@@ -575,6 +617,7 @@ function renderCart() {
     state.selectedCart = new Set(items.map((i) => i.id));
     saveStorage();
   }
+  const summary = cartSummary();
   ui.cartList.innerHTML = items.map((p) => `
     <div class="cart-item">
       <label class="select-dot">
@@ -585,7 +628,7 @@ function renderCart() {
       <div class="cart-info">
         <button class="cart-title-link" data-open="${p.id}">${p.title}</button>
         <div class="cart-sku">Артикул: ${getSku(p) || '—'}</div>
-        <div class="cart-price">${formatPrice(p.price)} ₽</div>
+        <div class="cart-price">${priceLabel(p)}</div>
       </div>
       <div class="cart-controls">
         <button class="qty-btn" data-qty="${p.id}" data-action="dec">−</button>
@@ -608,12 +651,12 @@ function renderCart() {
       </div>
     </div>
   `).join('');
-  ui.cartTotal.textContent = formatPrice(cartTotal());
+  ui.cartTotal.textContent = summary.missing ? 'По запросу' : `${formatPrice(summary.sum)} ₽`;
   if (ui.cartItemsCount) {
     ui.cartItemsCount.textContent = items.reduce((s, i) => s + i.qty, 0);
   }
   if (ui.checkoutTotal) {
-    ui.checkoutTotal.textContent = `${formatPrice(cartTotal())} ₽`;
+    ui.checkoutTotal.textContent = summary.missing ? 'По запросу' : `${formatPrice(summary.sum)} ₽`;
   }
   if (ui.cartSelectAll) {
     ui.cartSelectAll.checked = items.length && items.every((i) => state.selectedCart.has(i.id));
@@ -632,9 +675,10 @@ function renderOrders() {
         <div class="order-date">${new Date(o.createdAt).toLocaleString('ru-RU')}</div>
       </div>
       <div class="order-summary">
-        <div class="order-total">Сумма: ${formatPrice(o.total)} ₽</div>
+        <div class="order-total">Сумма: ${o.total ? `${formatPrice(o.total)} ₽` : 'По запросу'}</div>
         <button class="order-repeat" type="button">Повторить</button>
       </div>
+      <div class="order-status">Статус: ${o.status || 'Отправлено'}</div>
       <button class="order-toggle" type="button">Состав заказа</button>
       <div class="order-items hidden">
         <ul>
@@ -811,6 +855,14 @@ function bindEvents() {
       e.stopPropagation();
       return;
     }
+    if (btn && btn.dataset.request) {
+      const id = btn.dataset.request;
+      addToCart(id);
+      renderCart();
+      setScreen('checkout');
+      e.stopPropagation();
+      return;
+    }
     if (btn && btn.dataset.qtyInc) {
       addToCart(btn.dataset.qtyInc);
       renderProducts();
@@ -836,6 +888,11 @@ function bindEvents() {
 
   on(ui.productsSort, 'change', () => {
     state.filters.products.sort = ui.productsSort.value;
+    renderProducts();
+  });
+
+  on(ui.productsSearch, 'input', () => {
+    state.filters.products.search = ui.productsSearch.value.trim();
     renderProducts();
   });
 
@@ -1036,17 +1093,19 @@ function bindEvents() {
     if (!items.length) { ui.orderStatus.textContent = 'Корзина пуста.'; return; }
     const profile = { name: ui.inputName.value.trim(), phone: ui.inputPhone.value.trim(), email: ui.inputEmail.value.trim() };
     if (!profile.name || !profile.phone || !profile.email) { ui.orderStatus.textContent = 'Заполните поля.'; return; }
-
+    const summary = cartSummary();
     const order = {
       id: Date.now(),
       createdAt: new Date().toISOString(),
-      customer: { ...profile, comment: ui.inputComment ? ui.inputComment.value.trim() : '' },
+      customer: { ...profile, comment: ui.inputComment ? ui.inputComment.value.trim() : '', contactMethod: ui.contactMethod ? ui.contactMethod.value : '' },
       items: items.map((i) => ({ id: i.id, title: i.title, sku: i.sku, price: i.price, qty: i.qty })),
-      total: cartTotal(),
+      total: summary.missing ? null : summary.sum,
       telegramUserId: null,
+      status: 'Отправлено',
     };
 
     ui.orderStatus.textContent = 'Отправка...';
+    if (ui.orderRetry) ui.orderRetry.classList.add('hidden');
     if (!state.config.orderEndpoint) {
       ui.orderStatus.textContent = 'Не задан адрес отправки (orderEndpoint в config.json).';
       return;
@@ -1069,9 +1128,16 @@ function bindEvents() {
       ui.orderStatus.textContent = 'Заявка отправлена.';
       setScreen('confirmation');
     } catch (err) {
-      ui.orderStatus.textContent = 'Ошибка отправки. Проверьте настройки.';
+      ui.orderStatus.textContent = 'Ошибка отправки. Проверьте настройки и попробуйте ещё раз.';
+      if (ui.orderRetry) ui.orderRetry.classList.remove('hidden');
     }
   });
+
+  if (ui.orderRetry) {
+    ui.orderRetry.addEventListener('click', () => {
+      if (ui.orderForm) ui.orderForm.requestSubmit();
+    });
+  }
 
   let touchStartX = 0;
   let touchStartY = 0;

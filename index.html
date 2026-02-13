@@ -179,9 +179,10 @@
           <h2 id="productsTitle">Категория</h2>
         </div>
         <div class="filter-bar">
+          <input id="productsSearch" class="filter-input" type="search" placeholder="Поиск по названию" />
           <select id="productsSort" class="filter-select">
-            <option value="default">Сортировка</option>
-            <option value="price-asc">Цена по возрастанию</option>
+            <option value="default">По популярности</option>
+            <option value="price-asc">По цене</option>
           </select>
         </div>
         <div id="productsList" class="product-list"></div>
@@ -273,6 +274,13 @@
             <label>Телефон *<input id="inputPhone" type="tel" required placeholder="+7" /></label>
             <label>Email *<input id="inputEmail" type="email" required placeholder="name@mail.ru" /></label>
             <label>Комментарий к заказу<input id="inputComment" type="text" placeholder="Комментарий" /></label>
+            <label>Способ связи
+              <select id="contactMethod">
+                <option value="telegram">Telegram</option>
+                <option value="whatsapp">WhatsApp</option>
+                <option value="call">Звонок</option>
+              </select>
+            </label>
             <label class="checkbox">
               <input id="policyCheck" type="checkbox" />
               <span>Согласен(а) с <a id="policyLink" href="#" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
@@ -283,6 +291,7 @@
             </div>
             <div id="orderStatus" class="status"></div>
             <button id="orderSubmit" class="primary-button" type="submit">Отправить заявку</button>
+            <button id="orderRetry" class="secondary-button hidden" type="button">Повторить</button>
           </form>
         </div>
       </section>
