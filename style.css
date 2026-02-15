@@ -383,6 +383,7 @@ img { max-width: 100%; display: block; }
 }
 .product-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .product-actions.icon-actions { gap: 8px; align-items: center; }
+.favorites-controls { justify-content: flex-end; margin-top: 8px; }
 
 .card-icon {
   position: absolute;
