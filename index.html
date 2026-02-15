@@ -17,17 +17,45 @@
     <main class="main">
       <div id="dataStatus" class="data-status hidden"></div>
       <section id="screen-home" class="screen active">
+        <section class="home-premium-hero">
+          <div class="home-premium-badge">Промышленное оборудование и производство</div>
+          <h1 class="home-premium-title">ЛАМБРИЗ</h1>
+          <p class="home-premium-text">
+            Комплексные решения для автомоек, клининга и производства металлоизделий из нержавеющей стали.
+          </p>
+          <div class="home-premium-actions">
+            <button class="primary-button" data-screen="categories">Перейти в каталог</button>
+            <button class="ghost-button" data-screen="contacts">Связаться с менеджером</button>
+          </div>
+        </section>
+
+        <section class="home-trust">
+          <div class="trust-chip">Доставка по РФ и СНГ</div>
+          <div class="trust-chip">Собственное производство</div>
+          <div class="trust-chip">Сервис и поддержка</div>
+          <div class="trust-chip">Без минимальной суммы заказа</div>
+        </section>
+
         <div class="home-section-title">Каталог</div>
-        <div class="hero-grid hero-grid-inline">
+        <div class="hero-grid hero-grid-inline hero-grid-premium">
           <button class="hero-tile" data-group="equipment">
             <div class="hero-image" data-image="equipment"></div>
             <div class="hero-label">Оборудование и комплектующие</div>
+            <div class="hero-sub">АВД, аксессуары, насосы, пылесосы и химчистка</div>
           </button>
           <button class="hero-tile" data-group="stainless">
             <div class="hero-image" data-image="stainless"></div>
             <div class="hero-label">Собственное производство</div>
+            <div class="hero-sub">Металлоизделия, лазерная резка, гибка, сварка</div>
           </button>
         </div>
+
+        <section class="home-quick-links">
+          <button class="quick-link" data-screen="promo">Смотреть акции</button>
+          <button class="quick-link" data-screen="production">Услуги производства</button>
+          <button class="quick-link" data-screen="payment">Оплата и доставка</button>
+        </section>
+
         <div class="home-section-title">Акции</div>
         <div class="promo-row">
           <div id="promoTrack" class="promo-track"></div>
