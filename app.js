@@ -495,6 +495,15 @@ function getPromoProducts() {
   return matched;
 }
 
+function getRecommendedProducts(product, limit = 8) {
+  if (!product || !product.id) return [];
+  const sameCategory = state.products.filter((item) => item.id !== product.id && item.categoryId === product.categoryId);
+  const pool = sameCategory.length
+    ? sameCategory
+    : state.products.filter((item) => item.id !== product.id);
+  return pool.slice(0, limit);
+}
+
 function renderPromos() {
   const list = getPromoProducts();
   const filtered = applyFilters(list, state.filters.promo);
@@ -556,6 +565,7 @@ function renderProductView() {
       return `<div><span>${s.label}</span><span>${s.value}</span></div>`;
     })
     .join('');
+  const recommended = getRecommendedProducts(p, 10);
   ui.productView.innerHTML = `
     <div class="product-hero">
       <div class="product-gallery">${p.images.map((src) => `<img src="${safeSrc(src)}" alt="${p.title}" />`).join('')}</div>
@@ -584,6 +594,20 @@ function renderProductView() {
       <div class="section-title">Характеристики</div>
       <div class="product-specs">${specs}</div>
     </div>
+    ${recommended.length ? `
+      <div class="detail-section recommended-section">
+        <div class="section-title">Рекомендуем</div>
+        <div class="recommended-track">
+          ${recommended.map((item) => `
+            <button class="recommended-card" data-open="${item.id}" type="button" aria-label="${item.title}">
+              <img src="${safeSrc(item.images[0])}" alt="${item.title}" />
+              <div class="recommended-title">${item.title}</div>
+              <div class="recommended-price">${priceLabel(item)}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
   `;
 }
 
@@ -973,8 +997,20 @@ function bindEvents() {
   on(ui.productView, 'click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
+    if (btn.dataset.open) {
+      state.currentProduct = btn.dataset.open;
+      renderProductView();
+      return;
+    }
     if (btn.dataset.favorite) { toggleFavorite(btn.dataset.favorite); }
     if (btn.dataset.cart) { addToCart(btn.dataset.cart); renderProductView(); }
+    if (btn.dataset.request) {
+      const id = btn.dataset.request;
+      addToCart(id);
+      renderCart();
+      setScreen('checkout');
+      return;
+    }
     if (btn.dataset.qtyInc) { addToCart(btn.dataset.qtyInc); renderProductView(); }
     if (btn.dataset.qtyDec) {
       const id = btn.dataset.qtyDec;

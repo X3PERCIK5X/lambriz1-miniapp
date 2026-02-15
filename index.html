@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260215-2" />
+    <link rel="stylesheet" href="style.css?v=20260215-3" />
   </head>
   <body>
     <header class="header">
@@ -38,16 +38,11 @@
           <div class="trust-chip">Без минимальной суммы заказа</div>
         </section>
 
-        <section class="home-info-links">
-          <button class="home-info-card" data-screen="about">
-            <div class="home-info-title">О компании</div>
-            <div class="home-info-text">Кто мы, чем занимаемся и какие решения предлагаем.</div>
-          </button>
-          <button class="home-info-card" data-screen="production">
-            <div class="home-info-title">Собственное производство</div>
-            <div class="home-info-text">Услуги, технологии и возможности изготовления.</div>
-          </button>
-        </section>
+        <div class="home-section-title">Актуальные акции</div>
+        <div class="promo-row promo-row-home">
+          <div id="promoTrack" class="promo-track"></div>
+        </div>
+        <button class="ghost-button home-promo-more" data-screen="promo">Смотреть все акции</button>
 
         <div class="home-section-title">Каталог</div>
         <div class="hero-grid hero-grid-inline hero-grid-premium">
@@ -62,6 +57,17 @@
             <div class="hero-sub">Металлоизделия, лазерная резка, гибка, сварка</div>
           </button>
         </div>
+
+        <section class="home-info-links">
+          <button class="home-info-card" data-screen="about">
+            <div class="home-info-title">О компании</div>
+            <div class="home-info-text">Кто мы, чем занимаемся и какие решения предлагаем.</div>
+          </button>
+          <button class="home-info-card" data-screen="production">
+            <div class="home-info-title">Собственное производство</div>
+            <div class="home-info-text">Услуги, технологии и возможности изготовления.</div>
+          </button>
+        </section>
       </section>
 
       <section id="screen-categories" class="screen">
