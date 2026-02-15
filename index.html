@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260215-1" />
+    <link rel="stylesheet" href="style.css?v=20260215-2" />
   </head>
   <body>
     <header class="header">
@@ -12,7 +12,6 @@
         <div class="logo">
           <img src="logo.svg" alt="Ламбриз" />
         </div>
-        <div class="header-tagline">Промышленный каталог</div>
       </div>
       <div class="header-actions header-empty"></div>
     </header>
@@ -21,17 +20,11 @@
       <div id="dataStatus" class="data-status hidden"></div>
       <section id="screen-home" class="screen active">
         <section class="home-premium-hero">
-          <div class="home-premium-grid" aria-hidden="true"></div>
           <div class="home-premium-badge">Промышленное оборудование и производство</div>
-          <h1 class="home-premium-title">ЛАМБРИЗ</h1>
+          <h1 class="home-premium-title">О компании</h1>
           <p class="home-premium-text">
             Комплексные решения для автомоек, клининга и производства металлоизделий из нержавеющей стали.
           </p>
-          <div class="home-premium-metrics">
-            <div class="premium-metric"><span>Проектирование</span></div>
-            <div class="premium-metric"><span>Поставка</span></div>
-            <div class="premium-metric"><span>Сервис</span></div>
-          </div>
           <div class="home-premium-actions">
             <button class="primary-button" data-screen="categories">Перейти в каталог</button>
             <button class="ghost-button" data-screen="feedback">Связаться с менеджером</button>
@@ -43,6 +36,17 @@
           <div class="trust-chip">Собственное производство</div>
           <div class="trust-chip">Сервис и поддержка</div>
           <div class="trust-chip">Без минимальной суммы заказа</div>
+        </section>
+
+        <section class="home-info-links">
+          <button class="home-info-card" data-screen="about">
+            <div class="home-info-title">О компании</div>
+            <div class="home-info-text">Кто мы, чем занимаемся и какие решения предлагаем.</div>
+          </button>
+          <button class="home-info-card" data-screen="production">
+            <div class="home-info-title">Собственное производство</div>
+            <div class="home-info-text">Услуги, технологии и возможности изготовления.</div>
+          </button>
         </section>
 
         <div class="home-section-title">Каталог</div>
