@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260215-3" />
+    <link rel="stylesheet" href="style.css?v=20260215-4" />
   </head>
   <body>
     <header class="header">
@@ -21,10 +21,14 @@
       <section id="screen-home" class="screen active">
         <section class="home-premium-hero">
           <div class="home-premium-badge">Промышленное оборудование и производство</div>
-          <h1 class="home-premium-title">О компании</h1>
+          <button class="home-premium-title home-premium-title-link" data-screen="about" type="button">О компании</button>
           <p class="home-premium-text">
             Комплексные решения для автомоек, клининга и производства металлоизделий из нержавеющей стали.
           </p>
+          <div class="home-premium-shortcuts">
+            <button class="premium-shortcut" data-screen="about" type="button">О компании</button>
+            <button class="premium-shortcut" data-screen="production" type="button">Собственное производство</button>
+          </div>
           <div class="home-premium-actions">
             <button class="primary-button" data-screen="categories">Перейти в каталог</button>
             <button class="ghost-button" data-screen="feedback">Связаться с менеджером</button>
@@ -38,11 +42,10 @@
           <div class="trust-chip">Без минимальной суммы заказа</div>
         </section>
 
-        <div class="home-section-title">Актуальные акции</div>
+        <button class="home-section-title home-section-title-link" data-screen="promo" type="button">Актуальные акции</button>
         <div class="promo-row promo-row-home">
           <div id="promoTrack" class="promo-track"></div>
         </div>
-        <button class="ghost-button home-promo-more" data-screen="promo">Смотреть все акции</button>
 
         <div class="home-section-title">Каталог</div>
         <div class="hero-grid hero-grid-inline hero-grid-premium">
@@ -58,16 +61,6 @@
           </button>
         </div>
 
-        <section class="home-info-links">
-          <button class="home-info-card" data-screen="about">
-            <div class="home-info-title">О компании</div>
-            <div class="home-info-text">Кто мы, чем занимаемся и какие решения предлагаем.</div>
-          </button>
-          <button class="home-info-card" data-screen="production">
-            <div class="home-info-title">Собственное производство</div>
-            <div class="home-info-text">Услуги, технологии и возможности изготовления.</div>
-          </button>
-        </section>
       </section>
 
       <section id="screen-categories" class="screen">
