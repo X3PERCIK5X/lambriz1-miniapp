@@ -353,10 +353,10 @@ function cartSummary() {
 function formatSummaryTotal(summary) {
   const hasNumericTotal = Number(summary.sum || 0) > 0;
   if (summary.missing && hasNumericTotal) {
-    return `${formatPrice(summary.sum)} ₽ + Цена по запросу`;
+    return `${formatPrice(summary.sum)} ₽ + Запрос цены`;
   }
   if (summary.missing) {
-    return 'Цена по запросу';
+    return 'Запрос цены';
   }
   return `${formatPrice(summary.sum)} ₽`;
 }
@@ -1122,15 +1122,34 @@ function bindEvents() {
       });
       return { sum, missing, count, requestCount };
     })();
+    const mappedItems = items.map((i) => ({
+      id: i.id,
+      title: i.title,
+      sku: i.sku,
+      price: i.price,
+      qty: i.qty,
+      isRequestPrice: !hasPrice(i),
+    }));
+    const pricedItems = mappedItems.filter((i) => !i.isRequestPrice);
+    const requestPriceItems = mappedItems.filter((i) => i.isRequestPrice);
+
     const order = {
       id: Date.now(),
       createdAt: new Date().toISOString(),
       customer: { ...profile, comment: ui.inputComment ? ui.inputComment.value.trim() : '', contactMethod: ui.contactMethod ? ui.contactMethod.value : '' },
-      items: items.map((i) => ({ id: i.id, title: i.title, sku: i.sku, price: i.price, qty: i.qty })),
+      items: mappedItems,
+      pricedItems,
+      requestPriceItems,
       total: summary.sum,
       hasRequestPrice: summary.missing,
       requestPriceItemsCount: summary.requestCount,
       totalDisplay: formatSummaryTotal(summary),
+      emailSummary: {
+        pricedTotal: summary.sum,
+        pricedTotalDisplay: `${formatPrice(summary.sum)} ₽`,
+        requestPriceLabel: summary.missing ? 'Запрос цены' : '',
+        totalDisplay: formatSummaryTotal(summary),
+      },
       telegramUserId: null,
       status: 'Отправлено',
     };
