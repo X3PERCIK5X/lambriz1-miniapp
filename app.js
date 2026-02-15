@@ -147,6 +147,13 @@ const ui = {
   policyLink: document.getElementById('policyLink'),
   orderStatus: document.getElementById('orderStatus'),
   orderRetry: document.getElementById('orderRetry'),
+  feedbackForm: document.getElementById('feedbackForm'),
+  feedbackName: document.getElementById('feedbackName'),
+  feedbackPhone: document.getElementById('feedbackPhone'),
+  feedbackEmail: document.getElementById('feedbackEmail'),
+  feedbackMethod: document.getElementById('feedbackMethod'),
+  feedbackComment: document.getElementById('feedbackComment'),
+  feedbackStatus: document.getElementById('feedbackStatus'),
   ordersList: document.getElementById('ordersList'),
   aboutText: document.getElementById('aboutText'),
   paymentText: document.getElementById('paymentText'),
@@ -1189,6 +1196,57 @@ function bindEvents() {
     });
   }
 
+  on(ui.feedbackForm, 'submit', async (e) => {
+    e.preventDefault();
+    const name = ui.feedbackName ? ui.feedbackName.value.trim() : '';
+    const phone = ui.feedbackPhone ? ui.feedbackPhone.value.trim() : '';
+    const email = ui.feedbackEmail ? ui.feedbackEmail.value.trim() : '';
+    const contactMethod = ui.feedbackMethod ? ui.feedbackMethod.value : 'phone';
+    const comment = ui.feedbackComment ? ui.feedbackComment.value.trim() : '';
+
+    if (!name || !phone) {
+      if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Заполните имя и телефон.';
+      return;
+    }
+    if (!state.config.orderEndpoint) {
+      if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Не задан адрес отправки (orderEndpoint в config.json).';
+      return;
+    }
+
+    const feedback = {
+      type: 'feedback',
+      requestType: 'feedback',
+      subject: 'Обратная связь',
+      title: 'Обратная связь',
+      createdAt: new Date().toISOString(),
+      customer: {
+        name,
+        phone,
+        email,
+        contactMethod,
+      },
+      message: comment,
+      source: 'miniapp',
+    };
+
+    if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Отправка...';
+    try {
+      const res = await fetch(state.config.orderEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedback),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+
+      state.profile = { ...state.profile, name, phone, email };
+      saveStorage();
+      if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Заявка отправлена. Мы скоро свяжемся с вами.';
+      if (ui.feedbackComment) ui.feedbackComment.value = '';
+    } catch (err) {
+      if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Ошибка отправки. Попробуйте ещё раз.';
+    }
+  });
+
   let touchStartX = 0;
   let touchStartY = 0;
   on(ui.menuDrawer, 'touchstart', (e) => {
@@ -1298,6 +1356,9 @@ async function loadConfig() {
   ui.inputName.value = state.profile.name || '';
   ui.inputPhone.value = state.profile.phone || '';
   ui.inputEmail.value = state.profile.email || '';
+  if (ui.feedbackName) ui.feedbackName.value = state.profile.name || '';
+  if (ui.feedbackPhone) ui.feedbackPhone.value = state.profile.phone || '';
+  if (ui.feedbackEmail) ui.feedbackEmail.value = state.profile.email || '';
 }
 
 const DATA_VERSION = '20260210-3';
