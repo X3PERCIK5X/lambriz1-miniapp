@@ -332,20 +332,33 @@ function cartItems() {
 }
 
 function cartSummary() {
-  if (!state.selectedCart.size) return { sum: 0, missing: false, count: 0 };
+  if (!state.selectedCart.size) return { sum: 0, missing: false, count: 0, requestCount: 0 };
   const selected = cartItems().filter((i) => state.selectedCart.has(i.id));
   let sum = 0;
   let missing = false;
   let count = 0;
+  let requestCount = 0;
   selected.forEach((item) => {
     count += item.qty || 0;
     if (!hasPrice(item)) {
       missing = true;
+      requestCount += item.qty || 0;
       return;
     }
     sum += item.price * item.qty;
   });
-  return { sum, missing, count };
+  return { sum, missing, count, requestCount };
+}
+
+function formatSummaryTotal(summary) {
+  const hasNumericTotal = Number(summary.sum || 0) > 0;
+  if (summary.missing && hasNumericTotal) {
+    return `${formatPrice(summary.sum)} ₽ + Цена по запросу`;
+  }
+  if (summary.missing) {
+    return 'Цена по запросу';
+  }
+  return `${formatPrice(summary.sum)} ₽`;
 }
 
 function updateBadges() {
@@ -651,12 +664,12 @@ function renderCart() {
       </div>
     </div>
   `).join('');
-  ui.cartTotal.textContent = summary.missing ? 'По запросу' : `${formatPrice(summary.sum)} ₽`;
+  ui.cartTotal.textContent = formatSummaryTotal(summary);
   if (ui.cartItemsCount) {
     ui.cartItemsCount.textContent = items.reduce((s, i) => s + i.qty, 0);
   }
   if (ui.checkoutTotal) {
-    ui.checkoutTotal.textContent = summary.missing ? 'По запросу' : `${formatPrice(summary.sum)} ₽`;
+    ui.checkoutTotal.textContent = formatSummaryTotal(summary);
   }
   if (ui.cartSelectAll) {
     ui.cartSelectAll.checked = items.length && items.every((i) => state.selectedCart.has(i.id));
@@ -675,7 +688,7 @@ function renderOrders() {
         <div class="order-date">${new Date(o.createdAt).toLocaleString('ru-RU')}</div>
       </div>
       <div class="order-summary">
-        <div class="order-total">Сумма: ${o.total ? `${formatPrice(o.total)} ₽` : 'По запросу'}</div>
+        <div class="order-total">Сумма: ${o.totalDisplay || (Number.isFinite(Number(o.total)) ? `${formatPrice(Number(o.total))} ₽` : 'По запросу')}</div>
         <button class="order-repeat" type="button">Повторить</button>
       </div>
       <div class="order-status">Статус: ${o.status || 'Отправлено'}</div>
@@ -1093,13 +1106,31 @@ function bindEvents() {
     if (!items.length) { ui.orderStatus.textContent = 'Корзина пуста.'; return; }
     const profile = { name: ui.inputName.value.trim(), phone: ui.inputPhone.value.trim(), email: ui.inputEmail.value.trim() };
     if (!profile.name || !profile.phone || !profile.email) { ui.orderStatus.textContent = 'Заполните поля.'; return; }
-    const summary = cartSummary();
+    const summary = (() => {
+      let sum = 0;
+      let missing = false;
+      let count = 0;
+      let requestCount = 0;
+      items.forEach((item) => {
+        count += item.qty || 0;
+        if (!hasPrice(item)) {
+          missing = true;
+          requestCount += item.qty || 0;
+          return;
+        }
+        sum += Number(item.price || 0) * (item.qty || 0);
+      });
+      return { sum, missing, count, requestCount };
+    })();
     const order = {
       id: Date.now(),
       createdAt: new Date().toISOString(),
       customer: { ...profile, comment: ui.inputComment ? ui.inputComment.value.trim() : '', contactMethod: ui.contactMethod ? ui.contactMethod.value : '' },
       items: items.map((i) => ({ id: i.id, title: i.title, sku: i.sku, price: i.price, qty: i.qty })),
-      total: summary.missing ? null : summary.sum,
+      total: summary.sum,
+      hasRequestPrice: summary.missing,
+      requestPriceItemsCount: summary.requestCount,
+      totalDisplay: formatSummaryTotal(summary),
       telegramUserId: null,
       status: 'Отправлено',
     };
