@@ -397,24 +397,38 @@ img { max-width: 100%; display: block; }
 }
 .promo-row-home .promo-card {
   flex: 0 0 calc((100% - 24px) / 4);
+  border-radius: 12px;
 }
 .promo-row-home .promo-card img {
-  height: 58px;
+  height: 52px;
 }
 .promo-row-home .promo-title {
   padding: 4px 6px 0;
   font-size: 10px;
-  min-height: 32px;
+  min-height: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: initial;
 }
 .promo-row-home .promo-price {
-  padding: 3px 6px 6px;
+  padding: 3px 6px 8px;
   gap: 4px;
+  margin-top: 4px;
 }
 .promo-row-home .promo-price .promo-new {
   font-size: 10px;
 }
 .promo-row-home .promo-price .promo-old {
   font-size: 9px;
+}
+.promo-row-home .promo-badge {
+  width: 28px;
+  height: 28px;
+  font-size: 10px;
+  top: 6px;
+  right: 6px;
 }
 .promo-badge {
   position: absolute;

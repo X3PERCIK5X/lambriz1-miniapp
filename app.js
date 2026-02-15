@@ -226,6 +226,7 @@ function setScreen(name) {
   }
   ui.screens.forEach((s) => s.classList.toggle('active', s.id === `screen-${name}`));
   updateBottomNav(name);
+  scrollToTop();
 }
 
 function goBack() {
@@ -241,6 +242,13 @@ function goBack() {
   state.currentScreen = prev;
   ui.screens.forEach((s) => s.classList.toggle('active', s.id === `screen-${prev}`));
   updateBottomNav(prev);
+  scrollToTop();
+}
+
+function scrollToTop() {
+  window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
 }
 
 function openMenu() {
