@@ -298,13 +298,23 @@
       </section>
 
       <section id="screen-confirmation" class="screen">
-        <div class="screen-head">
+        <div class="screen-head confirmation-head">
           <button class="back-button icon-only" data-back="home" aria-label="Назад">←</button>
           <h2>Заявка отправлена</h2>
         </div>
         <div class="confirmation">
-          <p>Мы свяжемся с вами в ближайшее время.</p>
-          <button class="primary-button" data-screen="home">Вернуться в каталог</button>
+          <div class="confirmation-icon" aria-hidden="true">
+            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7 10 17l-6-6" />
+            </svg>
+          </div>
+          <div class="confirmation-title">Спасибо, заявку получили</div>
+          <p class="confirmation-text">Менеджер свяжется с вами в ближайшее время и уточнит детали заказа.</p>
+          <div class="confirmation-note">Если у части товаров цена по запросу, мы отдельно согласуем стоимость перед подтверждением.</div>
+          <div class="confirmation-actions">
+            <button class="primary-button" data-screen="home">Вернуться в каталог</button>
+            <button class="ghost-button" data-screen="orders">Открыть мои заказы</button>
+          </div>
         </div>
       </section>
 
