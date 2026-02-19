@@ -157,6 +157,7 @@ const ui = {
   feedbackPolicyCheck: document.getElementById('feedbackPolicyCheck'),
   feedbackConsentLink: document.getElementById('feedbackConsentLink'),
   feedbackPolicyLink: document.getElementById('feedbackPolicyLink'),
+  feedbackDirectPhone: document.getElementById('feedbackDirectPhone'),
   feedbackStatus: document.getElementById('feedbackStatus'),
   ordersList: document.getElementById('ordersList'),
   aboutText: document.getElementById('aboutText'),
@@ -1416,6 +1417,10 @@ async function loadConfig() {
   const menuCallButton = document.getElementById('menuCallButton');
   if (menuPhone) menuPhone.textContent = phoneText;
   if (menuCallButton && phoneDigits) menuCallButton.href = `tel:+${phoneDigits}`;
+  if (ui.feedbackDirectPhone) {
+    ui.feedbackDirectPhone.textContent = phoneText;
+    if (phoneDigits) ui.feedbackDirectPhone.href = `tel:+${phoneDigits}`;
+  }
 
   ui.inputName.value = state.profile.name || '';
   ui.inputPhone.value = state.profile.phone || '';

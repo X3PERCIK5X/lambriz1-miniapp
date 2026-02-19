@@ -1019,6 +1019,26 @@ img { max-width: 100%; display: block; }
   font-size: 14px;
   color: #365468;
 }
+.feedback-direct-contact {
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid #d4e2ec;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f8fcff 0%, #f2f7fb 100%);
+}
+.feedback-direct-label {
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #4d6778;
+}
+.feedback-direct-phone {
+  display: inline-block;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #0b4266;
+  text-decoration: none;
+}
 
 .orders-list {
   display: grid;
