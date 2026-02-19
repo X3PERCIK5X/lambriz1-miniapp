@@ -20,6 +20,7 @@ const state = {
   },
   productionSlide: 0,
   profile: {},
+  telegramUserId: '',
   orders: [],
 };
 
@@ -141,6 +142,7 @@ const ui = {
   inputName: document.getElementById('inputName'),
   inputPhone: document.getElementById('inputPhone'),
   inputEmail: document.getElementById('inputEmail'),
+  inputTelegramId: document.getElementById('inputTelegramId'),
   inputComment: document.getElementById('inputComment'),
   contactMethod: document.getElementById('contactMethod'),
   policyCheck: document.getElementById('policyCheck'),
@@ -152,6 +154,7 @@ const ui = {
   feedbackName: document.getElementById('feedbackName'),
   feedbackPhone: document.getElementById('feedbackPhone'),
   feedbackEmail: document.getElementById('feedbackEmail'),
+  feedbackTelegramId: document.getElementById('feedbackTelegramId'),
   feedbackMethod: document.getElementById('feedbackMethod'),
   feedbackComment: document.getElementById('feedbackComment'),
   feedbackPolicyCheck: document.getElementById('feedbackPolicyCheck'),
@@ -254,6 +257,24 @@ function scrollToTop() {
   window.scrollTo(0, 0);
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
+}
+
+function resolveTelegramUserId() {
+  const webApp = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+  if (!webApp) return '';
+  try {
+    if (typeof webApp.ready === 'function') webApp.ready();
+  } catch (_err) {}
+  const user = webApp.initDataUnsafe && webApp.initDataUnsafe.user ? webApp.initDataUnsafe.user : null;
+  return user && user.id ? String(user.id) : '';
+}
+
+function fillTelegramIds() {
+  const telegramUserId = resolveTelegramUserId();
+  if (telegramUserId) state.telegramUserId = telegramUserId;
+  const value = state.telegramUserId || '';
+  if (ui.inputTelegramId) ui.inputTelegramId.value = value;
+  if (ui.feedbackTelegramId) ui.feedbackTelegramId.value = value;
 }
 
 function openMenu() {
@@ -1196,10 +1217,11 @@ function bindEvents() {
     const pricedItems = mappedItems.filter((i) => !i.isRequestPrice);
     const requestPriceItems = mappedItems.filter((i) => i.isRequestPrice);
 
+    const telegramUserId = (ui.inputTelegramId && ui.inputTelegramId.value ? ui.inputTelegramId.value : state.telegramUserId || '') || null;
     const order = {
       id: Date.now(),
       createdAt: new Date().toISOString(),
-      customer: { ...profile, comment: ui.inputComment ? ui.inputComment.value.trim() : '', contactMethod: ui.contactMethod ? ui.contactMethod.value : '' },
+      customer: { ...profile, telegramUserId, comment: ui.inputComment ? ui.inputComment.value.trim() : '', contactMethod: ui.contactMethod ? ui.contactMethod.value : '' },
       items: mappedItems,
       pricedItems,
       requestPriceItems,
@@ -1213,7 +1235,7 @@ function bindEvents() {
         requestPriceLabel: summary.missing ? 'Запрос цены' : '',
         totalDisplay: formatSummaryTotal(summary),
       },
-      telegramUserId: null,
+      telegramUserId,
       status: 'Отправлено',
     };
 
@@ -1257,6 +1279,7 @@ function bindEvents() {
     const name = ui.feedbackName ? ui.feedbackName.value.trim() : '';
     const phone = ui.feedbackPhone ? ui.feedbackPhone.value.trim() : '';
     const email = ui.feedbackEmail ? ui.feedbackEmail.value.trim() : '';
+    const telegramUserId = (ui.feedbackTelegramId && ui.feedbackTelegramId.value ? ui.feedbackTelegramId.value : state.telegramUserId || '') || null;
     const contactMethod = ui.feedbackMethod ? ui.feedbackMethod.value : 'phone';
     const comment = ui.feedbackComment ? ui.feedbackComment.value.trim() : '';
 
@@ -1283,8 +1306,10 @@ function bindEvents() {
         name,
         phone,
         email,
+        telegramUserId,
         contactMethod,
       },
+      telegramUserId,
       message: comment,
       source: 'miniapp',
     };
@@ -1428,6 +1453,7 @@ async function loadConfig() {
   if (ui.feedbackName) ui.feedbackName.value = state.profile.name || '';
   if (ui.feedbackPhone) ui.feedbackPhone.value = state.profile.phone || '';
   if (ui.feedbackEmail) ui.feedbackEmail.value = state.profile.email || '';
+  fillTelegramIds();
 }
 
 const DATA_VERSION = '20260210-3';
@@ -1513,6 +1539,7 @@ async function init() {
     reportStatus('Ошибка загрузки каталога. Обновите страницу.');
   }
   buildMenuCatalog();
+  fillTelegramIds();
 }
 
 init();
