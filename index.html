@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Ламбриз — Каталог</title>
-    <link rel="stylesheet" href="style.css?v=20260215-6" />
+    <link rel="stylesheet" href="style.css?v=20260215-7" />
   </head>
   <body>
     <header class="header">
@@ -295,7 +295,7 @@
             </label>
             <label class="checkbox">
               <input id="policyCheck" type="checkbox" />
-              <span>Согласен(а) с <a id="policyLink" href="#" target="_blank" rel="noopener">политикой конфиденциальности</a></span>
+              <span class="consent-text">Нажимая "Отправить", даю <a id="consentLink" href="#" target="_blank" rel="noopener">согласие на обработку персональных данных</a>. Подробнее - в <a id="policyLink" href="#" target="_blank" rel="noopener">Политике в отношении обработки персональных данных</a>.</span>
             </label>
             <div class="cart-totals">
               <div><span>Товаров</span><strong id="cartItemsCount">0</strong></div>
@@ -515,6 +515,10 @@
               </select>
             </label>
             <label>Комментарий<input id="feedbackComment" type="text" placeholder="Коротко опишите вопрос" /></label>
+            <label class="checkbox">
+              <input id="feedbackPolicyCheck" type="checkbox" />
+              <span class="consent-text">Нажимая "Отправить", даю <a id="feedbackConsentLink" href="#" target="_blank" rel="noopener">согласие на обработку персональных данных</a>. Подробнее - в <a id="feedbackPolicyLink" href="#" target="_blank" rel="noopener">Политике в отношении обработки персональных данных</a>.</span>
+            </label>
             <div id="feedbackStatus" class="status"></div>
             <button class="primary-button" type="submit">Отправить</button>
           </form>

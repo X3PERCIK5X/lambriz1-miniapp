@@ -144,6 +144,7 @@ const ui = {
   inputComment: document.getElementById('inputComment'),
   contactMethod: document.getElementById('contactMethod'),
   policyCheck: document.getElementById('policyCheck'),
+  consentLink: document.getElementById('consentLink'),
   policyLink: document.getElementById('policyLink'),
   orderStatus: document.getElementById('orderStatus'),
   orderRetry: document.getElementById('orderRetry'),
@@ -153,6 +154,9 @@ const ui = {
   feedbackEmail: document.getElementById('feedbackEmail'),
   feedbackMethod: document.getElementById('feedbackMethod'),
   feedbackComment: document.getElementById('feedbackComment'),
+  feedbackPolicyCheck: document.getElementById('feedbackPolicyCheck'),
+  feedbackConsentLink: document.getElementById('feedbackConsentLink'),
+  feedbackPolicyLink: document.getElementById('feedbackPolicyLink'),
   feedbackStatus: document.getElementById('feedbackStatus'),
   ordersList: document.getElementById('ordersList'),
   aboutText: document.getElementById('aboutText'),
@@ -1159,7 +1163,7 @@ function bindEvents() {
 
   on(ui.orderForm, 'submit', async (e) => {
     e.preventDefault();
-    if (!ui.policyCheck.checked) { ui.orderStatus.textContent = 'Подтвердите согласие с политикой.'; return; }
+    if (!ui.policyCheck.checked) { ui.orderStatus.textContent = 'Подтвердите согласие на обработку персональных данных.'; return; }
     const items = cartItems();
     if (!items.length) { ui.orderStatus.textContent = 'Корзина пуста.'; return; }
     const profile = { name: ui.inputName.value.trim(), phone: ui.inputPhone.value.trim(), email: ui.inputEmail.value.trim() };
@@ -1257,6 +1261,10 @@ function bindEvents() {
 
     if (!name || !phone) {
       if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Заполните имя и телефон.';
+      return;
+    }
+    if (ui.feedbackPolicyCheck && !ui.feedbackPolicyCheck.checked) {
+      if (ui.feedbackStatus) ui.feedbackStatus.textContent = 'Подтвердите согласие на обработку персональных данных.';
       return;
     }
     if (!state.config.orderEndpoint) {
@@ -1360,7 +1368,12 @@ function setProductionSlide(index) {
 async function loadConfig() {
   const res = await fetch('config.json', { cache: 'no-store' });
   state.config = await res.json();
-  ui.policyLink.href = state.config.privacyPolicyUrl || '#';
+  const policyUrl = state.config.privacyPolicyUrl || '#';
+  const consentUrl = state.config.personalDataConsentUrl || policyUrl;
+  if (ui.policyLink) ui.policyLink.href = policyUrl;
+  if (ui.consentLink) ui.consentLink.href = consentUrl;
+  if (ui.feedbackPolicyLink) ui.feedbackPolicyLink.href = policyUrl;
+  if (ui.feedbackConsentLink) ui.feedbackConsentLink.href = consentUrl;
   if (ui.aboutText) {
     const aboutRaw = state.config.aboutText || 'Текст будет добавлен позже.';
     if (!ui.aboutText.innerHTML.trim()) {

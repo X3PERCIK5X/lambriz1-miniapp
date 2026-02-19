@@ -940,6 +940,16 @@ img { max-width: 100%; display: block; }
 .order-form label { display: grid; gap: 4px; font-size: 14px; }
 .order-form input { border: 1px solid var(--border); border-radius: 8px; padding: 8px; }
 .checkbox { grid-template-columns: 20px 1fr; align-items: start; }
+.consent-text {
+  font-size: 12px;
+  line-height: 1.45;
+  color: #365468;
+}
+.consent-text a {
+  color: #0d4f78;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .status { font-size: 13px; color: var(--ink-soft); }
 .order-status { font-size: 13px; color: var(--ink-soft); }
 
