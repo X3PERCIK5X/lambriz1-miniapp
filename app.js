@@ -75,7 +75,6 @@ const menuCatalogTree = [
       'Насосы для бензиновых двигателей',
       'Насосы для горячей воды',
       'Плунжерные насосы',
-      'Электродвигатели',
     ],
   },
   { title: 'Пеногенераторы' },
@@ -107,6 +106,7 @@ const menuCatalogFallback = new Map([
   ['Пылесосы и Химчистка', 'equipment-vacuums'],
   ['Поломоечные машины', 'equipment-cleaning'],
 ]);
+const hiddenCategories = new Set(['equipment-engines-electric']);
 
 const ui = {
   screens: document.querySelectorAll('.screen'),
@@ -384,8 +384,14 @@ function updateBadges() {
 
 function renderCategories() {
   const available = new Set(state.products.map((p) => p.categoryId));
-  const filtered = state.categories.filter((c) => c.groupId === state.currentGroup && (available.size === 0 || available.has(c.id)));
-  const list = filtered.length ? filtered : state.categories.filter((c) => available.has(c.id));
+  const filtered = state.categories.filter((c) =>
+    !hiddenCategories.has(c.id)
+    && c.groupId === state.currentGroup
+    && (available.size === 0 || available.has(c.id))
+  );
+  const list = filtered.length
+    ? filtered
+    : state.categories.filter((c) => !hiddenCategories.has(c.id) && available.has(c.id));
   if (!list.length) {
     ui.categoriesGrid.innerHTML = `
       <div class="empty-state">
@@ -398,8 +404,9 @@ function renderCategories() {
   ui.categoriesGrid.innerHTML = list.map((c) => {
     const firstProduct = state.products.find((p) => p.categoryId === c.id);
     const image = firstProduct && Array.isArray(firstProduct.images) && firstProduct.images[0] ? firstProduct.images[0] : c.image;
+    const sideClass = c.id === 'equipment-high-pressure-explosion' ? 'category-side-image' : '';
     return `
-    <button class="category-card" data-category="${c.id}">
+    <button class="category-card ${sideClass}" data-category="${c.id}">
       <img src="${safeSrc(image)}" alt="${c.title}" />
       <span>${c.title}</span>
     </button>

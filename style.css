@@ -56,6 +56,12 @@ img { max-width: 100%; display: block; }
   display: grid;
   gap: 2px;
 }
+.header-topline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  color: #2a556f;
+}
 
 .logo {
   display: inline-flex;
@@ -580,6 +586,10 @@ img { max-width: 100%; display: block; }
   background: #fff;
   padding: 8px;
   object-position: center;
+}
+.category-card.category-side-image img {
+  object-fit: cover;
+  object-position: right center;
 }
 .category-card span {
   display: block;
